@@ -1,0 +1,17 @@
+extends ../../../../templates/jade/card
+
+block content
+  .snapscan-top
+  .snapscan-details
+    p.amount= 'R' + (locals.total / 100).toFixed(2)
+
+    if locals.status === 'paid'
+      p.instruction Paid!
+    else
+      p.instruction Tap to complete payment
+
+  .snapscan-footer
+    if locals.status === 'paid'
+      | Thank You
+    else
+      | Pay Now

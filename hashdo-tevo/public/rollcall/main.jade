@@ -1,0 +1,30 @@
+extends ../../../../templates/jade/card
+
+block header
+  .hdc-hdr
+    .hdc-title
+      | Roll Call
+
+block content
+  if locals.users.length > 0
+    each item in locals.users
+      .row
+        label
+          if locals.active
+            input(type='checkbox', data-id= item.id, checked= item.status)
+            .label= item.name
+
+          else
+            input(type='checkbox', data-id= item.id, checked= item.status, disabled='true')
+            .label= item.name
+
+  else
+    .info
+      p No users report into you.
+
+block footer
+  if locals.active && locals.users.length > 0
+    .hdc-footer
+      a.link &nbsp;
+      a.link.done.active Done
+

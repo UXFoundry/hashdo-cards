@@ -1,0 +1,25 @@
+{
+  "name": "hashdo-tevo",
+  "version": "0.0.1",
+  "description": "Tevo specific HashDo cards.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": [
+    "hashdo",
+    "tevo"
+  ],
+  "dependencies": {
+    "hashdo": "*"
+  },
+  "peerDependencies": {
+    "request": "2.x"
+  },
+  "pack": {
+    "friendlyName": "Tevo",
+    "cards": [
+      "promotion",
+      "rollcall",
+      "request",
+      "stock"
+    ]
+  }
+}

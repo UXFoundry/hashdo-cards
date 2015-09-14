@@ -1,0 +1,23 @@
+{
+  "name": "hashdo-link",
+  "version": "0.0.1",
+  "description": "Link to virtually any data source.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": [
+    "hashdo"
+  ],
+  "dependencies": {
+    "hashdo": "*"
+  },
+  "peerDependencies": {
+    "lodash": "3.x",
+    "request": "2.x"
+  },
+  "pack": {
+    "hidden": true,
+    "friendlyName": "Link",
+    "cards": [
+      "embed"
+    ]
+  }
+}

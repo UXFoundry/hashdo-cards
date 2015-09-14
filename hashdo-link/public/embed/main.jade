@@ -1,0 +1,18 @@
+extends ../../../../templates/jade/card
+
+if locals.thumbnail
+  block header
+    .hdc-hdr(style='background-image: url(' + locals.thumbnail.url + '); width: ' + locals.thumbnail.width + '; height: ' + locals.thumbnail.height, valign='bottom')
+
+      if locals.icon
+        .hdc-source-icon
+          img(src= locals.icon)
+
+block content
+  p.title= locals.title
+
+  if locals.source
+    p.source= locals.source
+
+  if locals.description
+    p.description= locals.description

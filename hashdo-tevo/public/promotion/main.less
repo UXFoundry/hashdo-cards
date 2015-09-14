@@ -1,0 +1,131 @@
+.hdc {
+  &.tevo.promotion {
+    .hdc-inner {
+      padding: 0;
+
+      .entries {
+        p.empty {
+          color: #ccc;
+          padding: 5px 10px;
+        }
+
+        ul {
+          margin: 0;
+          list-style: none;
+          padding-left: 0;
+
+          li {
+            border-bottom: 1px solid #f0f4f7;
+            padding: 8px 12px;
+            color: #666;
+            min-height: 18px;
+
+            .space {
+              float: right;
+              font-size: 10px;
+              color: #999;
+            }
+
+            .name {
+              width: 125px;
+              font-size: 12px;
+            }
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+
+      .form {
+        background-color: #f2f0f0;
+        border-top: 1px solid #d9d4d4;
+
+        .form-inner {
+          border-top: 1px solid #fff;
+          padding: 15px;
+
+          label {
+            color: #333;
+            font-size: 11px;
+            font-weight: 400;
+            display: block;
+            padding: 2px 0;
+          }
+
+          select {
+            background: #fff;
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            height: 28px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+          }
+
+          .details {
+            margin-top: 10px;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            flex-wrap: nowrap;
+            align-content: space-around;
+
+            div {
+              -webkit-box-flex: 1;
+              -moz-box-flex: 1;
+              -webkit-flex: 1;
+              -ms-flex: 1;
+              flex: 1;
+              margin: 0 3px;
+
+              &.detail-button {
+                -webkit-box-flex: 0.2;
+                -moz-box-flex: 0.2;
+                -webkit-flex: 0.2;
+                -ms-flex: 0.2;
+                flex: 0.2;
+              }
+
+              &:first-child {
+                margin-left: 0;
+              }
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              button[type=button] {
+                background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+                border: 1px solid #bbb;
+                font-weight: bold;
+                border-radius: 4px;
+                width: 100%;
+                height: 28px;
+
+                //i {
+                //  width: 19px;
+                //  height: 16px;
+                //  font-size: 14px;
+                //  line-height: 14px;
+                //  display: inline-block;
+                //  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAQCAYAAAD0xERiAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wgFBhwVpzV6rQAAAhVJREFUOMuVVL/raXEYfj4fNiWK8qNDsZ3hSPdGBplOFrMYDBaDyehP8CeQCYVSymLxTflaLN/BoTMykIyIEof3u92u67jXfepdnufzPL3vp96XERH0oKoq3W63J95gMEAURabnMeqRg8GA0uk0TCbTk3Y6ndBqtUiW5edAInqo8/mMYDBIlUqF/tSICLVajYLBIJ3P5ycN+/0e2WyWvF4veTwecrvdFI1GSdM06IXdbjfEYjFyu93k8XjI6/VSMpmk4/EIY7PZpOVyiV6vB845AMDhcHwZDAYAwOFwwGKxIJ/Px8xmMzjn6HQ6X9vt9gcA3O93FAoFdLtdMu73e4iiiEAg8PAHh8MBxWKR2u02LBYLdrsdpVIplEolZrfbf9rt9l9vRVGkzWYDjhfI5/O0Wq0wnU6xWCzYdDrFarVCPp+nVx7dMEVRaDweo16vy4IgMAAQBIHV63V5PB5DURR6O2w2m0GSJFit1o/feavV+iFJEmaz2fudOZ1OrNdrXcN6vYbL5Xo/LBwOs+v1inK5/DBOuVwmTdMQCoXe3wCTyYRqtYpMJoN+v0+SJEFRFKiqikajobsZLzsDgEgkwiaTSSeRSOByuSCRSGAymXQikQh75TFyzqFpmq5os9mSuVwO/4KmaeCcg83nc4rH44jFYmCM4X9xv98xGo0wHA7BiAiqqtLn5ydenaO/gTEGWZbh9/vZNxq/H6RfoTSWAAAAAElFTkSuQmCC) no-repeat 50% 50%;
+                //}
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .hdc-footer {
+      .clear {
+        color: #999 !important;
+      }
+    }
+  }
+}

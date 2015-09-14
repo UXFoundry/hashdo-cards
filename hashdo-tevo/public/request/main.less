@@ -1,0 +1,145 @@
+.hdc {
+  &.tevo.request {
+    .hdc-inner {
+      padding: 0;
+
+      .entries {
+        p.empty {
+          color: #ccc;
+          padding: 5px 10px;
+        }
+
+        ul {
+          margin: 0;
+          list-style: none;
+          padding-left: 0;
+
+          li {
+            border-bottom: 1px solid #f0f4f7;
+            padding: 8px 12px;
+            color: #666;
+            min-height: 18px;
+
+            .name {
+              width: 130px;
+              font-size: 12px;
+            }
+
+            .counts {
+              float: right;
+
+              span {
+                display: inline-block;
+                min-width: 10px;
+                padding: 3px 3px;
+                font-size: 12px;
+                color: #000;
+                line-height: 1;
+                vertical-align: middle;
+                white-space: nowrap;
+                text-align: center;
+                border-radius: 10px;
+                margin-left: 2px;
+
+                &.physical {
+                  border: 1px solid #B66900;
+                }
+
+                &.required {
+                  border: 1px solid #008D24;
+                }
+              }
+            }
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+
+      .form {
+        background-color: #f2f0f0;
+        border-top: 1px solid #d9d4d4;
+
+        .form-inner {
+          border-top: 1px solid #fff;
+          padding: 15px;
+
+          label {
+            color: #333;
+            font-size: 11px;
+            font-weight: 400;
+            display: block;
+            padding: 2px 0;
+          }
+
+          select {
+            background: #fff;
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            height: 28px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+          }
+
+          .counts {
+            margin-top: 10px;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            flex-wrap: nowrap;
+            align-content: space-around;
+
+            div {
+              -webkit-box-flex: 1;
+              -moz-box-flex: 1;
+              width: 33%;
+              -webkit-flex: 1;
+              -ms-flex: 1;
+              flex: 1;
+              margin: 0 3px;
+
+              &:first-child {
+                margin-left: 0;
+              }
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              select {
+                &.physical {
+                  border-bottom: 2px solid #B66900;
+                }
+
+                &.required {
+                  border-bottom: 2px solid #008D24;
+                }
+              }
+
+              button[type=button] {
+                background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+                border: 1px solid #bbb;
+                font-weight: bold;
+                border-radius: 4px;
+                width: 100%;
+                height: 28px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .hdc-footer {
+      .clear {
+        color: #999 !important;
+      }
+    }
+  }
+}

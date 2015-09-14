@@ -1,0 +1,25 @@
+{
+  "name": "hashdo-xandgo",
+  "version": "0.0.2",
+  "description": "X&Go related HashDo cards.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": [
+    "hashdo",
+    "xandgo"
+  ],
+  "dependencies": {
+    "hashdo": "*"
+  },
+  "peerDependencies": {
+    "lodash": "3.x",
+    "request": "2.x"
+  },
+  "pack": {
+    "friendlyName": "X&Go",
+    "cards": [
+      "rate",
+      "place",
+      "product"
+    ]
+  }
+}

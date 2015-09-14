@@ -1,0 +1,21 @@
+<table class="directions">
+  <tbody>
+    <tr>
+      <td colspan="4" class="substep summary">{{totalDistance}} - about {{totalDuration}}</td>
+    </tr>
+
+    {{#each directions}}
+    <tr>
+      <td class="substep">
+        <div class="stepicon">
+          <div class="maneuver {{maneuver}}">
+          </div>
+        </div>
+      </td>
+      <td class="substep index">{{index}}</td>
+      <td class="substep"><div class="instructions">{{{instructions}}}</div></td>
+      <td class="substep distance">{{distance}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

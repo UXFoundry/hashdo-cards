@@ -1,0 +1,18 @@
+extends ../../../../templates/jade/card
+
+block header
+  if locals.product.headerImage
+    .hdc-hdr(style='background: url(' + locals.product.headerImage + ') no-repeat 50% 0%; width: 225px; height: 143px;', valign='bottom')
+
+block content
+  p.title= locals.product.name
+
+  if locals.product.description
+    .description
+      != locals.product.description
+
+block footer
+  if locals.product.video
+    .hdc-footer
+      a.link &nbsp;
+      a.link.hdc-link(href= locals.product.video, target='_blank') Video

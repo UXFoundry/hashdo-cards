@@ -1,0 +1,51 @@
+extends ../../../../templates/jade/card
+
+block header
+  .hdc-hdr
+    .hdc-title
+      | Stocks Request
+
+block content
+  .entries
+    if locals.entries && locals.entries.length > 0
+      ul
+        each item in locals.entries
+          li
+            .counts
+              span.physical= item.physical
+              span.required= item.required
+
+            .name= item.product
+
+    else
+      p.empty No Entries...
+
+  if locals.active && locals.products
+    .form
+      .form-inner
+        label Product
+        select.product
+          option(value='')
+
+          each item in locals.products
+            option(value= item)= item
+
+        .counts
+          div
+            label Physical
+            select.physical
+
+          div
+            label Required
+            select.required
+
+          div
+            label &nbsp;
+            button.add(type='button') +
+
+block footer
+  if locals.active
+    .hdc-footer
+      a.link.clear Clear
+      a.link.done Done
+

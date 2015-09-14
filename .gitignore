@@ -1,0 +1,7 @@
+.settings
+.vscode
+node_modules
+npm-debug.log
+
+# ignore .DS_Store files on OS X
+.DS_Store

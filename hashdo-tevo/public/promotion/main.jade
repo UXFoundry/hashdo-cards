@@ -1,0 +1,56 @@
+extends ../../../../templates/jade/card
+
+block header
+  .hdc-hdr
+    .hdc-title
+      | Promotion Space
+
+block content
+  .entries
+    if locals.entries && locals.entries.length > 0
+      ul
+        each item in locals.entries
+          li
+            .space= item.space
+            .name= item.product
+
+    else
+      p.empty No Entries...
+
+  if locals.active && locals.products
+    .form
+      .form-inner
+        label Product
+        select.product
+          option(value='')
+
+          each item in locals.products
+            option(value= item)= item
+
+        .details
+          div
+            label Space
+
+            - var spaces = ['Side Panel', 'Gondola End', 'Clip Strip', 'Bulk Stack', 'Snake Queue'];
+            select.space
+              option(value='')
+
+              each space in spaces
+                - for (var i = 1; i < 6; i++)
+                  option(value= space + ' ' + i)= space + ' ' + i
+
+          //div.button
+          //  label &nbsp;
+          //  button.photo(type='button')
+          //    i
+
+          div.detail-button
+            label &nbsp;
+            button.add(type='button') +
+
+block footer
+  if locals.active
+    .hdc-footer
+      a.link.clear Clear
+      a.link.done Done
+

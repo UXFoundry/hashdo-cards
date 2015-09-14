@@ -1,0 +1,13 @@
+extends ../../../../templates/jade/card
+
+block header
+  if locals.rating === 0
+    .hdc-hdr
+      .hdc-title!= locals.header
+
+block content
+  .stars
+    fieldset(class= locals.rating > 0 ? 'readonly' : '')
+      each star in [5, 4, 3, 2, 1]
+        input.star(id= 'star' + star + '-' + locals.card.id, type='radio', name='rating-' + locals.card.id, value= star, checked= locals.rating === star, disabled= locals.rating > 0)
+        label(for='star' + star + '-' + locals.card.id)= star + ' Stars'
