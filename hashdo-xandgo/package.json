@@ -8,7 +8,8 @@
     "xandgo"
   ],
   "dependencies": {
-    "hashdo": "*"
+    "hashdo": "*",
+    "cloudinary": "1.2.4"
   },
   "peerDependencies": {
     "lodash": "3.x",
