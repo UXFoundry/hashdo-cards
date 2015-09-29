@@ -32,7 +32,7 @@ module.exports = {
           url: 'https://maps.googleapis.com/maps/api/geocode/json',
           qs: {
             'address': address,
-            'key': inputs.googleAPIKey
+            'key': inputs.googleAPIKey || process.env.GOOGLE_API_KEY
           },
           json: true
         },

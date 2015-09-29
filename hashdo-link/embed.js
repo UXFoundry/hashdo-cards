@@ -39,7 +39,7 @@ module.exports = {
           url: 'http://iframe.ly/api/iframely',
           qs: {
             'url': inputs.url.indexOf('%3A%2F%2F') > -1 ? decodeURIComponent(inputs.url) : inputs.url,
-            'api_key': inputs.iframelyAPIKey
+            'api_key': inputs.iframelyAPIKey || process.env.IFRAMELY_API_KEY
           },
           json: true
         },

@@ -85,7 +85,7 @@ module.exports = {
           qs: {
             'origin': lat + ',' + lng,
             'destination': inputs.destination,
-            'key': inputs.googleAPIKey
+            'key': inputs.googleAPIKey || process.env.GOOGLE_API_KEY
           },
           json: true
         },
