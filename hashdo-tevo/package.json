@@ -1,6 +1,6 @@
 {
   "name": "hashdo-tevo",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Tevo specific HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -8,10 +8,8 @@
     "tevo"
   ],
   "dependencies": {
-    "hashdo": "*"
-  },
-  "peerDependencies": {
-    "request": "2.x"
+    "hashdo": "*",
+    "request": "2.61.0"
   },
   "pack": {
     "friendlyName": "Tevo",

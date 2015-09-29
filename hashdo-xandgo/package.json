@@ -1,6 +1,6 @@
 {
   "name": "hashdo-xandgo",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "X&Go related HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -9,11 +9,9 @@
   ],
   "dependencies": {
     "hashdo": "*",
-    "cloudinary": "1.2.4"
-  },
-  "peerDependencies": {
-    "lodash": "3.x",
-    "request": "2.x"
+    "cloudinary": "1.2.4",
+    "lodash": "3.10.1",
+    "request": "2.61.0"
   },
   "pack": {
     "friendlyName": "X&Go",

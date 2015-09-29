@@ -1,6 +1,6 @@
 {
   "name": "hashdo-pay",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Make payments via HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -8,7 +8,8 @@
     "snapscan"
   ],
   "dependencies": {
-    "hashdo": "*"
+    "hashdo": "*",
+    "request": "2.61.0"
   },
   "pack": {
     "friendlyName": "Pay",
