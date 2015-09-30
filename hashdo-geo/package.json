@@ -5,12 +5,12 @@
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
     "hashdo",
+    "card",
     "geolocation"
   ],
   "dependencies": {
-    "hashdo": "*",
     "lodash": "3.10.1",
-    "request": "2.61.0"
+    "request": "2.64.0"
   },
   "pack": {
     "friendlyName": "Geo",

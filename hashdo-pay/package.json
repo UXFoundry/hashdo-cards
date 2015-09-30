@@ -5,11 +5,11 @@
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
     "hashdo",
+    "card",
     "snapscan"
   ],
   "dependencies": {
-    "hashdo": "*",
-    "request": "2.61.0"
+    "request": "2.64.0"
   },
   "pack": {
     "friendlyName": "Pay",

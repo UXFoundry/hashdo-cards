@@ -4,12 +4,12 @@
   "description": "Link to virtually any data source.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
-    "hashdo"
+    "hashdo",
+    "card"
   ],
   "dependencies": {
-    "hashdo": "*",
     "lodash": "3.10.1",
-    "request": "2.61.0"
+    "request": "2.64.0"
   },
   "pack": {
     "hidden": true,

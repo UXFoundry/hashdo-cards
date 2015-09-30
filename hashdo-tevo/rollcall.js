@@ -93,7 +93,7 @@ module.exports = {
         this.clientStateSupport = true;
         this.clientAnalyticsSupport = true;
 
-        viewModel.users = users;
+        viewModel.users = users || [];
         viewModel.active = true;
 
         callback(null, viewModel, {
