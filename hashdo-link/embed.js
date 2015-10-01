@@ -12,7 +12,7 @@ module.exports = {
       example: 'cfff62348986e2bdddb43b',
       description: 'An iFramely API Key.',
       secure: true,
-      required: true,
+      required: !process.env.IFRAMELY_API_KEY,
       whereToGet: {
         url: 'https://iframely.com',
         description: 'Signup for an API key on iframely.com.'

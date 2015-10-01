@@ -18,7 +18,7 @@ module.exports = {
       example: 'AIzaSyD587MQrkTIx_nsa7GQn_Qo',
       description: 'A Google Apps API Key.',
       secure: true,
-      required: true,
+      required: !process.env.GOOGLE_API_KEY,
       whereToGet: {
         url: 'http://console.developers.google.com',
         description: 'Create a new project and then head to credentials.'

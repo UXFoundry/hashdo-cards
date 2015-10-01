@@ -25,7 +25,7 @@ module.exports = {
       example: 'AIzaSyD587MQrkTIx_nsa7GQn_Qo',
       description: 'A Google Apps API Key.',
       secure: true,
-      required: true,
+      required: !process.env.GOOGLE_API_KEY,
       whereToGet: {
         url: 'https://developers.google.com/maps/documentation/directions/intro',
         description: 'Create a new project, enable Directions API and then head to credentials to create an API key.'
