@@ -14,7 +14,8 @@
   "pack": {
     "friendlyName": "Pay",
     "cards": [
-      "snapscan"
+      "snapscan",
+      "zapper"
     ]
   }
 }
