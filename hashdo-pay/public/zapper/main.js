@@ -1,26 +1,59 @@
-// To enable this script to load in the browser, ensure that the 'clientStateSupport' property is enabled in the card JS file.
 card.onReady = function () {
   var $card = $('#' + locals.card.id);
   
-  // Subscribe to any state changes.
-  card.state.onChange = function (val) {
-    console.log('State changed.', val);
+  card.state.onChange = function () {
+    $('#zapper-description').text('Payment successful');
+    $('#zapper-footer').text('Thank You');
+    $card.parent().removeAttr('href');
+    $card.off('click');
   };
-
-  // Regular Zepto style events.
+  
   $card.on('click', function () {
-    console.log('Card clicked.');
+    $('#zapper-description').text('Waiting for payment to be completed...');
     
-    // Zepto selectors available.
-    $('#text-content').text('Clicked the card, new text state saved from client.');
-    
-    // How to save state from the client.
-    card.state.save({
-      text: $('#text-content').text()
-    },
+    var saveState = function () {
+      card.state.save({
+        status: 'complete'
+      },
       function (err) {
-        console.log('Do something on success or error.');
-      }
-    );
+        if (err) {
+          console.error(err);
+          $('#zapper-description').text('Payment failed');
+          
+          setTimeout(function () {
+            $('#zapper-description').text(locals.description);
+          }, 3000);
+        }
+      });
+    };
+    
+    var poll = function () {
+      setTimeout(function () {
+        $.ajax({ 
+          url: 'http://qa.pointofsale.zapzapadmin.com/api/v2/merchants/' + locals.merchantId + '/sites/' + locals.siteId + '/payments?PosReference=' + locals.reference,
+          method: 'GET',
+          headers: {
+            siteid: locals.siteId,
+            poskey: locals.posKey,
+            possecret: locals.posSecret,
+            signature: locals.signature
+          },
+          complete: function (data) {
+            console.log(data);
+            
+            // TODO: Validate the data here and continue to poll or save the state.
+            if (!data) {
+              poll();
+            }
+            else {
+              saveState();
+            }
+          }
+        });
+      }, 3000);
+    };
+    
+    // Start polling on click.
+    poll();
   });
 };

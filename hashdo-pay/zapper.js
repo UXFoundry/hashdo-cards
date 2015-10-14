@@ -23,48 +23,49 @@ module.exports = {
       label: 'Application or Merchant Name',
       description: 'The name that will appear in Zapper to whom the payment is being made.',
       required: true,
-      secure: false,
-      prompt: false
+      secure: true
     },
     merchantId: {
       example: 11620,
       label: 'Merchant ID',
       description: 'The unique merchant ID assigned to you when joining Zapper.',
       required: true,
-      secure: true,
-      prompt: false
+      secure: true
     },    
     siteId: {
       example: 10232,
       label: 'Site ID',
       description: 'Unique ID tied to the merchant ID defining which site the payment is being made from.',
       required: true,
-      secure: true,
-      prompt: false
+      secure: true
+    },
+    paymentId: {
+      example: '552fa62012edcf18-0123456',
+      label: 'Payment ID',
+      description: 'The payment\'s unique ID.',
+      required: true,
+      secure: true
     },    
     description: {      
       example: 'Payment for movie tickets.',
       label: 'Description',
       description: 'The description of the payment being made. This will be displayed in the Zapper application.',
       required: false,
-      secure: false,
-      prompt: true
-    },    
+      prompt: true,
+      secure: true
+    },
     amount: {
       example: 400,
       label: 'Amount',
-      description: 'The payment amount in cents.',
+      description: 'The required payment amount in cents.',
       required: true,
-      secure: false,
       prompt: true
     },
     currency: {
       example: 'ZAR',
       label: 'Currency',
       description: 'The ISO currency code that the payment needs to be made in.',
-      // TODO: have available options to select on the client.
       required: true,
-      secure: false,
       prompt: true
     }
   },
@@ -81,19 +82,36 @@ module.exports = {
    * @param {Function} callback  Callback function to signal that any async processing in this card is complete. function([error], [viewModel], [clientLocals])
    */
   getCardData: function (inputs, state, callback) {
+    // Validate
+    var paymentInfo = inputs.paymentId.split('-');
+    
+    // uniqueReference cannot be greater than 16 chars.
+    if (paymentInfo.length !== 2 || inputs.paymentId[0].length > 16) {
+      callback(new Error('Invalid paymentId value: ' + inputs.paymentId));
+    }
+      
+    var Currency = require('currency-symbol.js'),
+      Sha256 = require('crypto').createHash('sha256');
+    
+    var posKey = process.env.ZAPPER_POS_KEY || '',
+      posSecret = process.env.ZAPPER_POS_SECRET || '';
+      
+    Sha256.update(posKey + '&' + posSecret);
+    
     // By default we don't want extra client code.
     this.clientStateSupport = false;
     
     // Generate view model to render your view template.
     var viewModel = {
-      symbol: 'R',  // TODO: get symbol from currency input.
-      total: (Number(state.total || inputs.amount) / 100).toFixed(2),
-      description: state.description || inputs.description,
+      symbol: Currency.symbolize(inputs.currency.toUpperCase()),
+      amount: (Number(inputs.amount) / 100).toFixed(2),
+      description: inputs.description,
+      footer: 'Pay Now',
       title: 'Zapper Payment'
     };
     
     if (state.status !== 'complete') {      
-      this.clientStateSupport = false;
+      this.clientStateSupport = true;
       
       // Build the QR code data.
       var paymentUrl = 'http://2.zap.pe?t=4&i={merchantId}:{siteId}'
@@ -102,12 +120,12 @@ module.exports = {
         
       var paymentData = ':7[34|{amount}|11,33|{orderNumber}|10,66|{uniqueReference}'
         .replace('{amount}', inputs.amount)
-        .replace('{orderNumber}', 'TODO')
-        .replace('uniqueReference', 'TOOD - 16 chars max');
+        .replace('{orderNumber}', paymentInfo[1])
+        .replace('{uniqueReference}', paymentInfo[0]);
         
       var descriptionData = ':8[0n|{description}|11|{label}'
         .replace('{description}', inputs.description)
-        .replace('{label}', 'TODO');
+        .replace('{label}', 'Description');
         
       var merchantData = ':10[38|{name},39|{currency}'
         .replace('{name}', inputs.merchantName)
@@ -123,9 +141,20 @@ module.exports = {
       
       viewModel.link = 'zapper://payment?qr=' + encodeURIComponent(qrCode) + '&appName=HashDo&successCallbackURL=test&failureCallbackURL=test';
     }
+    else {
+      viewModel.description = 'Payment was completed';
+      viewModel.footer = 'Thank You';
+    }
     
-    
-    callback(null, viewModel);
+    callback(null, viewModel, {
+      description: inputs.description,
+      merchantId: inputs.merchantId,
+      siteId: inputs.siteId,
+      reference: paymentInfo[0],
+      posKey: posKey,
+      posSecret: posSecret,
+      signature: Sha256.digest('hex')
+    });
   }
 };
 
