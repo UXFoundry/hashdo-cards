@@ -5,8 +5,8 @@ card.onReady = function () {
 
   card.state.onChange = function (val) {
     if (val) {
-      $card.find('p.instruction').html('Paid!');
-      $card.find('.snapscan-footer').html('Thank You');
+      $card.find('p.instruction').text('Paid!');
+      $card.find('.snapscan-footer').text('Thank You');
       $card.parent().removeAttr('href');
     }
   };
