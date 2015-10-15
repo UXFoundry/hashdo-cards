@@ -26,17 +26,38 @@ module.exports = {
       secure: true
     },
     merchantId: {
-      example: 11620,
+      example: 10,
       label: 'Merchant ID',
       description: 'The unique merchant ID assigned to you when joining Zapper.',
-      required: true,
+      required: !process.env.ZAPPER_MERCHANT_ID,
       secure: true
     },    
     siteId: {
-      example: 10232,
+      example: 10,
       label: 'Site ID',
       description: 'Unique ID tied to the merchant ID defining which site the payment is being made from.',
-      required: true,
+      required: !process.env.ZAPPER_SITE_ID,
+      secure: true
+    },
+    posApiUrl: {
+      example: 'http://qa.pointofsale.zapzapadmin.com',
+      label: 'POS API URL',
+      description: 'API key to access Zapper online POS system.',
+      required: !process.env.ZAPPER_POS_API_URL,
+      secure: true
+    },
+    posKey: {
+      example: '6E4A8B1D-2715-453A-83A9-5CEA976A1B7A',
+      label: 'POS Key',
+      description: 'API key to access Zapper online POS system.',
+      required: !process.env.ZAPPER_POS_KEY,
+      secure: true
+    },
+    posSecret: {
+      example: 'DD9B7A6B-A3D8-43ED-AF5F-DA762F59A799',
+      label: 'POS Secret',
+      description: 'API secret paired with the POS key to access Zapper online POS system.',
+      required: !process.env.ZAPPER_POS_SECRET,
       secure: true
     },
     paymentId: {
@@ -73,7 +94,6 @@ module.exports = {
   /**
    * Generate or restore view model for template based on inputs and current card state.
    * Update any card state if necessary for subsequent calls to getCardData.
-   * NB: 
    *
    * @method getCardData
    * @async
@@ -91,12 +111,10 @@ module.exports = {
     }
       
     var Currency = require('currency-symbol.js'),
-      Sha256 = require('crypto').createHash('sha256');
-    
-    var posKey = process.env.ZAPPER_POS_KEY || '',
-      posSecret = process.env.ZAPPER_POS_SECRET || '';
+      Sha256 = require('crypto').createHash('sha256'),
+      _ = require('lodash');
       
-    Sha256.update(posKey + '&' + posSecret);
+    Sha256.update(inputs.posSecret + '&' + inputs.posKey);
     
     // By default we don't want extra client code.
     this.clientStateSupport = false;
@@ -139,7 +157,10 @@ module.exports = {
       
       qrCode += merchantData;
       
-      viewModel.link = 'zapper://payment?qr=' + encodeURIComponent(qrCode) + '&appName=HashDo&successCallbackURL=test&failureCallbackURL=test';
+      viewModel.link = 'zapper://payment?qr=' + encodeURIComponent(qrCode) + '&appName=HashDo';
+      
+      // TODO: Remove this when callbacks become optional.
+      viewModel.link += '&successCallbackURL=test&failureCallbackURL=test';
     }
     else {
       viewModel.description = 'Payment was completed';
@@ -151,8 +172,9 @@ module.exports = {
       merchantId: inputs.merchantId,
       siteId: inputs.siteId,
       reference: paymentInfo[0],
-      posKey: posKey,
-      posSecret: posSecret,
+      posApiUrl: _.trimRight(inputs.posApiUrl, '/'),
+      posKey: inputs.posKey,
+      posSecret: inputs.posSecret,
       signature: Sha256.digest('hex')
     });
   }

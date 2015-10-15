@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "currency-symbol.js": "0.1.0",
+    "lodash": "3.10.1",
     "request": "2.64.0"
   },
   "pack": {

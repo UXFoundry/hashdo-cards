@@ -11,9 +11,10 @@ card.onReady = function () {
   $card.on('click', function () {
     $('#zapper-description').text('Waiting for payment to be completed...');
     
-    var saveState = function () {
+    function saveState(response) {
       card.state.save({
-        status: 'complete'
+        status: 'complete',
+        response: response
       },
       function (err) {
         if (err) {
@@ -27,10 +28,10 @@ card.onReady = function () {
       });
     };
     
-    var poll = function () {
+    function poll() {
       setTimeout(function () {
         $.ajax({ 
-          url: 'http://qa.pointofsale.zapzapadmin.com/api/v2/merchants/' + locals.merchantId + '/sites/' + locals.siteId + '/payments?PosReference=' + locals.reference,
+          url: locals.posApiUrl + '/api/v2/merchants/' + locals.merchantId + '/sites/' + locals.siteId + '/payments?PosReference=' + locals.reference,
           method: 'GET',
           headers: {
             siteid: locals.siteId,
@@ -38,19 +39,20 @@ card.onReady = function () {
             possecret: locals.posSecret,
             signature: locals.signature
           },
-          complete: function (data) {
-            console.log(data);
+          complete: function (response) {
+            console.debug(response);
             
-            // TODO: Validate the data here and continue to poll or save the state.
-            if (!data) {
+            // Validate the data here and continue to poll or save the state.
+            if (!response.data || response.data.length === 0) {
               poll();
             }
             else {
-              saveState();
+              // TODO: Check payment data to validate it wasn't tampered with.             
+              saveState(response);
             }
           }
         });
-      }, 3000);
+      }, 5000);
     };
     
     // Start polling on click.
