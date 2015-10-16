@@ -40,8 +40,6 @@ card.onReady = function () {
             signature: locals.signature
           },
           complete: function (response) {
-            console.debug(response);
-            
             // Validate the data here and continue to poll or save the state.
             if (!response.data || response.data.length === 0) {
               poll();

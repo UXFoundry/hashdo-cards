@@ -137,7 +137,7 @@ module.exports = {
         .replace('{siteId}', inputs.siteId);
         
       var paymentData = ':7[34|{amount}|11,33|{orderNumber}|10,66|{uniqueReference}'
-        .replace('{amount}', inputs.amount)
+        .replace('{amount}', (Number(inputs.amount) / 100).toFixed(2))
         .replace('{orderNumber}', paymentInfo[1])
         .replace('{uniqueReference}', paymentInfo[0]);
         
