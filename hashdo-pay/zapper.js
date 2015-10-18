@@ -112,7 +112,14 @@ module.exports = {
       callback(new Error('Invalid paymentId value: ' + inputs.paymentId));
       return;
     }
-
+    
+    // Apply defaults
+    inputs.merchantId = inputs.merchantId || process.env.ZAPPER_MERCHANT_ID;
+    inputs.siteId = inputs.siteId || process.env.ZAPPER_SITE_ID;
+    inputs.posApiUrl = inputs.posApiUrl || process.env.ZAPPER_POS_API_URL;
+    inputs.posKey = inputs.posKey || process.env.ZAPPER_POS_KEY;
+    inputs.posKey = inputs.posKey || process.env.ZAPPER_POS_SECRET;
+    
     var Currency = require('currency-symbol.js'),
       Request = require('request'),
       Sha256 = require('crypto').createHash('sha256'),
