@@ -180,6 +180,8 @@ module.exports = {
     }
 
     function paymentComplete() {
+      this.clientStateSupport = false;
+      
       // Don't add client code unless the card is for a new payment.
       viewModel.description = 'Payment was completed';
       viewModel.footer = 'Thank You';
@@ -198,7 +200,6 @@ module.exports = {
     }
 
     if (state.status === 'complete') {
-      this.clientStateSupport = false;
       paymentComplete();
     }
     else {
@@ -214,13 +215,12 @@ module.exports = {
           state.status = 'complete';
           state.response = body;
 
-          this.clientStateSupport = false;
           paymentComplete();
         }
         else {
           newPayment();
         }
-      });
+      }.bind(this));
     }
   }
 };
