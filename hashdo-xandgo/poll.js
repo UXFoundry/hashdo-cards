@@ -43,7 +43,11 @@ module.exports = {
     // has poll expired?
     var expiry = parsePollExpiry(inputs.expiryDate);
     if (expiry) {
-      state.expiry = expiry;
+      if (_.isString(expiry)) {
+        state.expiry = expiry;
+      }
+
+      this.clientStateSupport = true;
     }
     else {
       state.expired = true;
@@ -122,6 +126,16 @@ function parsePollExpiry(expiryDate) {
         return false;
       }
     }
+    else {
+
+      // ignore invalid expiry dates
+      return true;
+    }
+  }
+  else {
+
+    // no expiry date
+    return true;
   }
 }
 
