@@ -1,22 +1,31 @@
 /* global card, locals, $, Fingerprint2 */
 
 card.onReady = function () {
-  var fp,
-    $card = $('#' + locals.card.id);
+  var $card = $('#' + locals.card.id),
+    isActive = true,
+    now = new Date(),
+    renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()).valueOf();
 
-  // require dependencies
-  if (typeof Fingerprint2 === 'undefined' || typeof Fingerprint2 === 'undefined') {
-    card.require('//cdn.jsdelivr.net/fingerprintjs2/0.8.0/fingerprint2.min.js', function () {
-      new Fingerprint2().get(function (result) {
-        fp = result;
-      });
-    });
+  // previously voted?
+  if (localStorage) {
+    var previousIndex = localStorage.getItem('hashdo-poll-' + locals.id);
+
+    if (previousIndex) {
+      renderResults(previousIndex, true);
+    }
+  }
+
+  // expired?
+  if (locals.expired) {
+    renderResults(null, true);
   }
 
   // subscribe to any state changes
   card.state.onChange = function (val) {
-    if (val.cardId !== locals.card.id) {
-      updateResults(val.votes);
+    if (!isActive) {
+      if (val.cardId !== locals.card.id) {
+        updateResults(val.votes);
+      }
     }
   };
 
@@ -24,17 +33,16 @@ card.onReady = function () {
   $card.find('.vote').on('click', function () {
     var selectedIndex = $card.find('input[type=radio]:checked').parent().attr('data-index');
 
-    // ensure we have a selection and a fingerprint has been generated.
-    if (typeof selectedIndex !== 'undefined' && typeof fp !== 'undefined') {
-      var now = new Date(),
-        utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()).valueOf();
+    // ensure we have a selection
+    if (typeof selectedIndex !== 'undefined') {
+      var voteNow = new Date(),
+        voteUTC = new Date(voteNow.getUTCFullYear(), voteNow.getUTCMonth(), voteNow.getUTCDate(), voteNow.getUTCHours(), voteNow.getUTCMinutes(), voteNow.getUTCSeconds()).valueOf();
 
       // vote
       locals.votes = locals.votes || [];
       locals.votes.push({
-        dateTimeStamp: utc,
-        vote: selectedIndex,
-        fp: fp
+        dateTimeStamp: voteUTC,
+        vote: selectedIndex
       });
 
       // render results
@@ -49,20 +57,31 @@ card.onReady = function () {
           // done
         }
       );
+
+      // prevent abuse
+      if (localStorage) {
+        localStorage.setItem('hashdo-poll-' + locals.id, selectedIndex);
+      }
     }
   });
 
-  function renderResults(selectedIndex) {
+  function renderResults(selectedIndex, isOld) {
+    isActive = false;
     $card.find('.hdc-footer').find('.vote').remove();
 
     // add this vote
-    if (locals.voteCounts[selectedIndex]) {
-      locals.voteCounts[selectedIndex].count++;
-    }
+    if (selectedIndex && locals.voteCounts[selectedIndex]) {
+      if (!isOld) {
+        locals.totalVotes++;
+        locals.voteCounts[selectedIndex].count++;
 
-    // recalculate percentages
-    for (var i = 0; i < locals.voteCounts.length; i++) {
-      locals.voteCounts[i].percentage = Math.floor((locals.voteCounts[i].count / (locals.totalVotes + 1)) * 100);
+        // recalculate percentages
+        for (var i = 0; i < locals.voteCounts.length; i++) {
+          locals.voteCounts[i].percentage = Math.floor((locals.voteCounts[i].count / locals.totalVotes) * 100);
+        }
+      }
+
+      $('.poll-vote-count').text(locals.totalVotes + (locals.totalVotes === 1 ? ' Vote' : ' Votes'));
     }
 
     $card.find('.poll-option').each(function () {
@@ -74,6 +93,10 @@ card.onReady = function () {
 
       if (index === selectedIndex) {
         $option.addClass('selected');
+
+        if (isOld) {
+          $option.find('input').prop('checked', true);
+        }
       }
 
       $option.find('.poll-option-percentage').text(locals.voteCounts[index].percentage + '%');
@@ -81,7 +104,13 @@ card.onReady = function () {
     });
   }
 
-  function updateResults() {
-
+  function updateResults(votes) {
+    if (votes) {
+      for (var i = 0; i < votes.length; i++) {
+        if (votes[i].dateTimeStamp && votes[i].dateTimeStamp > renderUTC) {
+          renderResults(votes[i].vote);
+        }
+      }
+    }
   }
 };

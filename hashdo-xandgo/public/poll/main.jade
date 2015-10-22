@@ -4,10 +4,19 @@ block content
   p.title= locals.question
 
   if locals.options
-    if !locals.expired
-      .poll-options
-        form.poll-form
-          each item, index in locals.options
+    .poll-options
+      form.poll-form
+        each item, index in locals.options
+          if locals.expired
+            .poll-option.result(data-index= index)
+
+              label(for= locals.id + '-' + index)
+                span.poll-option-bar(style='width: ' + ((locals.voteCounts[index].percentage / 100) * 130) + 'px')
+                span.poll-option-text= item
+
+              .poll-option-percentage= locals.voteCounts[index].percentage + '%'
+
+          else
             .poll-option(data-index= index)
               input(type='radio', name= locals.id, id= locals.id + '-' + index)
 

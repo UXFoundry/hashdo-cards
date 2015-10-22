@@ -47,6 +47,7 @@ module.exports = {
     }
     else {
       state.expired = true;
+      state.expiry = false;
       this.clientStateSupport = false;
     }
 
@@ -76,8 +77,11 @@ module.exports = {
     var clientLocals = {
       id: state.pollId,
       voteCounts: counts,
-      totalVotes: state.votes.length
+      totalVotes: state.votes.length,
+      expired: state.expired
     };
+
+    console.log(counts);
 
     callback(null, viewModel, clientLocals);
   }
