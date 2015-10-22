@@ -1,0 +1,30 @@
+extends /card
+
+block content
+  p.title= locals.question
+
+  if locals.options
+    if !locals.expired
+      .poll-options
+        form.poll-form
+          each item, index in locals.options
+            .poll-option(data-index= index)
+              input(type='radio', name= locals.id, id= locals.id + '-' + index)
+
+              label(for= locals.id + '-' + index)
+                span.poll-option-dot
+                span.poll-option-bar(style='width: 0')
+                span.poll-option-text= item
+
+              .poll-option-percentage
+
+block footer
+  .hdc-footer
+    .poll-meta
+      .poll-vote-count= totalVotes + (totalVotes === 1 ? ' Vote' : ' Votes')
+
+      if locals.expiry
+        .poll-expiry-date= locals.expiry
+
+    if !locals.expired
+      a.link.vote.active Vote

@@ -1,0 +1,143 @@
+.hdc {
+  &.xandgo.poll {
+    form {
+      margin-bottom: 0;
+    }
+
+    .poll-option {
+      display: block;
+      position: relative;
+      margin: 20px 0;
+      padding-left: 22px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      input[type="radio"] {
+        display: block;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        z-index: 0;
+      }
+
+      .poll-option-percentage {
+        float: left;
+        display: inline-block;
+        padding: 2px 5px;
+        color: #8899A6;
+        width: 30px;
+      }
+
+      .poll-option-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 170px;
+        position: relative;
+        display: inline-block;
+        padding: 2px 4px;
+      }
+
+      .poll-option-bar {
+        position: absolute;
+        background-color: #E0E8ED;
+        height: 100%;
+        border-radius: 2px;
+        transition: all .5s cubic-bezier(.8, 0, 1, 1);
+      }
+
+      &.result {
+        .poll-option-text {
+          width: 120px;
+        }
+
+        input {
+          display: none;
+        }
+
+        .poll-option-dot {
+          display: none;
+        }
+      }
+
+      &.selected {
+        input {
+          display: block;
+        }
+
+        .poll-option-dot {
+          display: block;
+          box-shadow: none;
+        }
+      }
+    }
+
+    // IE 7-8-9
+
+    input[type="radio"] {
+      display: inline-block;
+    }
+
+    input[type="radio"] + label span.poll-option-dot {
+      display: none;
+    }
+
+    // end IE
+
+    input[type="radio"] + label span.poll-option-dot {
+      appearance: none;
+
+      z-index: 20;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      vertical-align: middle;
+      box-shadow: hsla(0, 0%, 100%, .15) 0 1px 1px, inset hsla(0, 0%, 0%, .5) 0 0 0 1px;
+      background: #efefef radial-gradient(ellipse at center, #62c2f3 0%, #62c2f3 40%, #efefef 45%) no-repeat;
+      transition: background-position .05s cubic-bezier(.8, 0, 1, 1);
+    }
+
+    input[type="radio"]:checked + label span.poll-option-dot {
+      transition: background-position .1s .05s cubic-bezier(0, 0, .2, 1);
+    }
+
+    input[type="radio"] + label span.poll-option-dot {
+      background-position: -20px 0;
+    }
+
+    input[type="radio"]:checked + label span.poll-option-dot {
+      background-position: 0 0;
+    }
+
+    .hdc-footer {
+      .poll-meta {
+        color: #8899A6;
+        font-size: 12px;
+        font-weight: 200;
+
+        div {
+          display: inline-block;
+          margin-right: 4px;
+
+          &:after {
+            content: '•';
+            margin-left: 4px;
+          }
+
+          &:last-child {
+            &:after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
