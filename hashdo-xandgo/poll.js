@@ -81,8 +81,6 @@ module.exports = {
       expired: state.expired
     };
 
-    console.log(counts);
-
     callback(null, viewModel, clientLocals);
   }
 };
