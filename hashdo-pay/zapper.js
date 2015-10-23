@@ -108,7 +108,7 @@ module.exports = {
     var paymentInfo = inputs.paymentId.split('-');
     
     // uniqueReference cannot be greater than 16 chars.
-    if (paymentInfo.length !== 2 || inputs.paymentId[0].length > 16) {
+    if (paymentInfo.length !== 2 || paymentInfo[0].length > 16) {
       callback(new Error('Invalid paymentId value: ' + inputs.paymentId));
       return;
     }

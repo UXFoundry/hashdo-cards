@@ -1,6 +1,6 @@
 {
   "name": "hashdo-pay",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Make payments via HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
