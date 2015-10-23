@@ -7,7 +7,7 @@
 module.exports = {
   name: 'Zapper',
   description: 'Make payments with Zapper',
-  icon: 'icon.png',
+  icon: 'http://cdn.hashdo.com/icons/zapper.png',
   clientStateSupport: true,
   
   /**
