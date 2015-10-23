@@ -193,8 +193,8 @@ module.exports = {
       var qrCode = generateQrCode();
       viewModel.link = 'zapper://payment?qr=' + encodeURIComponent(qrCode) + '&appName=HashDo';
       
-      // TODO: Remove this when callbacks become optional.
-      viewModel.link += '&successCallbackURL=test&failureCallbackURL=test';
+      // Optionally deep link back into another application.
+      ////viewModel.link += '&successCallbackURL=myapp://success&failureCallbackURL=myapp://fail';
 
       callback(null, viewModel, clientLocals);
     }
