@@ -4,7 +4,7 @@ card.onReady = function () {
   var $card = $('#' + locals.card.id),
     isActive = true,
     now = new Date(),
-    renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()).valueOf();
+    renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()).valueOf();
 
   // previously voted?
   if (localStorage) {
@@ -36,7 +36,7 @@ card.onReady = function () {
     // ensure we have a selection
     if (typeof selectedIndex !== 'undefined') {
       var voteNow = new Date(),
-        voteUTC = new Date(voteNow.getUTCFullYear(), voteNow.getUTCMonth(), voteNow.getUTCDate(), voteNow.getUTCHours(), voteNow.getUTCMinutes(), voteNow.getUTCSeconds()).valueOf();
+        voteUTC = new Date(voteNow.getUTCFullYear(), voteNow.getUTCMonth(), voteNow.getUTCDate(), voteNow.getUTCHours(), voteNow.getUTCMinutes(), voteNow.getUTCSeconds(), voteNow.getUTCMilliseconds()).valueOf();
 
       // vote
       locals.votes = locals.votes || [];
