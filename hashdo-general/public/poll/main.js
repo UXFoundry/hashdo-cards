@@ -81,7 +81,7 @@ card.onReady = function () {
         }
       }
 
-      $('.poll-vote-count').text(locals.totalVotes + (locals.totalVotes === 1 ? ' Vote' : ' Votes'));
+      $card.find('.poll-vote-count').text(locals.totalVotes + (locals.totalVotes === 1 ? ' Vote' : ' Votes'));
     }
 
     $card.find('.poll-option').each(function () {
