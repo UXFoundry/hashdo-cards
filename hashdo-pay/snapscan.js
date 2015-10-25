@@ -60,7 +60,7 @@ module.exports = {
         token = params[2];
       }
 
-      callback(null, { amount: payload.requiredAmount, token: token }, {
+      callback(null, {amount: payload.requiredAmount, token: token}, {
         requestId: requestId,
         code: code,
         total: payload.totalAmount,
