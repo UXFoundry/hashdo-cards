@@ -1,0 +1,17 @@
+extends /card
+
+block header
+  .hdc-hdr
+    .hdc-title= locals.title
+
+block content
+  if locals.list && locals.list.length > 0
+    ul
+      each val, index in locals.list
+        - var checked_class = locals.checked['item-'+index] ? 'checked' : ''
+        li(class= checked_class)
+          label
+            input(type='checkbox', data-index= index, checked= locals.checked['item-'+index])
+            span= val
+  else
+    p No list items have been configured

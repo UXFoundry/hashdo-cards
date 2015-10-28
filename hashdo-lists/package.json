@@ -1,0 +1,19 @@
+{
+  "name": "hashdo-lists",
+  "version": "0.1.0",
+  "description": "Various HashDo lists.",
+  "keywords": [
+    "hashdo",
+    "lists"
+  ],
+  "peerDependencies": {
+    "lodash": "3.x",
+    "request": "2.x"
+  },
+  "pack": {
+    "friendlyName": "Lists",
+    "cards": [
+      "todo"
+    ]
+  }
+}
