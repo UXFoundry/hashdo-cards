@@ -42,6 +42,7 @@ card.onReady = function () {
       ht.on('pan', function (ev) {
         m_current = containM(m_last + ev.deltaX);
         $cont.css('margin-left', m_current);
+        ev.stopPropagation()
       });
 
       ht.on('panend', function (ev) {
@@ -52,6 +53,7 @@ card.onReady = function () {
         slide_current = Math.abs(Math.round(m_current / card_w));
         indicateNav();
         snap();
+        ev.stopPropagation()
       });
     };
 
