@@ -41,7 +41,7 @@ module.exports = {
     var viewModel = {
       list: items,
       numbered: inputs.numbered,
-      title: inputs.title
+      title: inputs.title || this.name
     };
     
     callback(null, viewModel);

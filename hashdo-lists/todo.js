@@ -46,7 +46,7 @@ module.exports = {
     var viewModel = {
       list: items,
       checked: state.checked || {},
-      title: inputs.title
+      title: inputs.title || this.name
     };
 
     callback(null, viewModel);
