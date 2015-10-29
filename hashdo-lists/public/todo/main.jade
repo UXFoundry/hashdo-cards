@@ -1,8 +1,9 @@
 extends /card
 
-block header
-  .hdc-hdr
-    .hdc-title= locals.title
+if locals.title
+  block header
+    .hdc-hdr
+      .hdc-title= locals.title
 
 block content
   if locals.list && locals.list.length > 0

@@ -1,0 +1,20 @@
+extends /card
+
+if locals.title
+  block header
+    .hdc-hdr
+      .hdc-title= locals.title
+
+block content
+  if locals.list && locals.list.length > 0
+    if locals.numbered === 'true'
+      ol
+        each item in locals.list
+          li= item
+
+    else
+      ul
+        each item in locals.list
+          li= item
+  else
+    p No list items have been configured

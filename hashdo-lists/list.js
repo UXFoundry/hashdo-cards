@@ -1,31 +1,31 @@
 module.exports = {
-  name: 'Todo List',
-  description: 'A simple list of things to do',
-  icon: 'http://cdn.hashdo.com/icons/todo.png',
-
+  name: 'List',
+  description: 'A list',
+  icon: 'http://cdn.hashdo.com/icons/list.png',
+  
   inputs: {
     title: {
-      example: 'Holiday Checklist',
+      example: 'Shopping List',
       label: 'List Title',
       description: 'The list\s title'
     },
-    list: {
-      example: 'Tickets, Passport, Travelers Cheques, Charging cables',
-      label: 'Actionable Items',
-      description: 'Delimiter separated list of actionable items'
+    list: {      
+      example: 'Bread, Milk, Eggs, Butter',
+      label: 'List',
+      description: 'Delimiter separated list of items'
     },
     delimiter: {
       example: ',',
       label: 'Delimiter',
       description: 'The character used to separate the list items'
     },
-    userId: {
-      example: '552fa62425186c6012edcf18',
-      description: 'The current user\'s ID.',
-      required: true
+    numbered: {
+      example: 'true',
+      label: 'Numbered?',
+      description: 'Number the list? true or false'
     }
   },
-
+  
   getCardData: function (inputs, state, callback) {
     var _ = require('lodash'),
       items = [];
@@ -36,19 +36,15 @@ module.exports = {
       for (var item in items) {
         items[item] = _.trim(_.capitalize(items[item]));
       }
-
-      this.clientStateSupport = true;
     }
-    else {
-      this.clientStateSupport = false;
-    }
-
+    
     var viewModel = {
       list: items,
-      checked: state.checked || {},
+      numbered: inputs.numbered,
       title: inputs.title
     };
-
+    
     callback(null, viewModel);
   }
 };
+

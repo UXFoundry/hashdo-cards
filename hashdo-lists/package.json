@@ -1,6 +1,6 @@
 {
   "name": "hashdo-lists",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Various HashDo lists.",
   "keywords": [
     "hashdo",
@@ -13,6 +13,7 @@
   "pack": {
     "friendlyName": "Lists",
     "cards": [
+      "list",
       "todo"
     ]
   }
