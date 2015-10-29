@@ -6,21 +6,21 @@ card.onReady = function () {
     $nav = $card.find('.nav'),
     $cont = $card.find('.cont'),
     $slides = $cont.find('.slide'),
-    card_w = $inner.width() - parseInt($inner.css('padding-left'), 10) - parseInt($inner.css('padding-right'), 10),
-    cont_w = $slides.size() * card_w,
-    ht_elem = document.getElementById(locals.card.id),
+    cardWidth = $inner.width() - parseInt($inner.css('padding-left'), 10) - parseInt($inner.css('padding-right'), 10),
+    containerWidth = $slides.size() * cardWidth,
 
     m_current = 0,
     m_last = 0,
-    m_min = -cont_w / $slides.size() * ($slides.size() - 1),
-    slide_current = 0,
+    m_min = -containerWidth / $slides.size() * ($slides.size() - 1),
+    currentSlide = 0,
 
     indicateNav = function () {
-      $nav.find('a').removeClass('active').eq(slide_current).addClass('active');
+      $nav.find('a').removeClass('active').eq(currentSlide).addClass('active');
     },
 
     snap = function () {
-      var m_goto = -slide_current * card_w;
+      var m_goto = -currentSlide * cardWidth;
+
       if (m_last != m_goto) {
         m_last = m_goto;
 
@@ -37,30 +37,32 @@ card.onReady = function () {
     },
 
     setUpHammer = function () {
-      var ht = new Hammer(ht_elem);
+      var ht = new Hammer($card[0]);
 
       ht.on('pan', function (ev) {
         m_current = containM(m_last + ev.deltaX);
         $cont.css('margin-left', m_current);
-        ev.stopPropagation()
+
+        ev.srcEvent.stopPropagation();
       });
 
       ht.on('panend', function (ev) {
-        var v = -ev.velocityX * card_w / 2;
+        var v = -ev.velocityX * cardWidth / 2;
         m_last = m_current;
         m_current = containM(m_current + v);
 
-        slide_current = Math.abs(Math.round(m_current / card_w));
+        currentSlide = Math.abs(Math.round(m_current / cardWidth));
         indicateNav();
         snap();
-        ev.stopPropagation()
+        
+        ev.srcEvent.stopPropagation();
       });
     };
 
-  $cont.width(cont_w);
+  $cont.width(containerWidth);
 
   $nav.find('a').on('click', function () {
-    slide_current = $(this).index();
+    currentSlide = $(this).index();
     indicateNav();
     snap();
   });
