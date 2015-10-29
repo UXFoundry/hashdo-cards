@@ -1,0 +1,78 @@
+.hdc {
+  &.general.slider {
+    .hdc-content .hdc-inner {
+      padding: 0;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        display: block;
+        margin: 0 auto 10px;
+        user-drag: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .h {
+        margin: 10px 0;
+        padding: 0 15px;
+      }
+
+      p {
+        margin: 10px 0 0;
+        padding: 0 15px;
+
+        &.error {
+          padding: 15px;
+        }
+      }
+
+      .wrapper {
+        overflow: hidden;
+        width: 100%;
+        margin: 0 0 20px;
+      }
+
+      .cont {
+        width: 1000%;
+        overflow: hidden;
+
+        &.transition {
+          transition: margin 300ms;
+        }
+      }
+
+      .slide {
+        width: 225px;
+        float: left;
+      }
+
+      .nav {
+        height: 20px;
+        margin: -5px 15px 15px;
+        display: flex;
+        justify-content: center;
+
+        a {
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: fade(black, 20%);
+            transition: background-color 300ms;
+          }
+
+          &.active i {
+            background-color: fade(black, 40%);
+          }
+        }
+      }
+    }
+  }
+}

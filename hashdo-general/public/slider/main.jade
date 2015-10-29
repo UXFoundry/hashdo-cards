@@ -1,0 +1,26 @@
+extends /card
+
+block content
+  if locals.slides && locals.slides.length > 0
+    .wrapper
+      .cont
+        each slide in locals.slides
+          .slide
+            if slide.img
+              img(src=slide.img)
+
+            if slide.heading
+              h3.h= slide.heading
+
+            if slide.copy
+              p= slide.copy
+
+    if locals.slides.length > 1
+      .nav
+        each slide, i in locals.slides
+          - var activeClass = i == 0 ? 'active' : ''
+
+          a(href='#', class= activeClass)
+            i
+  else
+    p.error Invalid Config
