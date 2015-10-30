@@ -4,8 +4,8 @@ card.onReady = function () {
   var $card = $('#' + locals.card.id),
     $inner = $card.find('.hdc-inner'),
     $nav = $card.find('.nav'),
-    $cont = $card.find('.cont'),
-    $slides = $cont.find('.slide'),
+    $container = $card.find('.cont'),
+    $slides = $container.find('.slide'),
     cardWidth = $inner.width() - parseInt($inner.css('padding-left'), 10) - parseInt($inner.css('padding-right'), 10),
     containerWidth = $slides.size() * cardWidth,
 
@@ -14,7 +14,7 @@ card.onReady = function () {
     m_min = -containerWidth / $slides.size() * ($slides.size() - 1),
     currentSlide = 0,
 
-    indicateNav = function () {
+    updateNav = function () {
       $nav.find('a').removeClass('active').eq(currentSlide).addClass('active');
     },
 
@@ -24,8 +24,8 @@ card.onReady = function () {
       if (m_last != m_goto) {
         m_last = m_goto;
 
-        $cont.addClass('transition').css('margin-left', m_last).on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-          $cont.removeClass('transition').unbind('transitionend webkitTransitionEnd oTransitionEnd');
+        $container.addClass('transition').css('margin-left', m_last).on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+          $container.removeClass('transition').unbind('transitionend webkitTransitionEnd oTransitionEnd');
         });
       }
     },
@@ -41,7 +41,7 @@ card.onReady = function () {
 
       ht.on('pan', function (ev) {
         m_current = containM(m_last + ev.deltaX);
-        $cont.css('margin-left', m_current);
+        $container.css('margin-left', m_current);
 
         ev.srcEvent.stopPropagation();
       });
@@ -52,18 +52,22 @@ card.onReady = function () {
         m_current = containM(m_current + v);
 
         currentSlide = Math.abs(Math.round(m_current / cardWidth));
-        indicateNav();
+        updateNav();
         snap();
         
         ev.srcEvent.stopPropagation();
       });
+
+      ht.on('swipe', function (ev) {
+        ev.srcEvent.stopPropagation();
+      });
     };
 
-  $cont.width(containerWidth);
+  $container.width(containerWidth);
 
   $nav.find('a').on('click', function () {
     currentSlide = $(this).index();
-    indicateNav();
+    updateNav();
     snap();
   });
 
