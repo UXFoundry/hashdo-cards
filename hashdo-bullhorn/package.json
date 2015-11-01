@@ -1,0 +1,24 @@
+{
+  "name": "hashdo-bullhorn",
+  "version": "0.1.0",
+  "description": "Bullhorn card pack.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": [
+    "hashdo",
+    "card",
+    "jobs",
+    "candidates"
+  ],
+  "dependencies": {
+    "lodash": "3.10.1",
+    "request": "2.65.0"
+  },
+  "pack": {
+    "friendlyName": "Bullhorn",
+    "cards": [
+      "poll",
+      "html",
+      "slider"
+    ]
+  }
+}
