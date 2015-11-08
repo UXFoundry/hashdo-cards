@@ -1,0 +1,25 @@
+{
+  "name": "hashdo-meandyou",
+  "version": "0.1.0",
+  "description": "me&you card pack.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": [
+    "hashdo",
+    "card",
+    "me&you",
+    "mobile",
+    "cell"
+  ],
+  "dependencies": {
+    "lodash": "3.10.1",
+    "moment": "2.10.6",
+    "request": "2.65.0"
+  },
+  "pack": {
+    "friendlyName": "Me&You",
+    "cards": [
+      "usage",
+      "bill"
+    ]
+  }
+}

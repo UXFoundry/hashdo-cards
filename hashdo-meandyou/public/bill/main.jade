@@ -1,0 +1,15 @@
+extends /card
+
+block header
+  .hdc-hdr
+    .hdc-title
+      .name= locals.name
+      .number= '0' + locals.number.substr(2)
+
+  .hdc-subhdr
+    | Bill so far
+    .date For #{locals.date}
+
+block content
+  div!= locals.html
+  p This is your bill to date. Any recharges, account payments or outstanding amounts owing will not be reflected here. Once off data purchases are included. Please note that this serves as a guide. Total usage may differ due to system delays.
