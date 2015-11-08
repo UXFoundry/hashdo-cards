@@ -1,6 +1,15 @@
 extends /card
 
 block header
+  .hdc-hdr
+    .hdc-title
+      .name= locals.name
+      .number= '0' + locals.number.substr(2)
+
+  .hdc-subhdr
+    | Account usage
+    .date For #{locals.date}
 
 block content
-  p Yo
+  div!= locals.valueBundles
+  div!= locals.dataBundles
