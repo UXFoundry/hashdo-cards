@@ -12,7 +12,8 @@ var Client = (function () {
       clientId: '',
       clientSecret: '',
       username: '',
-      password: ''
+      password: '',
+      debug: false
     });
   }
 
@@ -24,15 +25,20 @@ var Client = (function () {
           url: client.restUrl + 'entity/JobOrder/' + id,
           qs: {
             BhRestToken: client.BhRestToken,
-            fields: '*'
+            fields: 'publicDescription, address'
           },
           json: true
         },
         function (err, response) {
-          if (response && response.body) {
-            callback && callback(response.body);
+          if (response && response.body && response.body.data) {
+            if (client.options.debug) {
+              console.log('Get Job Success: ' + id);
+            }
+
+            callback && callback(response.body.data);
           }
           else {
+            console.error('Error loading job ' + id);
             callback && callback();
           }
         }
@@ -53,8 +59,17 @@ var Client = (function () {
           json: true
         },
         function (err, response) {
-          client.restUrl = response.body.restUrl;
-          client.BhRestToken = response.body.BhRestToken;
+          if (response.body.BhRestToken) {
+            if (client.options.debug) {
+              console.log('Login Success: ' + response.body.BhRestToken);
+            }
+
+            client.restUrl = response.body.restUrl;
+            client.BhRestToken = response.body.BhRestToken;
+          }
+          else {
+            console.error('Error during login. Unable to obtain BhRestToken.');
+          }
 
           callback && callback();
         }
@@ -77,9 +92,9 @@ var Client = (function () {
     else {
       client.getAuthCode(function (code) {
         if (code) {
-          client.getToken(code, function (tokens) {
+          client.getToken(code, function (token) {
             client.authDateTime = new Date().getTime();
-            client.accessToken = tokens.access_token;
+            client.accessToken = token;
 
             callback && callback();
           });
@@ -105,10 +120,15 @@ var Client = (function () {
         json: true
       },
       function (err, response) {
-        if (response && response.body) {
-          callback && callback(response.body);
+        if (response && response.body && response.body.access_token) {
+          if (client.options.debug) {
+            console.log('Token Success: ' + response.body.access_token);
+          }
+
+          callback && callback(response.body.access_token);
         }
         else {
+          console.error('Error loading Token');
           callback && callback();
         }
       }
@@ -129,7 +149,21 @@ var Client = (function () {
         }
       },
       function (err, res) {
-        callback && callback(QS.parse(URL.parse(res.request.uri.href).query).code);
+        var href = res.request.uri.href,
+          url = URL.parse(href),
+          params = QS.parse(url.query);
+
+        if (params && params.code) {
+          if (client.options.debug) {
+            console.log('Auth Code Success: ' + params.code);
+          }
+
+          callback && callback(params.code);
+        }
+        else {
+          console.error('Error loading Auth Code.');
+          callback && callback();
+        }
       }
     );
   };
