@@ -91,7 +91,6 @@ module.exports = {
           var available = parseFloat(bundleValue.Available),
             allocated = parseFloat(bundleValue.Allocation),
             used = allocated - available,
-            billLimitDisplay = billLimit + allocated,
             progress = (100 - ((available / allocated) * 100)) / 2,
             creditProgress = totalOutOfBundle > 0 ? ((parseFloat(totalOutOfBundle) / parseFloat(billLimit)) * 100) / 2 : 0,
             totalUsed = progress >= 10 ? 'R' + used.toFixed(2) : '',
