@@ -32,6 +32,7 @@ module.exports = {
             }
           }
           catch (ex) {
+            console.log(ex);
             // ignore error
           }
         }

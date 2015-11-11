@@ -7,13 +7,16 @@ block content
         each slide in locals.slides
           .slide
             if slide.img
-              img(src=slide.img)
+              if slide.imgHeight
+                img(src=slide.img, height= slide.imgHeight + 'px')
+              else
+                img(src=slide.img)
 
             if slide.heading
-              h3.h= slide.heading
+              h3(style= slide.headingCSS || '').h= slide.heading
 
             if slide.copy
-              p= slide.copy
+              p(style= slide.copyCSS || '')= slide.copy
 
     if locals.slides.length > 1
       .nav
