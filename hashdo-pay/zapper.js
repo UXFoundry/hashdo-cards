@@ -40,7 +40,7 @@ module.exports = {
       secure: true
     },
     posApiUrl: {
-      example: 'http://qa.pointofsale.zapzapadmin.com',
+      example: 'http://zapqa.zapzapadmin.com/qa-zapperpointofsale',
       label: 'POS API URL',
       description: 'API key to access Zapper online POS system.',
       required: !process.env.ZAPPER_POS_API_URL,
