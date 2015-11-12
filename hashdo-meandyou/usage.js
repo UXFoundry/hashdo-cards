@@ -89,10 +89,11 @@ module.exports = {
 
         function getValueBundleTemplate(bundleValue, billLimit, totalOutOfBundle) {
           var available = parseFloat(bundleValue.Available),
+            creditAvailable = parseFloat(billLimit) - parseFloat(totalOutOfBundle),
             allocated = parseFloat(bundleValue.Allocation),
             used = allocated - available,
-            progress = (100 - ((available / allocated) * 100)) / 2,
-            creditProgress = totalOutOfBundle > 0 ? ((parseFloat(totalOutOfBundle) / parseFloat(billLimit)) * 100) / 2 : 0,
+            progress = (100 - ((available / allocated) * 100)),
+            creditProgress = totalOutOfBundle > 0 ? ((parseFloat(totalOutOfBundle) / parseFloat(billLimit)) * 100) : 0,
             totalUsed = progress >= 10 ? 'R' + used.toFixed(2) : '',
             totalUsedCredit = creditProgress >= 10 ? 'R' + totalOutOfBundle.toFixed(2) : '';
 
@@ -105,10 +106,16 @@ module.exports = {
             '<div class="progress-bar" id="valueBundle" style="width: ' + progress + '%">' +
             '<span class="">' + totalUsed + '</span>' +
             '</div>' +
-            '<div class="progress-bar progress-striped" id="valueCredit" style="width: ' + creditProgress + '%">' +
+            '</div>' +
+
+            '<h3><span class="_jsRatePlan">R' + billLimit + ' credit limit</span><b class="pull-right _jsNextRatePlan"></b></h3>' +
+            '<p class="miniNotice _jsRatePlanRemaining">R' + creditAvailable.toFixed(2) + ' credit remaining</p>' +
+
+            '<div class="progress valueBundleProgress">' +
+            '<div class="progress-bar" style="width: ' + creditProgress + '%">' +
             '<span class="">' + totalUsedCredit + '</span>' +
             '</div>' +
-            '</div>';
+            '</div>'
         }
 
         function getDataBundleTemplate(bundleData) {
