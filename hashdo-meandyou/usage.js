@@ -94,26 +94,26 @@ module.exports = {
             used = allocated - available,
             progress = (100 - ((available / allocated) * 100)),
             creditProgress = totalOutOfBundle > 0 ? ((parseFloat(totalOutOfBundle) / parseFloat(billLimit)) * 100) : 0,
-            totalUsed = progress >= 10 ? 'R' + used.toFixed(2) : '',
-            totalUsedCredit = creditProgress >= 10 ? 'R' + totalOutOfBundle.toFixed(2) : '';
+            totalUsed = 'R' + used.toFixed(2),
+            totalUsedCredit = 'R' + totalOutOfBundle.toFixed(2);
 
           creditProgress = creditProgress > 50 ? 50 : creditProgress;
 
           return '<h3><span class="_jsRatePlan">' + bundleValue.Name + '</span><b class="pull-right _jsNextRatePlan"></b></h3>' +
-            '<p class="miniNotice _jsRatePlanRemaining">R' + available.toFixed(2) + ' bundle remaining</p>' +
+            '<p class="miniNotice _jsRatePlanRemaining">R' + available.toFixed(2) + ' remaining</p>' +
+            '<p class="miniUsed">' + totalUsed + ' used</p>' +
 
             '<div class="progress valueBundleProgress">' +
             '<div class="progress-bar" id="valueBundle" style="width: ' + progress + '%">' +
-            '<span class="">' + totalUsed + '</span>' +
             '</div>' +
             '</div>' +
 
             '<h3><span class="_jsRatePlan">R' + billLimit + ' credit limit</span><b class="pull-right _jsNextRatePlan"></b></h3>' +
-            '<p class="miniNotice _jsRatePlanRemaining">R' + creditAvailable.toFixed(2) + ' credit remaining</p>' +
+            '<p class="miniNotice _jsRatePlanRemaining">R' + creditAvailable.toFixed(2) + ' remaining</p>' +
+            '<p class="miniUsed">' + totalUsedCredit + ' used</p>' +
 
             '<div class="progress valueBundleProgress">' +
             '<div class="progress-bar" style="width: ' + creditProgress + '%">' +
-            '<span class="">' + totalUsedCredit + '</span>' +
             '</div>' +
             '</div>'
         }
@@ -122,14 +122,14 @@ module.exports = {
           var available = parseFloat(bundleData.Available) / 1048576.0,
             allocated = parseFloat(bundleData.Allocation) / 1048576.0,
             progress = 100 - ((available / allocated) * 100),
-            totalUsed = progress.toFixed() >= 10 ? (allocated - available).toFixed() + 'MB used' : '';
+            totalUsed = (allocated - available).toFixed() + 'MB used';
 
           return '<div class="_jsDataBundleContainer">' +
             '<h3>' + bundleData.Name + ' <b class="pull-right _jsNextData"></b></h3>' +
-            '<p class="miniNotice _jsDataRemaining">' + available.toFixed() + 'MB data remaining</p>' +
+            '<p class="miniNotice _jsDataRemaining">' + available.toFixed() + 'MB remaining</p>' +
+            '<p class="miniUsed">' + totalUsed + '</p>' +
             '<div class="progress">' +
             '<div class="progress-bar" id="dataBundle" style="width: ' + progress.toFixed() + '%">' +
-            '<span class="">' + totalUsed + '</span>' +
             '</div>' +
             '</div>' +
             '</div>';
