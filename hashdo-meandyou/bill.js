@@ -134,7 +134,7 @@ module.exports = {
           for (var j = 0; j < data.OutOfBundle.Items.length; j++) {
             var chItems = data.OutOfBundle.Items[j];
 
-            if (chItems.Amount != '0.00') {
+            if (chItems && chItems.Amount != '0.00') {
               myBillSoFarTotal = myBillSoFarTotal + parseFloat(chItems.Amount);
 
               if (chItems.EventAbbreviation.toLowerCase() == 'mosms') {
