@@ -1,6 +1,6 @@
 {
   "name": "hashdo-geo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Geographical related HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "lodash": "3.10.1",
-    "request": "2.65.0"
+    "request": "2.67.0"
   },
   "pack": {
     "friendlyName": "Geo",
