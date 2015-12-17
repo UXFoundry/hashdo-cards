@@ -1,0 +1,56 @@
+extends /card
+
+block content
+  if locals.reference
+    .swiper-container
+      .swiper-wrapper
+        each image in locals.images
+          .swiper-slide
+            img(src= image, width='225', height='143')
+
+      .swiper-pagination
+
+    .property-details
+      h3= locals.shortDescription
+
+      table
+        tr
+          td.label Ref:
+          td= locals.reference
+        tr
+          td.label Address:
+          td= locals.address
+
+      p= locals.longDescription
+
+  else
+    .error Property not found...
+
+block footer
+  if locals.auction
+    .auction-bar
+      .auction-title
+        img(src='https://cdn.hashdo.com/icons/in2assetshammer.png', width='16px', height='16px')
+        span Auction Details
+
+      .auction-details
+        table
+          tr
+            td.label Name:
+            td= locals.auction.formattedName
+          tr
+            td.label Date:
+            td= locals.auction.date
+          tr
+            td.label Address:
+            td= locals.auction.address
+          tr
+            td.label Properties:
+            td= locals.auction.propertyCount
+          tr
+            td.label Contact:
+            td= locals.auction.contact
+          tr
+            td.label Cell:
+            td
+              a.external(href='tel:' + locals.auction.cell)= locals.auction.cell
