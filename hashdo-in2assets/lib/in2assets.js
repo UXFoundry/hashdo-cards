@@ -107,7 +107,7 @@ function getAuctions(callback) {
             if (item.auction_start_date) {
               var itemMoment = Moment(item.auction_start_date);
 
-              if (item.auction_name !== lastAuction) {
+              if (item.auction_name + itemMoment.unix() !== lastAuction) {
                 auctions.push({
                   name: item.auction_name,
                   formattedName: parseAuctionName(item.auction_name),
@@ -119,7 +119,7 @@ function getAuctions(callback) {
                   cell: item.cellnumber
                 });
 
-                lastAuction = item.auction_name;
+                lastAuction = item.auction_name + itemMoment.unix();
               }
             }
           }
@@ -132,7 +132,7 @@ function getAuctions(callback) {
             for (i = 0; i < body.length; i++) {
               var item = body[i];
 
-              if (item.auction_name === auction.name) {
+              if (item.auction_name === auction.name && Moment(item.auction_start_date).unix() === auction.dateUnix) {
                 auction.properties.push({
                   reference: item.reference,
                   longDescription: item.long_descrip,
