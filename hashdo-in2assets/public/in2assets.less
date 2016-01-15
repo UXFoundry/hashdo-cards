@@ -12,20 +12,21 @@
       background: #ff4c00;
     }
 
-    .auction-bar {
-      .auction-title {
-        background-color: #ff4c00;
-        color: #fff;
-        padding: 6px 15px;
-        font-size: 14px;
-        font-weight: 600;
+    .auction-title {
+      background-color: #ff4c00;
+      color: #fff;
+      padding: 8px 15px 8px 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
 
-        img {
-          float: left;
-          margin-right: 10px;
-        }
+      img {
+        float: left;
+        margin-right: 10px;
       }
+    }
 
+    .auction-bar {
       .auction-details {
         padding: 10px;
         color: #333;
@@ -53,6 +54,11 @@
           a {
             text-decoration: none !important;
             color: #777 !important;
+
+            &.external {
+              color: #15c !important;
+              text-decoration: underline !important;
+            }
           }
         }
 

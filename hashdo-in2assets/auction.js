@@ -4,9 +4,9 @@ module.exports = {
   icon: 'http://cdn.hashdo.com/icons/in2assets.png',
 
   inputs: {
-    auctionName: {
-      example: 'DURBAN COMBINED PROPERTY AUCTION',
-      description: 'The name of the auction.',
+    auctionId: {
+      example: '18',
+      description: 'The id of the auction.',
       required: true,
       prompt: true
     }
@@ -24,7 +24,7 @@ module.exports = {
       callback(null, viewModel);
     }
     else {
-      In2Assets.getAuction(inputs.auctionName, function (err, auction) {
+      In2Assets.getAuction(inputs.auctionId, function (err, auction) {
         if (auction) {
           var viewModel = auction;
 

@@ -1,5 +1,4 @@
-var FuzzySearch = require('fuzzysearch'),
-  Moment = require('moment'),
+var Moment = require('moment'),
   Request = require('request'),
   _ = require('lodash');
 
@@ -15,7 +14,7 @@ exports.isTime = function (dateTimeStamp) {
   return true;
 };
 
-exports.getAuction = function (name, callback) {
+exports.getAuction = function (auctionId, callback) {
   getAuctions(function (err, auctions) {
     if (err || !auctions) {
       callback && callback(err || genericErrorMessage);
@@ -24,7 +23,7 @@ exports.getAuction = function (name, callback) {
       var result = undefined;
 
       _.forEach(auctions, function (auction) {
-        if (FuzzySearch(name.toLowerCase(), auction.name.toLowerCase())) {
+        if (auction.id === auctionId) {
           result = auction;
           return false;
         }
@@ -48,13 +47,12 @@ exports.getProperty = function (reference, callback) {
           if (property.reference === reference) {
             result = property;
             result.auction = {
+              id: auction.id,
               name: auction.name,
               formattedName: auction.formattedName,
               propertyCount: auction.properties.length,
               date: auction.date,
-              address: auction.address,
-              contact: auction.contact,
-              cell: auction.cell
+              address: auction.address
             };
 
             return false;
@@ -107,19 +105,18 @@ function getAuctions(callback) {
             if (item.auction_start_date) {
               var itemMoment = Moment(item.auction_start_date);
 
-              if (item.auction_name + itemMoment.unix() !== lastAuction) {
+              if (item.auction_id !== lastAuction) {
                 auctions.push({
+                  id: item.auction_id,
                   name: item.auction_name,
                   formattedName: parseAuctionName(item.auction_name),
                   dateUnix: itemMoment.unix(),
                   date: itemMoment.format('Do MMM YYYY, HH:mm'),
                   address: parseAuctionAddress(item),
-                  properties: [],
-                  contact: item.firstname + ' ' + item.lastname,
-                  cell: item.cellnumber
+                  properties: []
                 });
 
-                lastAuction = item.auction_name + itemMoment.unix();
+                lastAuction = item.auction_id;
               }
             }
           }
@@ -132,7 +129,7 @@ function getAuctions(callback) {
             for (i = 0; i < body.length; i++) {
               var item = body[i];
 
-              if (item.auction_name === auction.name && Moment(item.auction_start_date).unix() === auction.dateUnix) {
+              if (item.auction_id === auction.id) {
                 auction.properties.push({
                   reference: item.reference,
                   longDescription: item.long_descrip,
@@ -140,7 +137,9 @@ function getAuctions(callback) {
                   leadImage: parsePropertyImage(item.lead_image),
                   thumbnail: parsePropertyThumbnail(item.lead_image),
                   address: parsePropertyAddress(item),
-                  province: item.province
+                  province: item.province,
+                  contact: item.firstname + ' ' + item.lastname,
+                  cell: item.cellnumber
                 });
               }
             }

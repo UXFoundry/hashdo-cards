@@ -2,6 +2,9 @@ extends /card
 
 block content
   if locals.reference
+    .auction-title
+      span Property
+
     .swiper-container
       .swiper-wrapper
         each image in locals.images
@@ -17,9 +20,19 @@ block content
         tr
           td.label Ref:
           td= locals.reference
+
         tr
           td.label Address:
           td= locals.address
+
+        tr
+          td.label Contact:
+          td= locals.contact
+
+        tr
+          td.label Cell:
+          td
+            a.external(href='tel:' + locals.cell)= locals.cell
 
       p= locals.longDescription
 
@@ -38,19 +51,20 @@ block footer
           tr
             td.label Name:
             td= locals.auction.formattedName
+
           tr
             td.label Date:
             td= locals.auction.date
+
           tr
             td.label Address:
             td= locals.auction.address
+
           tr
             td.label Properties:
             td= locals.auction.propertyCount
+
           tr
-            td.label Contact:
-            td= locals.auction.contact
-          tr
-            td.label Cell:
+            td.label Call Us:
             td
-              a.external(href='tel:' + locals.auction.cell)= locals.auction.cell
+              a.external(href='tel:0861444769') 0861 444 769
