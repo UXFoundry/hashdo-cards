@@ -1,11 +1,54 @@
 extends /card
 
-block header
-  if locals.place.headerImage
-    .hdc-hdr(style='background: url(' + locals.place.headerImage + ') no-repeat 50% 0%; width: 225px; height: 143px;', valign='bottom')
-
 block content
-  p.title= locals.place.name
+  if locals.photos.length > 0
+    .swiper-container
+      .swiper-wrapper
+        each img in locals.photos
+          .swiper-slide
+            img.lead-image(src= img, width='225', height='143')
 
-  if locals.place.address
-    p.source= locals.place.address
+      .swiper-pagination
+
+  .place-header
+    h3= locals.name
+
+    if locals.shortDescription
+      p= locals.shortDescription
+
+  .place-meta
+    table
+      if locals.address
+        tr
+          td.label Address:
+          td=locals.address
+
+      if locals.phone
+        tr
+          td.label Tel:
+          td
+            a.external(href='tel:' + locals.phone)= locals.phone
+
+      if locals.website
+        tr
+          td.label Website:
+          td
+            a.external(href='http://' + locals.website)= locals.website
+
+      if locals.twitter
+        tr
+          td.label Twitter:
+          td
+            a.external(href='http://twitter.com/' + locals.twitter)= '@' + locals.twitter
+
+      if locals.instagram
+        tr
+          td.label Instagram:
+          td
+            a.external(href='http://instagram.com/' + locals.instagram)= '@' + locals.instagram
+
+      if locals.details
+        each detail in locals.details
+          tr
+            td.label= detail.label
+            td= detail.value

@@ -24,112 +24,21 @@ module.exports = {
   },
 
   getCardData: function (inputs, state, callback) {
+    var XandGo = require('./lib/xandgo'),
+      card = this;
 
-    function getPlace(callback) {
-      var Request = require('request');
+    // enable client side js support
+    card.client$Support = true;
 
-      Request.post({
-        url: 'http://xandgo.com/api/place',
-        form: {
-          apiKey: inputs.apiKey,
-          secret: inputs.secret,
-          placeId: inputs.placeId
-        },
-        json: true
-      }, function (err, response, body) {
-        if (!err) {
-          if (body.success) {
-            var place = body.place;
-            place.headerImage = parseHeaderImage(place);
-            place.address = parseAddress(place);
-
-            callback(place);
-          }
-          else {
-            callback();
-          }
-        }
-        else {
-          console.error('XandGo-Place: Error getting X&Go place for place ID ' + inputs.placeId, err);
-          callback();
-        }
-      });
-    }
-
-    function parseHeaderImage(place) {
-      var Cloudinary = require('cloudinary'),
-        width = 225,
-        height = 143,
-        crop = 'fill';
-
+    XandGo.getPlace(inputs.apiKey, inputs.secret, inputs.placeId, function (place) {
       if (place) {
-        /*jshint camelcase: false */
-        Cloudinary.config({
-          cloud_name: 'xandgo',
-          api_key: process.env.CLOUDINARY_KEY,
-          api_secret: process.env.CLOUDINARY_SECRET
-        });
+        var viewModel = place;
 
-        if (place.photos && place.photos.length > 0) {
-          /*jshint camelcase: false */
-          return Cloudinary.url(place.photos[0].public_id, {
-            width: width,
-            height: height,
-            crop: crop
-          });
-        }
+        // save state
+        state.place = place;
+        state.dateTimeStamp = new Date();
 
-        if (place.logo) {
-          /*jshint camelcase: false */
-          return Cloudinary.url(place.logo.public_id, {
-            width: width,
-            height: height,
-            crop: crop
-          });
-        }
-
-        if (place.location) {
-          if (place.location.geo) {
-            return 'http://maps.googleapis.com/maps/api/staticmap?&markers=color:black%7C' + place.location.geo[1] + ',' + place.location.geo[0] + '&center=' + place.location.geo[1] + ',' + place.location.geo[0] + '&size=' + width + 'x' + height + '&zoom=15&sensor=false';
-          }
-        }
-      }
-
-      return '';
-    }
-
-    function parseAddress(place) {
-      var address = [];
-
-      if (place) {
-        if (place.location) {
-          if (place.location.street1) {
-            address.push(place.location.street1);
-          }
-
-          if (place.location.suburb) {
-            address.push(place.location.suburb);
-          }
-
-          if (place.location.state) {
-            address.push(place.location.state);
-          }
-
-          if (address.length > 0) {
-            return address.join(', ');
-          }
-        }
-      }
-
-      return '';
-    }
-
-    getPlace(function (place) {
-      if (place) {
-        callback(null, {
-          title: place.name || this.name,
-          place: place
-        });
+        callback(null, viewModel);
       }
       else {
         callback(new Error('Could not find place with ID ' + (inputs.placeId || '?')));
