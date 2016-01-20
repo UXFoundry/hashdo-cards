@@ -1,6 +1,6 @@
 {
   "name": "hashdo-link",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Link to virtually any data source.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -8,7 +8,7 @@
     "card"
   ],
   "dependencies": {
-    "lodash": "3.10.1",
+    "lodash": "4.0.0",
     "request": "2.67.0"
   },
   "pack": {

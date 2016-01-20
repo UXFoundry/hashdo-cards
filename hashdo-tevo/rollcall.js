@@ -58,7 +58,7 @@ module.exports = {
                 result = [];
 
               for (var i = 0; i < users.length; i++) {
-                result.push(_.extend({}, users[i], {status: false}));
+                result.push(_.merge({}, users[i], {status: false}));
               }
 
               callback(result);

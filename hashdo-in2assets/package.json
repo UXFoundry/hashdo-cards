@@ -1,6 +1,6 @@
 {
   "name": "hashdo-in2assets",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "in2assets card pack.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -11,8 +11,8 @@
     "auctions"
   ],
   "dependencies": {
-    "lodash": "3.10.1",
-    "moment": "2.10.6",
+    "lodash": "4.0.0",
+    "moment": "2.11.1",
     "request": "2.67.0"
   },
   "pack": {

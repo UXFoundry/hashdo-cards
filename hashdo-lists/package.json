@@ -1,15 +1,11 @@
 {
   "name": "hashdo-lists",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Various HashDo lists.",
   "keywords": [
     "hashdo",
     "lists"
   ],
-  "peerDependencies": {
-    "lodash": "3.10.1",
-    "request": "2.67.0"
-  },
   "pack": {
     "friendlyName": "Lists",
     "cards": [
@@ -18,7 +14,7 @@
     ]
   },
   "dependencies": {
-    "lodash": "^3.10.1",
-    "request": "^2.67.0"
+    "lodash": "4.0.0",
+    "request": "2.67.0"
   }
 }

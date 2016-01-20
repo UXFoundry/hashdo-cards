@@ -37,22 +37,22 @@ module.exports = {
     var Request = require('request'),
       _ = require('lodash');
 
-    function getLatLng(callback) {
+    function getLatLng(cb) {
       var lat = Number(inputs.latitude),
         lng = Number(inputs.longitude);
 
       if (_.isNaN(lat) || _.isNaN(lng)) {
-        getLatLngByIP(inputs.ipAddress || '', callback);
+        getLatLngByIP(inputs.ipAddress || '', cb);
       }
       else {
-        callback({
+        cb({
           lat: lat,
           lng: lng
         });
       }
     }
 
-    function getLatLngByIP(ipAddress, callback) {
+    function getLatLngByIP(ipAddress, cb) {
       Request({
           url: 'http://ipinfo.io/' + ipAddress,
           json: true
@@ -62,24 +62,24 @@ module.exports = {
             if (body && body.loc) {
               var loc = body.loc.split(',');
 
-              callback({
+              cb({
                 lat: Number(loc[0]),
                 lng: Number(loc[1])
               });
             }
             else {
-              callback();
+              cb();
             }
           }
           else {
             console.error('Geo-Directions: Error getting lat/long for IP address ' + ipAddress, err);
-            callback();
+            cb();
           }
         }
       );
     }
 
-    function getDirections(lat, lng, callback) {
+    function getDirections(lat, lng, cb) {
       Request({
           url: 'https://maps.googleapis.com/maps/api/directions/json',
           qs: {
@@ -125,18 +125,18 @@ module.exports = {
                   });
                 }
 
-                callback(simpleDirectionData);
+                cb(simpleDirectionData);
               }
               else {
-                callback();
+                cb();
               }
             }
             else {
-              callback();
+              cb();
             }
           }
           else {
-            callback();
+            cb();
           }
         }
       );
@@ -174,10 +174,13 @@ module.exports = {
 
               callback(null, _.merge(viewModel, state));
             }
+            else {
+              callback(new Error('Failed to get directions for latitude and longitude: ' + (latLng || '?')));
+            }
           });
         }
         else {
-          callback(new Error('Failed to get latitude and longitude from IP address: ' + (inputs.ipAddress || '?')));
+          callback(new Error('Failed to get directions for latitude and longitude: ' + (latLng || '?')));
         }
       });
     }

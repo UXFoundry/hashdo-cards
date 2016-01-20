@@ -127,7 +127,7 @@ module.exports = {
 
     Sha256.update(inputs.posSecret + '&' + inputs.posKey);
 
-    var apiRequestUrl = _.trimRight(inputs.posApiUrl, '/') + '/api/v2/merchants/' + inputs.merchantId + '/sites/' + inputs.siteId + '/payments?PosReference=' + paymentInfo[0];
+    var apiRequestUrl = _.trimEnd(inputs.posApiUrl, '/') + '/api/v2/merchants/' + inputs.merchantId + '/sites/' + inputs.siteId + '/payments?PosReference=' + paymentInfo[0];
 
     var apiRequestHeaders = {
       siteid: inputs.siteId,
