@@ -1,0 +1,25 @@
+extends /card
+
+block content
+  .survey(data-status= locals.status)
+    .survey-modal
+      div
+        | Yo Yo Yo...
+        a(href='#close', title='Close') &nbsp;
+
+    .survey-header
+      .bg-icon &nbsp;
+      h1= locals.survey.name
+      h3= locals.survey.questions.length + ' question survey'
+
+    .survey-body
+      if locals.survey.description
+        p= locals.survey.description
+
+    if locals.responses.length > 0
+      .survey-footer
+        | Continue
+
+    else
+      .survey-footer
+        | Start survey

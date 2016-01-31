@@ -27,25 +27,25 @@ block content
         tr
           td.label Tel:
           td
-            a.external(href='tel:' + locals.phone)= locals.phone
+            a.hdc-link(href='tel:' + locals.phone)= locals.phone
 
       if locals.website
         tr
           td.label Website:
           td
-            a.external(href='http://' + locals.website)= locals.website
+            a.hdc-link(href='http://' + locals.website)= locals.website
 
       if locals.twitter
         tr
           td.label Twitter:
           td
-            a.external(href='http://twitter.com/' + locals.twitter)= '@' + locals.twitter
+            a.hdc-link(href='http://twitter.com/' + locals.twitter)= '@' + locals.twitter
 
       if locals.instagram
         tr
           td.label Instagram:
           td
-            a.external(href='http://instagram.com/' + locals.instagram)= '@' + locals.instagram
+            a.hdc-link(href='http://instagram.com/' + locals.instagram)= '@' + locals.instagram
 
       if locals.details
         each detail in locals.details

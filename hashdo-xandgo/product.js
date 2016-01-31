@@ -24,100 +24,33 @@ module.exports = {
   },
 
   getCardData: function (inputs, state, callback) {
-    var _ = require('lodash');
+    var XandGo = require('./lib/xandgo'),
+      card = this;
 
-    function getProduct(callback) {
-      var Request = require('request');
+    // enable client side js support
+    card.client$Support = true;
 
-      Request.post({
-        url: 'http://xandgo.com/api/product',
-        form: {
-          apiKey: inputs.apiKey,
-          secret: inputs.secret,
-          productId: inputs.productId
-        },
-        json: true
-      }, function (err, response, body) {
-        if (!err) {
-          if (body.success) {
-            var product = body.product;
-            product.headerImage = parseHeaderImage(product);
-            product.video = getDetail(product.details, 'Video');
+    XandGo.getDataVersion(inputs.apiKey, inputs.secret, 'products', function (version) {
+      version = version || 0;
 
-            callback(product);
-          }
-          else {
-            callback();
-          }
-        }
-        else {
-          console.error('XandGo-Product: Error getting X&Go product for product ID ' + inputs.productId, err);
-          callback();
-        }
-      });
-    }
-
-    function getDetail(details, detail) {
-      if (details && _.isArray(details)) {
-        for (var i = 0; i < details.length; i++) {
-          if (details[i].label === detail) {
-            return details[i].value;
-          }
-        }
-      }
-    }
-
-    function parseHeaderImage(product) {
-      var Cloudinary = require('cloudinary'),
-        width = 225,
-        height = 143,
-        crop = 'fill';
-
-      if (product) {
-        /*jshint camelcase: false */
-        Cloudinary.config({
-          cloud_name: 'xandgo',
-          api_key: process.env.CLOUDINARY_KEY,
-          api_secret: process.env.CLOUDINARY_SECRET
-        });
-
-        if (product.photos && product.photos.length > 0) {
-          /*jshint camelcase: false */
-          return Cloudinary.url(product.photos[0].public_id, {
-            width: width,
-            height: height,
-            crop: crop
-          });
-        }
-
-        if (product.logo) {
-          /*jshint camelcase: false */
-          return Cloudinary.url(product.logo.public_id, {
-            width: width,
-            height: height,
-            crop: crop
-          });
-        }
-
-        if (product.location) {
-          if (product.location.geo) {
-            return 'http://maps.googleapis.com/maps/api/staticmap?&markers=color:black%7C' + product.location.geo[1] + ',' + product.location.geo[0] + '&center=' + product.location.geo[1] + ',' + product.location.geo[0] + '&size=' + width + 'x' + height + '&zoom=15&sensor=false';
-          }
-        }
-      }
-
-      return '';
-    }
-
-    getProduct(function (product) {
-      if (product) {
-        callback(null, {
-          title: product.name || this.name,
-          product: product
-        });
+      if (state.product && state.version === version) {
+        callback(null, state.product);
       }
       else {
-        callback(new Error('Could not find product with ID ' + (inputs.productId || '?')));
+        XandGo.getProduct(inputs.apiKey, inputs.secret, inputs.productId, function (product) {
+          if (product) {
+            var viewModel = product;
+
+            // save state
+            state.product = product;
+            state.version = version;
+
+            callback(null, viewModel);
+          }
+          else {
+            callback(new Error('Could not find product with ID ' + (inputs.productId || '?')));
+          }
+        });
       }
     });
   }

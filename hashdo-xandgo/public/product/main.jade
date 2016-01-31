@@ -1,18 +1,37 @@
 extends /card
 
-block header
-  if locals.product.headerImage
-    .hdc-hdr(style='background: url(' + locals.product.headerImage + ') no-repeat 50% 0%; width: 225px; height: 143px;', valign='bottom')
-
 block content
-  p.title= locals.product.name
+  if locals.photos.length > 0
+    .swiper-container
+      .swiper-wrapper
+        each img in locals.photos
+          .swiper-slide
+            img.lead-image(src= img, width='225', height='143')
 
-  if locals.product.description
-    .description
-      != locals.product.description
+      .swiper-pagination
+
+  .product-header
+    h3= locals.name
+
+    if locals.shortDescription
+      p= locals.shortDescription
+
+  .product-meta
+    table
+      if locals.website
+        tr
+          td.label Website:
+          td
+            a.hdc-link(href='http://' + locals.website)= locals.website
+
+      if locals.details
+        each detail in locals.details
+          tr
+            td.label= detail.label
+            td= detail.value
 
 block footer
-  if locals.product.video
+  if locals.video
     .hdc-footer
       a.link &nbsp;
-      a.link.hdc-link(href= locals.product.video, target='_blank') Video
+      a.link.hdc-link(href= locals.video, target='_blank') Video

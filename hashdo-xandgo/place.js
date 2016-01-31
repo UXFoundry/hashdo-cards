@@ -30,18 +30,27 @@ module.exports = {
     // enable client side js support
     card.client$Support = true;
 
-    XandGo.getPlace(inputs.apiKey, inputs.secret, inputs.placeId, function (place) {
-      if (place) {
-        var viewModel = place;
+    XandGo.getDataVersion(inputs.apiKey, inputs.secret, 'places', function (version) {
+      version = version || 0;
 
-        // save state
-        state.place = place;
-        state.dateTimeStamp = new Date();
-
-        callback(null, viewModel);
+      if (state.place && state.version === version) {
+        callback(null, state.place);
       }
       else {
-        callback(new Error('Could not find place with ID ' + (inputs.placeId || '?')));
+        XandGo.getPlace(inputs.apiKey, inputs.secret, inputs.placeId, function (place) {
+          if (place) {
+            var viewModel = place;
+
+            // save state
+            state.place = place;
+            state.version = version;
+
+            callback(null, viewModel);
+          }
+          else {
+            callback(new Error('Could not find place with ID ' + (inputs.placeId || '?')));
+          }
+        });
       }
     });
   }
