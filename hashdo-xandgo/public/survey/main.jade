@@ -4,8 +4,16 @@ block content
   .survey(data-status= locals.status)
     .survey-modal
       div
-        | Yo Yo Yo...
         a(href='#close', title='Close') &nbsp;
+        .survey-question
+          h3
+          .survey-question-input
+          .survey-question-footer
+            .survey-question-next
+              | Next&nbsp;
+
+            .survey-question-back
+              | &nbsp;Back
 
     .survey-header
       .bg-icon &nbsp;

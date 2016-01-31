@@ -38,14 +38,12 @@
           p {
             color: #4D4D4D;
             -webkit-line-clamp: 8;
-            font-size: 13px;
           }
         }
 
         .survey-footer {
           padding: 15px;
           color: #4D4D4D;
-          text-decoration: none;
           font-weight: 500;
           font-size: 16px;
           cursor: pointer;
@@ -75,6 +73,8 @@
       bottom: 0;
       background: rgba(0,0,0,0.5);
       z-index: 10000;
+      width: 100%;
+      height: 100%;
 
       /* transition opacity on open */
       -webkit-transition: opacity 250ms ease-in;
@@ -88,19 +88,42 @@
       &.open {
         opacity: 1;
         pointer-events: auto;
+
+        -webkit-animation-name: bounce;
+        -moz-animation-name: bounce;
+        animation-name: bounce;
+      }
+
+      a[href='#close'] {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: transparent;
+
+        &:after {
+          content: 'x';
+          display: block;
+
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          width: 1.5em;
+
+          text-decoration: none;
+          text-shadow: none;
+          text-align: center;
+          color: #ccc;
+        }
       }
     }
 
     .survey-modal > div {
       width: 200px;
-      height: 300px;
       background: #fff;
-      position: absolute;
-      margin: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 auto;
 
       /* default minimise animation */
       -webkit-animation: minimise 250ms linear;
@@ -110,14 +133,80 @@
       padding: 10px;
       border-radius: 1px;
       box-shadow: 0 3px 10px rgba(0,0,0,0.8);
-      background: #fff;
-    }
 
-    /* override animation on modal open */
-    .survey-modal:target > div {
-      -webkit-animation-name: bounce;
-      -moz-animation-name: bounce;
-      animation-name: bounce;
+      .survey-question {
+        padding: 15px;
+
+        h3 {
+          margin: 0;
+        }
+
+        .survey-question-input {
+          margin: 20px 0 40px 0;
+
+          input {
+            border: none;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            color: #4D4D4D;
+            width: 100%;
+
+            &:focus {
+              outline: 0;
+            }
+          }
+        }
+
+        .survey-question-footer {
+          height: 20px;
+
+          .survey-question-next {
+            display: none;
+            cursor: pointer;
+            float: right;
+            padding: 5px 0 5px 10px;
+            color: #4D4D4D;
+            font-weight: 500;
+
+            &:after {
+              position: relative;
+              top: 4px;
+              content: '';
+              display: inline-block;
+              width: 0.7em;
+              height: 0.7em;
+              border-right: 0.1em solid #CBCBCB;
+              border-top: 0.1em solid #CBCBCB;
+              transform: rotate(45deg);
+              margin-right: 0.5em;
+              float: right;
+            }
+          }
+
+          .survey-question-back {
+            display: none;
+            cursor: pointer;
+            float: left;
+            padding: 5px 10px 5px 0;
+            color: #4D4D4D;
+            font-weight: 500;
+
+            &:before {
+              position: relative;
+              top: 4px;
+              content: '';
+              display: inline-block;
+              width: 0.7em;
+              height: 0.7em;
+              border-right: 0.1em solid #CBCBCB;
+              border-top: 0.1em solid #CBCBCB;
+              transform: rotate(225deg);
+              margin-left: 0.5em;
+              float: left;
+            }
+          }
+        }
+      }
     }
 
     @-webkit-keyframes bounce {
@@ -202,37 +291,6 @@
       100% {
         transform: scale3d(0.1,0.1,1);
       }
-    }
-
-    /* modal close link */
-    .survey-modal a[href='#close'] {
-      position: absolute;
-      right: 0;
-      top: 0;
-      color: transparent;
-    }
-
-    /* close button */
-    .survey-modal a[href='#close']:after {
-      content: 'x';
-      display: block;
-
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      width: 1.5em;
-
-      text-decoration: none;
-      text-shadow: none;
-      text-align: center;
-      color: #ccc;
-    }
-
-    .survey-modal a[href='#close']:focus:after,
-    .survey-modal a[href='#close']:hover:after {
-      -webkit-transform: scale(1.1,1.1);
-      -moz-transform: scale(1.1,1.1);
-      transform: scale(1.1,1.1);
     }
   }
 }
