@@ -52,7 +52,6 @@ module.exports = {
         });
       }
       else {
-
         // try for a newer version if no responses
         if (state.responses.length === 0) {
           XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, state.version, function (newSurvey, newVersion) {
@@ -60,42 +59,17 @@ module.exports = {
               state.version = newVersion;
               state.survey = newSurvey;
 
-              callback(null,
-                {
-                  survey: newSurvey,
-                  responses: state.responses
-                },
-                {
-                  questions: survey.questions,
-                  responseCount: 0
-                }
-              );
+              execCardDataCallback(newSurvey, state.responses, callback);
             }
             else {
-              callback(null,
-                {
-                  survey: state.survey,
-                  responses: state.responses
-                },
-                {
-                  questions: state.survey.questions,
-                  responseCount: 0
-                }
-              );
+              execCardDataCallback(state.survey, state.responses, callback);
             }
           });
         }
         else {
-          callback(null,
-            {
-              survey: state.survey,
-              responses: state.responses
-            },
-            {
-              questions: survey.questions,
-              responseCount: state.responses.length
-            }
-          );
+          console.log('here');
+          
+          execCardDataCallback(state.survey, state.responses, callback);
         }
       }
     }
@@ -105,14 +79,25 @@ module.exports = {
         state.survey = survey;
         state.responses = [];
 
-        callback(null,
+        execCardDataCallback(survey, [], callback);
+      });
+    }
+
+    function execCardDataCallback(survey, responses, callback) {
+      XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
+        callback && callback(null,
+
+          // jade locals
           {
             survey: survey,
-            responses: []
+            responses: responses
           },
+
+          // js client side locals
           {
             questions: survey.questions,
-            responseCount: 0
+            responses: responses,
+            user: user
           }
         );
       });

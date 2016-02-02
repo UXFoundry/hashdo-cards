@@ -4,7 +4,133 @@ var Cloudinary = require('cloudinary'),
   _ = require('lodash');
 
 var dataVersions = [],
-  dataVersionCacheDurationInMinutes = 2;
+  dataVersionCacheDurationInMinutes = 2,
+  baseAPIUrl = 'http://xandgo.com/api/';
+
+exports.getUser = function (apiKey, apiSecret, userId, callback) {
+  Request.post(
+    {
+      url: baseAPIUrl + 'user/byId',
+      form: {
+        apiKey: apiKey,
+        secret: apiSecret,
+        userId: userId
+      },
+      json: true
+    },
+    function (err, response, body) {
+      if (!err) {
+        if (body.success) {
+          callback(body.user);
+        }
+        else {
+          callback();
+        }
+      }
+      else {
+        callback();
+      }
+    }
+  );
+};
+
+exports.getPlace = function(apiKey, apiSecret, placeId, callback) {
+  Request.post(
+    {
+      url: baseAPIUrl + 'place',
+      form: {
+        apiKey: apiKey,
+        secret: apiSecret,
+        placeId: placeId
+      },
+      json: true
+    },
+    function (err, response, body) {
+      if (!err) {
+        if (body.success) {
+          var place = body.place;
+
+          place.photos = parsePhotos(place);
+          place.address = parsePlaceAddress(place);
+
+          callback(place);
+        }
+        else {
+          callback();
+        }
+      }
+      else {
+        callback();
+      }
+    }
+  );
+};
+
+exports.getProduct = function(apiKey, apiSecret, productId, callback) {
+  Request.post(
+    {
+      url: baseAPIUrl + 'product',
+      form: {
+        apiKey: apiKey,
+        secret: apiSecret,
+        productId: productId
+      },
+      json: true
+    },
+    function (err, response, body) {
+      if (!err) {
+        if (body.success) {
+          var product = body.product;
+
+          product.photos = parsePhotos(product);
+          product.video = getDetail(product.details, 'Video');
+
+          callback(product);
+        }
+        else {
+          callback();
+        }
+      }
+      else {
+        callback();
+      }
+    }
+  );
+};
+
+exports.getSurvey = function(apiKey, apiSecret, surveyId, currentVersion, callback) {
+  isUpdateAvailable(apiKey, apiSecret, currentVersion, 'surveys', function(updateAvailable, newVersion) {
+    if (updateAvailable) {
+      Request.post(
+        {
+          url: baseAPIUrl + 'survey',
+          form: {
+            apiKey: apiKey,
+            secret: apiSecret,
+            surveyId: surveyId
+          },
+          json: true
+        },
+        function (err, response, body) {
+          if (!err) {
+            if (body.success) {
+              callback(body.survey, newVersion);
+            }
+            else {
+              callback();
+            }
+          }
+          else {
+            callback();
+          }
+        }
+      );
+    }
+    else {
+      callback && callback();
+    }
+  });
+};
 
 exports.getDataVersion = getDataVersion;
 
@@ -17,7 +143,7 @@ function getDataVersion(apiKey, apiSecret, dataKey, callback) {
   else {
     Request.post(
       {
-        url: 'http://xandgo.com/api/app/dataVersion',
+        url: baseAPIUrl + 'app/dataVersion',
         form: {
           apiKey: apiKey,
           secret: apiSecret,
@@ -53,104 +179,6 @@ function isUpdateAvailable(apiKey, apiSecret, currentVersion, dataKey, callback)
     }
   });
 }
-
-exports.getPlace = function(apiKey, apiSecret, placeId, callback) {
-  Request.post(
-    {
-      url: 'http://xandgo.com/api/place',
-      form: {
-        apiKey: apiKey,
-        secret: apiSecret,
-        placeId: placeId
-      },
-      json: true
-    },
-    function (err, response, body) {
-      if (!err) {
-        if (body.success) {
-          var place = body.place;
-
-          place.photos = parsePhotos(place);
-          place.address = parsePlaceAddress(place);
-
-          callback(place);
-        }
-        else {
-          callback();
-        }
-      }
-      else {
-        callback();
-      }
-    }
-  );
-};
-
-exports.getProduct = function(apiKey, apiSecret, productId, callback) {
-  Request.post(
-    {
-      url: 'http://xandgo.com/api/product',
-      form: {
-        apiKey: apiKey,
-        secret: apiSecret,
-        productId: productId
-      },
-      json: true
-    },
-    function (err, response, body) {
-      if (!err) {
-        if (body.success) {
-          var product = body.product;
-
-          product.photos = parsePhotos(product);
-          product.video = getDetail(product.details, 'Video');
-
-          callback(product);
-        }
-        else {
-          callback();
-        }
-      }
-      else {
-        callback();
-      }
-    }
-  );
-};
-
-exports.getSurvey = function(apiKey, apiSecret, surveyId, currentVersion, callback) {
-  isUpdateAvailable(apiKey, apiSecret, currentVersion, 'surveys', function(updateAvailable, newVersion) {
-    if (updateAvailable) {
-      Request.post(
-        {
-          url: 'http://xandgo.com/api/survey',
-          form: {
-            apiKey: apiKey,
-            secret: apiSecret,
-            surveyId: surveyId
-          },
-          json: true
-        },
-        function (err, response, body) {
-          if (!err) {
-            if (body.success) {
-              callback(body.survey, newVersion);
-            }
-            else {
-              callback();
-            }
-          }
-          else {
-            callback();
-          }
-        }
-      );
-    }
-    else {
-      callback && callback();
-    }
-  });
-};
 
 function getCachedDataVersion(apiKey, apiSecret, dataKey) {
   var version = 0;
