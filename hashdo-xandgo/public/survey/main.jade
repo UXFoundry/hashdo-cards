@@ -16,7 +16,7 @@ block content
                 | Done
 
               .survey-question-next
-                | Continue
+                | Next
 
               .survey-question-back
                 | Back
@@ -25,6 +25,11 @@ block content
       .bg-icon &nbsp;
       h1= locals.survey.name
       h3= locals.survey.questions.length + ' question survey'
+
+    .survey-progress(class= locals.responseCount > 0 || locals.complete ? 'visible' : '')
+      h3= locals.percentageComplete + '%'
+      .survey-progress-bar
+        .survey-progress-percentage(style='width: ' + locals.percentageComplete + '%')
 
     .survey-body
       if locals.survey.description

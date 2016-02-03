@@ -19,12 +19,37 @@ card.onReady = function () {
     card.require('https://cdn.jsdelivr.net/lodash/4.2.0/lodash.min.js');
   }
 
+  // subscribe to any state changes
+  card.state.onChange = function (val) {
+    var percentageComplete = 0;
+
+    if (val && val.responses) {
+      var responseCount = _.keys(val.responses).length,
+        questionCount = getQuestionCount();
+
+      percentageComplete = Math.floor((responseCount / questionCount) * 100);
+    }
+
+    if (val.complete) {
+      percentageComplete = 100;
+    }
+
+    if (percentageComplete > 0) {
+      var $progress = $card.find('.survey-progress');
+
+      $progress.find('h3').html(percentageComplete + '%');
+      $progress.find('.survey-progress-percentage').css('width', percentageComplete + '%');
+      $progress.show();
+    }
+  };
+
   // summary footer click
   $card.find('.survey-footer.active').click(function () {
     // start or continue survey
     (_.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
   });
 
+  // start a new survey
   function startSurvey() {
     currentQuestion = getQuestion(0);
 
@@ -38,6 +63,7 @@ card.onReady = function () {
     }
   }
 
+  // continue an incomplete survey
   function continueSurvey() {
     // get latest response
     var latestId, latestResponse,
@@ -131,14 +157,22 @@ card.onReady = function () {
 
   // modal done
   $done.click(function () {
-    $card.find('.survey-footer').removeClass('active').html('Completed');
-    closeModal();
+    endSurvey();
   });
 
   // modal close
   $modal.find('a[href="#close"]').click(function () {
     closeModal();
   });
+
+  function getQuestionCount() {
+    if (locals.questions && _.isArray(locals.questions)) {
+      return locals.questions.length;
+    }
+    else {
+      return 0;
+    }
+  }
 
   function getQuestion(index) {
     if (locals.questions && locals.questions[index]) {
@@ -309,7 +343,8 @@ card.onReady = function () {
   }
 
   function endSurvey() {
-    console.log('DONE!');
+    $card.find('.survey-footer').removeClass('active').html('Completed').off('click');
+    closeModal();
   }
 
   function getUserFieldValue(field) {

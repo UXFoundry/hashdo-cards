@@ -49,6 +49,7 @@ module.exports = {
 
         callback(null, {
           survey: state.survey,
+          percentageComplete: 100,
           complete: true,
           completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset)
         });
@@ -90,7 +91,8 @@ module.exports = {
           // jade locals
           {
             survey: survey,
-            responseCount: _.keys(responses || {}).length
+            responseCount: _.keys(responses || {}).length,
+            percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100)
           },
 
           // js client side locals

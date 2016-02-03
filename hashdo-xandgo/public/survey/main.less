@@ -31,6 +31,36 @@
           }
         }
 
+        .survey-progress {
+          display: none;
+          padding: 20px 10px;
+          border-bottom: 1px dashed #E1E1E1;
+
+          &.visible {
+            display: inherit;
+          }
+
+          h3 {
+            color: #B1B1B1;
+            font-size: 13px;
+            line-height: 13px;
+            font-weight: 300;
+            margin: 0 0 10px 0;
+          }
+
+          .survey-progress-bar {
+            width: 100%;
+            height: 2px;
+            background-color: #CBCBCB;
+
+            .survey-progress-percentage {
+              background-color: #000;
+              width: 0;
+              height: 2px;
+            }
+          }
+        }
+
         .survey-body {
           padding: 20px 10px;
           border-bottom: 1px dashed #E1E1E1;
