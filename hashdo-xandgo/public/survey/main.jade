@@ -9,12 +9,17 @@ block content
           h3
           .survey-question-description
           .survey-question-input
-          .survey-question-footer
-            .survey-question-next
-              | Continue
 
-            .survey-question-back
-              | Back
+          if !locals.complete
+            .survey-question-footer
+              .survey-question-done
+                | Done
+
+              .survey-question-next
+                | Continue
+
+              .survey-question-back
+                | Back
 
     .survey-header
       .bg-icon &nbsp;
@@ -25,10 +30,15 @@ block content
       if locals.survey.description
         p= locals.survey.description
 
-    if locals.responses.length > 0
+    if locals.complete
       .survey-footer
-        | Continue
+        | Completed - #{locals.completeDate}
 
     else
-      .survey-footer
-        | Start survey
+      if locals.responseCount > 0
+        .survey-footer.active
+          | Continue
+
+      else
+        .survey-footer.active
+          | Start survey

@@ -31,7 +31,9 @@ module.exports = {
 
   getCardData: function (inputs, state, callback) {
     var XandGo = require('./lib/xandgo'),
-      card = this;
+      card = this,
+      Moment = require('moment'),
+      _ = require('lodash');
 
     // enable client side state and proxy support
     card.clientStateSupport = true;
@@ -47,13 +49,13 @@ module.exports = {
 
         callback(null, {
           survey: state.survey,
-          responses: state.responses,
-          complete: true
+          complete: true,
+          completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset)
         });
       }
       else {
         // try for a newer version if no responses
-        if (state.responses.length === 0) {
+        if (_.keys(state.responses).length === 0) {
           XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, state.version, function (newSurvey, newVersion) {
             if (newSurvey) {
               state.version = newVersion;
@@ -67,8 +69,6 @@ module.exports = {
           });
         }
         else {
-          console.log('here');
-          
           execCardDataCallback(state.survey, state.responses, callback);
         }
       }
@@ -77,9 +77,9 @@ module.exports = {
       XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, null, function (survey, version) {
         state.version = version;
         state.survey = survey;
-        state.responses = [];
+        state.responses = {};
 
-        execCardDataCallback(survey, [], callback);
+        execCardDataCallback(survey, state.responses, callback);
       });
     }
 
@@ -90,17 +90,35 @@ module.exports = {
           // jade locals
           {
             survey: survey,
-            responses: responses
+            responseCount: _.keys(responses || {}).length
           },
 
           // js client side locals
           {
             questions: survey.questions,
-            responses: responses,
+            responses: responses || {},
             user: user
           }
         );
       });
+    }
+
+    function formatDate(value, timezoneOffset, format) {
+      format = format || 'D MMM YYYY H:mm';
+
+      if (value) {
+        var dt = Moment(value).utc();
+
+        // default offset to GMT +2
+        if (_.isUndefined(timezoneOffset) || _.isNull(timezoneOffset) || !_.isNumber(timezoneOffset)) {
+          timezoneOffset = 120;
+        }
+
+        return dt.utcOffset(timezoneOffset).format(format);
+      }
+      else {
+        return '';
+      }
     }
   }
 };

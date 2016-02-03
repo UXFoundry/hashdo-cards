@@ -24,7 +24,7 @@
 
           h3 {
             color: #B1B1B1;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 13px;
             font-weight: 300;
             margin: 0 0 10px 0;
@@ -43,20 +43,28 @@
 
         .survey-footer {
           padding: 15px;
-          color: #4D4D4D;
-          font-weight: 500;
-          font-size: 16px;
-          cursor: pointer;
+          color: #B1B1B1;
+          font-size: 13px;
+          line-height: 13px;
+          font-weight: 300;
 
-          &:after {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-right: 0.1em solid #CBCBCB;
-            border-top: 0.1em solid #CBCBCB;
-            transform: rotate(45deg);
-            margin-top: 5px;
-            float: right;
+          &.active {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 16px;
+            cursor: pointer;
+            color: #000;
+
+            &:after {
+              content: '';
+              width: 10px;
+              height: 10px;
+              border-right: 0.1em solid #CBCBCB;
+              border-top: 0.1em solid #CBCBCB;
+              transform: rotate(45deg);
+              margin-top: 5px;
+              float: right;
+            }
           }
         }
       }
@@ -162,6 +170,16 @@
 
         .survey-question-footer {
           height: 20px;
+
+          .survey-question-done {
+            display: none;
+            cursor: pointer;
+            float: right;
+            margin-right: -5px;
+            padding: 5px 0 5px 0;
+            color: #4D4D4D;
+            font-weight: 500;
+          }
 
           .survey-question-next {
             display: none;
