@@ -152,7 +152,16 @@ card.onReady = function () {
 
   // modal back
   $back.click(function () {
+    if (currentQuestionIndex > 0) {
+      var previousQuestionIndex = currentQuestionIndex - 1;
 
+      if (locals.questions[previousQuestionIndex]) {
+        currentQuestionIndex = previousQuestionIndex;
+        currentQuestion = locals.questions[previousQuestionIndex];
+
+        renderQuestion();
+      }
+    }
   });
 
   // modal done
@@ -206,7 +215,7 @@ card.onReady = function () {
         inputHTML = '',
         value = '',
         showNext = true,
-        showBack = _.keys(responses).length > 0;
+        showBack = _.keys(responses).length > 0 && currentQuestionIndex > 0;
 
       resetModal();
 
@@ -215,6 +224,10 @@ card.onReady = function () {
 
       if (currentQuestion.replyType === 'end') {
         $done.show();
+
+        if (showBack) {
+          $back.show();
+        }
 
         // flag as complete
         card.state.save({
@@ -236,11 +249,18 @@ card.onReady = function () {
 
           case 'userDetail':
             inputHTML = '<input type="text">';
-            value = getUserDetailValue(currentQuestion.reply.field);
+            value = getUserDetailValue(currentQuestion.reply.detail);
             break;
         }
 
-        // populate description, field and buttons
+        // overwrite value with previous response if any
+        if (locals.responses && locals.responses[currentQuestion.id]) {
+          if (locals.responses[currentQuestion.id].response) {
+            value = locals.responses[currentQuestion.id].response;
+          }
+        }
+
+        // populate description, field, buttons / links and value
         $description.html(description);
         $input.html(inputHTML);
 
