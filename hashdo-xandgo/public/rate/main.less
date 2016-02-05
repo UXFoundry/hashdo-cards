@@ -1,69 +1,73 @@
 .hdc {  
   &.xandgo.rate {
-    .stars {
-      width: 190px;
-      height: 35px;
-      overflow: hidden;
-    }
+    .hdc-inner {
+      padding: 15px;
 
-    fieldset {
-      border: none;
-      margin: 0;
-      padding: 0;
-    }
+      .stars {
+        width: 190px;
+        height: 35px;
+        overflow: hidden;
+      }
 
-    fieldset:not(:checked) > input {
-      position: absolute;
-      top: -9999px;
-      clip: rect(0, 0, 0, 0);
-    }
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
 
-    fieldset:not(:checked) > label {
-      float: right;
-      width: 28px;
-      padding: 0 5px;
-      overflow: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      font-size: 200%;
-      line-height: 1.2;
-      color: #ddd;
-      text-shadow: 1px 1px #bbb, 1px 1px #666, 1px 1px 1px rgba(0, 0, 0, .4);
-    }
+      fieldset:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+        clip: rect(0, 0, 0, 0);
+      }
 
-    fieldset.readonly:not(:checked) > label {
-      cursor: default;
-    }
+      fieldset:not(:checked) > label {
+        float: right;
+        width: 28px;
+        padding: 0 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 200%;
+        line-height: 1.2;
+        color: #ddd;
+        text-shadow: 1px 1px #bbb, 1px 1px #666, 1px 1px 1px rgba(0, 0, 0, .4);
+      }
 
-    fieldset:not(:checked) > label:before {
-      content: '★ ';
-      margin-left: 3px;
-    }
+      fieldset.readonly:not(:checked) > label {
+        cursor: default;
+      }
 
-    fieldset > input:checked ~ label {
-      color: gold;
-      text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
-    }
+      fieldset:not(:checked) > label:before {
+        content: '★ ';
+        margin-left: 3px;
+      }
 
-    fieldset:not(.readonly):not(:checked) > label:hover,
-    fieldset:not(.readonly):not(:checked) > label:hover ~ label {
-      color: gold;
-      text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
-    }
+      fieldset > input:checked ~ label {
+        color: gold;
+        text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
+      }
 
-    fieldset:not(.readonly) > input:checked + label:hover,
-    fieldset:not(.readonly) > input:checked + label:hover ~ label,
-    fieldset:not(.readonly) > input:checked ~ label:hover,
-    fieldset:not(.readonly) > input:checked ~ label:hover ~ label,
-    fieldset:not(.readonly) > label:hover ~ input:checked ~ label {
-      color: gold;
-      text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
-    }
+      fieldset:not(.readonly):not(:checked) > label:hover,
+      fieldset:not(.readonly):not(:checked) > label:hover ~ label {
+        color: gold;
+        text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
+      }
 
-    fieldset:not(.readonly) > label:active {
-      position: relative;
-      top: 2px;
-      left: 2px;
+      fieldset:not(.readonly) > input:checked + label:hover,
+      fieldset:not(.readonly) > input:checked + label:hover ~ label,
+      fieldset:not(.readonly) > input:checked ~ label:hover,
+      fieldset:not(.readonly) > input:checked ~ label:hover ~ label,
+      fieldset:not(.readonly) > label:hover ~ input:checked ~ label {
+        color: gold;
+        text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
+      }
+
+      fieldset:not(.readonly) > label:active {
+        position: relative;
+        top: 2px;
+        left: 2px;
+      }
     }
   }
 }

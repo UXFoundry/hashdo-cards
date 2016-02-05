@@ -34,6 +34,33 @@ exports.getUser = function (apiKey, apiSecret, userId, callback) {
   );
 };
 
+exports.getRequestRating = function (apiKey, apiSecret, requestId, callback) {
+  Request.post(
+    {
+      url: baseAPIUrl + 'request/rating',
+      form: {
+        apiKey: apiKey,
+        secret: apiSecret,
+        requestId: requestId
+      },
+      json: true
+    },
+    function (err, response, body) {
+      if (!err) {
+        if (body.success) {
+          callback(body.rating);
+        }
+        else {
+          callback();
+        }
+      }
+      else {
+        callback();
+      }
+    }
+  );
+}
+
 exports.getPlace = function(apiKey, apiSecret, placeId, callback) {
   Request.post(
     {

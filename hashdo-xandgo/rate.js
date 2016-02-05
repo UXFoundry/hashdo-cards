@@ -30,37 +30,11 @@ module.exports = {
   },
 
   getCardData: function (inputs, state, callback) {
-    var _ = require('lodash');
+    var XandGo = require('./lib/xandgo');
 
-    function getRating(callback) {
-      var Request = require('request');
-
-      Request.post({
-        url: 'http://xandgo.com/api/request/rating',
-        form: {
-          apiKey: inputs.apiKey,
-          secret: inputs.secret,
-          requestId: inputs.requestId
-        },
-        json: true
-      }, function (err, response, body) {
-        if (!err) {
-          if (body.success) {
-            callback(body.rating);
-          }
-          else {
-            callback();
-          }
-        }
-        else {
-          console.error('XandGo-Rate: Error getting X&Go rating for request ID ' + inputs.requestId, err);
-          callback();
-        }
-      });
-    }
-
-    // By default we don't want extra client code.
+    // disable client state and proxy support
     this.clientStateSupport = false;
+    this.clientProxySupport = false;
 
     var viewModel = {
       title: 'Rate our Service',
@@ -72,21 +46,19 @@ module.exports = {
       callback(null, viewModel);
     }
     else {
-      getRating(function (rating) {
+      XandGo.getRequestRating(inputs.apiKey, inputs.secret, inputs.requestId, function (rating) {
         if (rating > 0) {
           state.rating = rating;
+          viewModel.rating = rating;
 
-          callback(null, _.merge(viewModel, state));
+          callback(null, viewModel);
         }
         else {
-          // Ensure client code is injected, but only if the rating hasn't yet been made.
+          // enable client state and proxy support
           this.clientStateSupport = true;
+          this.clientProxySupport = true;
 
-          callback(null, viewModel, {
-            apiKey: inputs.apiKey,
-            secret: inputs.secret,
-            requestId: inputs.requestId
-          });
+          callback(null, viewModel);
         }
       }.bind(this));
     }

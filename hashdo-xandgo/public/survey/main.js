@@ -32,6 +32,7 @@ card.onReady = function () {
 
     if (val.complete) {
       percentageComplete = 100;
+      $card.find('.survey-footer').removeClass('active').html('Completed').off('click');
     }
 
     if (percentageComplete > 0) {
@@ -228,18 +229,52 @@ card.onReady = function () {
         if (showBack) {
           $back.show();
         }
-
-        // flag as complete
-        card.state.save({
-          complete: true,
-          completeDateTimeStamp: new Date().getTime()
-        });
       }
       else {
         switch (currentQuestion.replyType) {
-          case 'rating':
-            description = '(' + currentQuestion.reply.min + ' - ' + currentQuestion.reply.max + ')';
+          case 'text':
+            inputHTML = '<input type="text">';
+            break;
+
+          case 'email':
+            inputHTML = '<input type="email">';
+            break;
+
+          case 'website':
+            inputHTML = '<input type="text" placeholder="http://">';
+            break;
+
+          case 'date':
+            inputHTML = '<input type="date">';
+            break;
+
+          case 'multipleChoice':
+            inputHTML = '<div class="survey-input-options">';
+
+            if (_.isArray(currentQuestion.reply)) {
+              for (var i = 0; i < currentQuestion.reply.length; i++) {
+                inputHTML +=
+                  '<div class="survey-input-option">' +
+                  '<input type="radio" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
+                  '<label for="option-' + currentQuestionIndex + '-' + i + '">' +
+                  '<span class="survey-input-option-dot"></span>' +
+                  '<span class="survey-input-option-text">' + currentQuestion.reply[i].choice + '</span>' +
+                  '</label>' +
+                  '</div>';
+              }
+            }
+
+            inputHTML += '</div>';
+
+            break;
+
+          case 'number':
             inputHTML = '<input type="number">';
+            break;
+
+          case 'rating':
+            inputHTML = '<input type="number">';
+            description = '(' + currentQuestion.reply.min + ' - ' + currentQuestion.reply.max + ')';
             break;
 
           case 'userField':
@@ -264,10 +299,8 @@ card.onReady = function () {
         $description.html(description);
         $input.html(inputHTML);
 
-        if (value) {
-          var $answer = $input.children().first();
-          $answer.val(value).focus()[0].select();
-        }
+        // populate response, if any
+        setResponse(value);
 
         if (showNext) {
           $next.show();
@@ -281,19 +314,72 @@ card.onReady = function () {
   }
 
   function getResponse() {
-    var $response = $input.children().first(),
-      response = _.trim($response.val());
+    switch (currentQuestion.replyType) {
+      case 'text':
+      case 'email':
+      case 'website':
+      case 'userField':
+      case 'userDetail':
+        return _.trim($input.find('input').val());
 
-    return response;
+      case 'date':
+        return $input.find('input').val().length > 0 ? new Date($input.find('input').val()) : '';
+
+      case 'rating':
+      case 'number':
+        return _.toNumber($input.find('input').val()) || '';
+
+      case 'multipleChoice':
+        return $input.find('input[type=radio]:checked').parent().find('.survey-input-option-text').text();
+    }
+  }
+
+  function setResponse(response) {
+    switch (currentQuestion.replyType) {
+      case 'text':
+      case 'email':
+      case 'website':
+      case 'number':
+      case 'rating':
+      case 'userField':
+      case 'userDetail':
+        var $el = $input.find('input');
+        $el.val(_.trim(response || '')).focus();
+
+        if ($el[0]) {
+          $el[0].select();
+        }
+
+        break;
+
+      case 'date':
+        var $el = $input.find('input');
+
+        if ($el[0]) {
+          var el = $el[0];
+
+          el.valueAsDate = new Date(response);
+          el.select();
+        }
+
+        break;
+
+      case 'multipleChoice':
+        return $input.find('.survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
+    }
   }
 
   function validateResponse(response) {
-    var $response = $input.children().first(),
+    var $response,
+      clearEvent = 'keypress',
       valid = true;
 
     // validate response
     switch (currentQuestion.replyType) {
       case 'multipleChoice':
+        $response = $input.children().first();
+        clearEvent = 'change';
+
         if (_.isArray(currentQuestion.reply)) {
           var validOption = false;
 
@@ -313,14 +399,113 @@ card.onReady = function () {
       case 'text':
       case 'userField':
       case 'userDetail':
-        if (response.length === 0) {
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required && response.length === 0) {
           valid = false;
         }
         break;
 
+      case 'email':
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required) {
+          if (response.length === 0) {
+            valid = false;
+          }
+
+          if (!isEmail(response)) {
+            valid = false;
+          }
+        }
+        else {
+          if (response) {
+            if (!isEmail(response)) {
+              valid = false;
+            }
+          }
+        }
+        break;
+
+      case 'website':
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required) {
+          if (response.length === 0) {
+            valid = false;
+          }
+
+          if (!isURL(response)) {
+            valid = false;
+          }
+        }
+        else {
+          if (response) {
+            if (!isURL(response)) {
+              valid = false;
+            }
+          }
+        }
+        break;
+
+      case 'date':
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required) {
+          if (!_.isDate(response)) {
+            valid = false;
+          }
+        }
+        else {
+          if (response) {
+            if (!_.isDate(response)) {
+              valid = false;
+            }
+          }
+        }
+        break;
+
+      case 'number':
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required) {
+          if (response.length === 0) {
+            valid = false;
+          }
+
+          if (!_.isNumber(response)) {
+            valid = false;
+          }
+        }
+        else {
+          if (response) {
+            if (!_.isNumber(response)) {
+              valid = false;
+            }
+          }
+        }
+        break;
+
       case 'rating':
-        if (!_.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
-          valid = false;
+        $response = $input.find('input');
+        clearEvent = 'keypress';
+
+        if (currentQuestion.required) {
+          if (!_.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
+            valid = false;
+          }
+        }
+        else {
+          if (response) {
+            if (!_.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
+              valid = false;
+            }
+          }
         }
         break;
     }
@@ -328,12 +513,12 @@ card.onReady = function () {
     if (!valid) {
       $response.addClass('invalid');
 
-      function onKeyPress() {
+      function onClear() {
         $response.removeClass('invalid');
-        $response.off('keypress', onKeyPress);
+        $response.off(clearEvent, onClear);
       }
 
-      $response.on('keypress', onKeyPress);
+      $response.on(clearEvent, onClear);
     }
 
     return valid;
@@ -363,7 +548,15 @@ card.onReady = function () {
   }
 
   function endSurvey() {
+    // remove events
     $card.find('.survey-footer').removeClass('active').html('Completed').off('click');
+
+    // flag as complete
+    card.state.save({
+      complete: true,
+      completeDateTimeStamp: new Date().getTime()
+    });
+
     closeModal();
   }
 
@@ -437,5 +630,297 @@ card.onReady = function () {
         }
       }
     }
+  }
+
+  function isEmail(str) {
+    // These comments use the following terms from RFC2822:
+    // local-part, domain, domain-literal and dot-atom.
+    // Does the address contain a local-part followed an @ followed by a domain?
+    // Note the use of lastIndexOf to find the last @ in the address
+    // since a valid email address may have a quoted @ in the local-part.
+    // Does the domain name have at least two parts, i.e. at least one dot,
+    // after the @? If not, is it a domain-literal?
+    // This will accept some invalid email addresses
+    // BUT it doesn't reject valid ones.
+    var atSym = str.lastIndexOf('@');
+
+    // no local-part
+    if (atSym < 1) {
+      return false;
+    }
+
+    // no domain
+    if (atSym == str.length - 1) {
+      return false;
+    }
+
+    // there may only be 64 octets in the local-part
+    if (atSym > 64) {
+      return false;
+    }
+
+    // there may only be 255 octets in the domain
+    if (str.length - atSym > 255) {
+      return false;
+    }
+
+    // Is the domain plausible?
+    var lastDot = str.lastIndexOf('.');
+
+    // Check if it is a dot-atom such as example.com
+    if (lastDot > atSym + 1 && lastDot < str.length - 1) {
+      return true;
+    }
+
+    //  Check if could be a domain-literal.
+    if (str.charAt(atSym + 1) == '[' && str.charAt(str.length - 1) == ']') {
+      return true;
+    }
+
+    return false;
+  }
+
+  /*!
+   * Copyright (c) 2015 Chris O'Hara <cohara87@gmail.com>
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining
+   * a copy of this software and associated documentation files (the
+   * "Software"), to deal in the Software without restriction, including
+   * without limitation the rights to use, copy, modify, merge, publish,
+   * distribute, sublicense, and/or sell copies of the Software, and to
+   * permit persons to whom the Software is furnished to do so, subject to
+   * the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be
+   * included in all copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+   * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+   * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+   * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+   */
+  var default_fqdn_options = {
+    require_tld: true,
+    allow_underscores: false,
+    allow_trailing_dot: false
+  };
+
+  function isFQDN(str, options) {
+    options = _.merge(options, default_fqdn_options);
+
+    /* Remove the optional trailing dot before checking validity */
+    if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+      str = str.substring(0, str.length - 1);
+    }
+
+    var parts = str.split('.');
+
+    if (options.require_tld) {
+      var tld = parts.pop();
+
+      if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+        return false;
+      }
+    }
+
+    for (var part, i = 0; i < parts.length; i++) {
+      part = parts[i];
+
+      if (options.allow_underscores) {
+        if (part.indexOf('__') >= 0) {
+          return false;
+        }
+
+        part = part.replace(/_/g, '');
+      }
+
+      if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+        return false;
+      }
+
+      if (/[\uff01-\uff5e]/.test(part)) {
+        // disallow full-width chars
+        return false;
+      }
+
+      if (part[0] === '-' || part[part.length - 1] === '-') {
+        return false;
+      }
+
+      if (part.indexOf('---') >= 0 && part.slice(0, 4) !== 'xn--') {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  var ipv4Maybe = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
+    ipv6Block = /^[0-9A-F]{1,4}$/i;
+
+  function isIP(str, version) {
+    version = version ? version + '' : '';
+
+    if (!version) {
+      return isIP(str, 4) || isIP(str, 6);
+    }
+    else if (version === '4') {
+      if (!ipv4Maybe.test(str)) {
+        return false;
+      }
+
+      var parts = str.split('.').sort(function (a, b) {
+        return a - b;
+      });
+
+      return parts[3] <= 255;
+    }
+    else if (version === '6') {
+      var blocks = str.split(':');
+      var foundOmissionBlock = false; // marker to indicate ::
+
+      // At least some OS accept the last 32 bits of an IPv6 address
+      // (i.e. 2 of the blocks) in IPv4 notation, and RFC 3493 says
+      // that '::ffff:a.b.c.d' is valid for IPv4-mapped IPv6 addresses,
+      // and '::a.b.c.d' is deprecated, but also valid.
+      var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
+      var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
+
+      if (blocks.length > expectedNumberOfBlocks)
+        return false;
+
+      // initial or final ::
+      if (str === '::') {
+        return true;
+      }
+      else if (str.substr(0, 2) === '::') {
+        blocks.shift();
+        blocks.shift();
+
+        foundOmissionBlock = true;
+      }
+      else if (str.substr(str.length - 2) === '::') {
+        blocks.pop();
+        blocks.pop();
+
+        foundOmissionBlock = true;
+      }
+
+      for (var i = 0; i < blocks.length; ++i) {
+        // test for a :: which can not be at the string start/end
+        // since those cases have been handled above
+        if (blocks[i] === '' && i > 0 && i < blocks.length -1) {
+          if (foundOmissionBlock)
+            return false; // multiple :: in address
+
+          foundOmissionBlock = true;
+        }
+        else if (foundIPv4TransitionBlock && i == blocks.length - 1) {
+          // it has been checked before that the last
+          // block is a valid IPv4 address
+        }
+        else if (!ipv6Block.test(blocks[i])) {
+          return false;
+        }
+      }
+
+      if (foundOmissionBlock) {
+        return blocks.length >= 1;
+      }
+      else {
+        return blocks.length === expectedNumberOfBlocks;
+      }
+    }
+
+    return false;
+  }
+
+  var default_url_options = {
+    protocols: ['http', 'https'],
+    require_tld: true,
+    require_protocol: false,
+    require_valid_protocol: true,
+    allow_underscores: false,
+    allow_trailing_dot: false,
+    allow_protocol_relative_urls: false
+  };
+
+  function isURL(url, options) {
+    if(!url || url.length >= 2083 || /\s/.test(url)) {
+      return false;
+    }
+
+    if (url.indexOf('mailto:') === 0) {
+      return false;
+    }
+
+    options = _.merge(options, default_url_options);
+
+    var protocol, auth, host, hostname, port, port_str, split;
+
+    split = url.split('://');
+
+    if (split.length > 1) {
+      protocol = split.shift();
+
+      if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
+        return false;
+      }
+    }
+    else if (options.require_protocol) {
+      return false;
+    }
+    else if (options.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
+      split[0] = url.substr(2);
+    }
+
+    url = split.join('://');
+    split = url.split('#');
+    url = split.shift();
+
+    split = url.split('?');
+    url = split.shift();
+
+    split = url.split('/');
+    url = split.shift();
+    split = url.split('@');
+
+    if (split.length > 1) {
+      auth = split.shift();
+
+      if (auth.indexOf(':') >= 0 && auth.split(':').length > 2) {
+        return false;
+      }
+    }
+
+    hostname = split.join('@');
+    split = hostname.split(':');
+    host = split.shift();
+
+    if (split.length) {
+      port_str = split.join(':');
+      port = parseInt(port_str, 10);
+
+      if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
+        return false;
+      }
+    }
+
+    if (!isIP(host) && !isFQDN(host, options) && host !== 'localhost') {
+      return false;
+    }
+
+    if (options.host_whitelist && options.host_whitelist.indexOf(host) === -1) {
+      return false;
+    }
+
+    if (options.host_blacklist && options.host_blacklist.indexOf(host) !== -1) {
+      return false;
+    }
+
+    return true;
   }
 };

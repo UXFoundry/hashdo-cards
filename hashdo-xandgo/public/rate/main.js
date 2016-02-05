@@ -12,30 +12,23 @@ card.onReady = function () {
     var rating = Number($(this).val()),
       title = $card.find('.hdc-title').text();
 
-    $.post('http://xandgo.com/api/request/rate', {
-        apiKey: locals.apiKey,
-        secret: locals.secret,
-        requestId: locals.requestId,
-        rating: rating
-      },
-      function (response) {
-        if (response && response.success) {
-          setRating(rating);
+    card.proxy.post('http://xandgo.com/api/request/rate', {rating: rating}, function (err, response) {
+      if (response && response.success) {
+        setRating(rating);
 
-          card.state.save({
-            rating: rating
-          });
-        }
-        else {
-          $card.find('.hdc-title').addClass('error').text('Error. Please try again in a moment.');
-          $card.find('input.star').prop('checked', false);
-
-          setTimeout(function () {
-            $card.find('.hdc-title').removeClass('error').text(title);
-          }, 2000);
-        }
+        card.state.save({
+          rating: rating
+        });
       }
-    );
+      else {
+        $card.find('.hdc-title').addClass('error').text('Error. Please try again in a moment.');
+        $card.find('input.star').prop('checked', false);
+
+        setTimeout(function () {
+          $card.find('.hdc-title').removeClass('error').text(title);
+        }, 2000);
+      }
+    });
   });
 
   function setRating(rating) {
