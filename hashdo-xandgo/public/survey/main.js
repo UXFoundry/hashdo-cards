@@ -1,51 +1,72 @@
 /* global card, locals, _, $ */
 
+// custom lodash build:
+// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge
+
 card.onReady = function () {
-  var currentQuestion,
+  var currentQuestion, previousQuestionId,
     currentQuestionIndex = 0,
     responses = locals.responses || {},
     $card = $('#' + locals.card.id),
-    $modal = $card.find('.survey-modal'),
-    $q = $modal.find('.survey-question'),
-    $title = $q.find('h3'),
-    $description = $q.find('.survey-question-description'),
-    $input = $q.find('.survey-question-input'),
-    $done = $q.find('.survey-question-done'),
-    $next = $q.find('.survey-question-next'),
-    $back = $q.find('.survey-question-back');
+    $modal = $card.find('.hdc-survey-modal');
 
-  // load lodash if needed
-  if (typeof _ === 'undefined') {
-    card.require('https://cdn.jsdelivr.net/lodash/4.2.0/lodash.min.js');
+  // promote survey modal to global
+  if ($('.hdc-survey-modal.global').length === 0) {
+    var $globalModal = $modal.clone();
+    $globalModal.addClass('global');
+    $(document).find('body').prepend($globalModal);
+
+    $modal.remove();
+
+    $modal = $globalModal;
   }
 
-  // subscribe to any state changes
-  card.state.onChange = function (val) {
-    var percentageComplete = 0;
+  var $q = $modal.find('.hdc-survey-question'),
+    $title = $q.find('h3'),
+    $description = $q.find('.hdc-survey-question-description'),
+    $input = $q.find('.hdc-survey-question-input'),
+    $done = $q.find('.hdc-survey-question-done'),
+    $next = $q.find('.hdc-survey-question-next'),
+    $back = $q.find('.hdc-survey-question-back');
 
-    if (val && val.responses) {
-      var responseCount = _.keys(val.responses).length,
-        questionCount = getQuestionCount();
+  // load lodash if needed and subscribe to state changes
+  if (typeof _ === 'undefined') {
+    card.require('https://cdn.hashdo.com/js/lodash.survey.min.js', function () {
+      subscribeToStateChanges();
+    });
+  }
+  else {
+    subscribeToStateChanges();
+  }
 
-      percentageComplete = Math.floor((responseCount / questionCount) * 100);
-    }
+  function subscribeToStateChanges() {
+    card.state.onChange = function (val) {
+      var percentageComplete = 0;
 
-    if (val.complete) {
-      percentageComplete = 100;
-      $card.find('.survey-footer').removeClass('active').html('Completed').off('click');
-    }
+      if (val && val.responses) {
+        var responseCount = _.keys(val.responses).length,
+          questionCount = getQuestionCount();
 
-    if (percentageComplete > 0) {
-      var $progress = $card.find('.survey-progress');
+        percentageComplete = Math.floor((responseCount / questionCount) * 100);
+      }
 
-      $progress.find('h3').html(percentageComplete + '%');
-      $progress.find('.survey-progress-percentage').css('width', percentageComplete + '%');
-      $progress.show();
-    }
-  };
+      if (val.complete) {
+        percentageComplete = 100;
+        $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
+      }
+
+      if (percentageComplete > 0) {
+        var $progress = $card.find('.hdc-survey-progress');
+
+        $progress.find('h3').html(percentageComplete + '%');
+        $progress.find('.hdc-survey-progress-percentage').css('width', percentageComplete + '%');
+        $progress.show();
+      }
+    };
+  }
 
   // summary footer click
-  $card.find('.survey-footer.active').click(function () {
+  $card.find('.hdc-survey-footer.active').click(function () {
     // start or continue survey
     (_.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
   });
@@ -126,14 +147,18 @@ card.onReady = function () {
     var response = getResponse();
 
     if (validateResponse(response)) {
+      previousQuestionId = currentQuestion.id;
+
       // save response
       responses[currentQuestion.id] = {
         response: response,
         dateTimeStamp: new Date().getTime()
       };
 
+      // save current question's response
       card.state.save({
-        responses: responses
+        responses: responses,
+        previousQuestionId: previousQuestionId
       });
 
       // next question
@@ -154,11 +179,21 @@ card.onReady = function () {
   // modal back
   $back.click(function () {
     if (currentQuestionIndex > 0) {
-      var previousQuestionIndex = currentQuestionIndex - 1;
+      var previousQuestionIndex;
+
+      previousQuestionId = previousQuestionId || locals.previousQuestionId;
+
+      if (previousQuestionId && previousQuestionId !== currentQuestion.id) {
+        previousQuestionIndex = getQuestionIndexById(previousQuestionId);
+      }
+      else {
+        previousQuestionIndex = currentQuestionIndex - 1;
+      }
 
       if (locals.questions[previousQuestionIndex]) {
         currentQuestionIndex = previousQuestionIndex;
         currentQuestion = locals.questions[previousQuestionIndex];
+        previousQuestionId = currentQuestion.id;
 
         renderQuestion();
       }
@@ -249,18 +284,18 @@ card.onReady = function () {
             break;
 
           case 'multipleChoice':
-            inputHTML = '<div class="survey-input-options">';
+            inputHTML = '<div class="hdc-survey-input-options">';
 
             if (_.isArray(currentQuestion.reply)) {
               for (var i = 0; i < currentQuestion.reply.length; i++) {
                 var controlType = currentQuestion.multipleSelections ? 'checkbox' : 'radio';
 
                 inputHTML +=
-                  '<div class="survey-input-option">' +
+                  '<div class="hdc-survey-input-option">' +
                   '<input type="' + controlType + '" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
                   '<label for="option-' + currentQuestionIndex + '-' + i + '">' +
-                  '<span class="survey-input-option-dot"></span>' +
-                  '<span class="survey-input-option-text">' + currentQuestion.reply[i].choice + '</span>' +
+                  '<span class="hdc-survey-input-option-dot"></span>' +
+                  '<span class="hdc-survey-input-option-text">' + currentQuestion.reply[i].choice + '</span>' +
                   '</label>' +
                   '</div>';
               }
@@ -336,13 +371,13 @@ card.onReady = function () {
           var selections = [];
 
           $input.find('input[type=checkbox]:checked').each(function () {
-            selections.push($(this).parent().find('.survey-input-option-text').text());
+            selections.push($(this).parent().find('.hdc-survey-input-option-text').text());
           });
 
           return selections.join(', ');
         }
         else {
-          return $input.find('input[type=radio]:checked').parent().find('.survey-input-option-text').text();
+          return $input.find('input[type=radio]:checked').parent().find('.hdc-survey-input-option-text').text();
         }
     }
   }
@@ -356,22 +391,14 @@ card.onReady = function () {
       case 'rating':
       case 'userField':
       case 'userDetail':
-        var $el = $input.find('input');
-        $el.val(_.trim(response || '')).focus();
-
-        if ($el[0]) {
-          $el[0].select();
-        }
+        $input.find('input').val(_.trim(response || ''));
         break;
 
       case 'date':
         var $el = $input.find('input');
 
-        if ($el[0]) {
-          var el = $el[0];
-
-          el.valueAsDate = new Date(response);
-          el.select();
+        if ($el.length === 1) {
+          $el[0].valueAsDate = new Date(response);
         }
         break;
 
@@ -380,11 +407,11 @@ card.onReady = function () {
           var selections = response.split(', ');
 
           for (j = 0; j < selections.length; j++) {
-            $input.find('.survey-input-options input[data-choice="' + selections[j] + '"]').prop('checked', true);
+            $input.find('.hdc-survey-input-options input[data-choice="' + selections[j] + '"]').prop('checked', true);
           }
         }
         else {
-          $input.find('.survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
+          $input.find('.hdc-survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
         }
         break;
     }
@@ -398,7 +425,7 @@ card.onReady = function () {
     // validate response
     switch (currentQuestion.replyType) {
       case 'multipleChoice':
-        $response = $input.find('.survey-input-options');
+        $response = $input.find('.hdc-survey-input-options');
         clearEvent = 'change';
 
         if (_.isArray(currentQuestion.reply)) {
@@ -586,7 +613,7 @@ card.onReady = function () {
 
   function endSurvey() {
     // remove events
-    $card.find('.survey-footer').removeClass('active').html('Completed').off('click');
+    $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
 
     // flag as complete
     card.state.save({

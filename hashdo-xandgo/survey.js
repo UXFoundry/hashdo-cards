@@ -99,7 +99,8 @@ module.exports = {
           {
             questions: survey.questions,
             responses: responses || {},
-            user: user
+            user: user,
+            previousQuestionId: state.previousQuestionId
           }
         );
       });

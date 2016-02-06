@@ -1,49 +1,49 @@
 extends /card
 
 block content
-  .survey(data-status= locals.status)
-    .survey-modal
+  .hdc-survey(data-status= locals.status)
+    .hdc-survey-modal
       div
         a(href='#close', title='Close') &nbsp;
-        .survey-question
+        .hdc-survey-question
           h3
-          .survey-question-description
-          .survey-question-input
+          .hdc-survey-question-description
+          .hdc-survey-question-input
 
           if !locals.complete
-            .survey-question-footer
-              .survey-question-done
+            .hdc-survey-question-footer
+              .hdc-survey-question-done
                 | Done
 
-              .survey-question-next
+              .hdc-survey-question-next
                 | Next
 
-              .survey-question-back
+              .hdc-survey-question-back
                 | Back
 
-    .survey-header
+    .hdc-survey-header
       .bg-icon &nbsp;
       h1= locals.survey.name
       h3= locals.survey.questions.length + ' question survey'
 
-    .survey-progress(class= locals.responseCount > 0 || locals.complete ? 'visible' : '')
+    .hdc-survey-progress(class= locals.responseCount > 0 || locals.complete ? 'visible' : '')
       h3= locals.percentageComplete + '%'
-      .survey-progress-bar
-        .survey-progress-percentage(style='width: ' + locals.percentageComplete + '%')
+      .hdc-survey-progress-bar
+        .hdc-survey-progress-percentage(style='width: ' + locals.percentageComplete + '%')
 
-    .survey-body
+    .hdc-survey-body
       if locals.survey.description
         p= locals.survey.description
 
     if locals.complete
-      .survey-footer
+      .hdc-survey-footer
         | Completed - #{locals.completeDate}
 
     else
       if locals.responseCount > 0
-        .survey-footer.active
+        .hdc-survey-footer.active
           | Continue
 
       else
-        .survey-footer.active
+        .hdc-survey-footer.active
           | Start survey
