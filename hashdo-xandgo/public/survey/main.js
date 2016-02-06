@@ -253,9 +253,11 @@ card.onReady = function () {
 
             if (_.isArray(currentQuestion.reply)) {
               for (var i = 0; i < currentQuestion.reply.length; i++) {
+                var controlType = currentQuestion.multipleSelections ? 'checkbox' : 'radio';
+
                 inputHTML +=
                   '<div class="survey-input-option">' +
-                  '<input type="radio" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
+                  '<input type="' + controlType + '" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
                   '<label for="option-' + currentQuestionIndex + '-' + i + '">' +
                   '<span class="survey-input-option-dot"></span>' +
                   '<span class="survey-input-option-text">' + currentQuestion.reply[i].choice + '</span>' +
@@ -330,7 +332,18 @@ card.onReady = function () {
         return _.toNumber($input.find('input').val()) || '';
 
       case 'multipleChoice':
-        return $input.find('input[type=radio]:checked').parent().find('.survey-input-option-text').text();
+        if (currentQuestion.multipleSelections) {
+          var selections = [];
+
+          $input.find('input[type=checkbox]:checked').each(function () {
+            selections.push($(this).parent().find('.survey-input-option-text').text());
+          });
+
+          return selections.join(', ');
+        }
+        else {
+          return $input.find('input[type=radio]:checked').parent().find('.survey-input-option-text').text();
+        }
     }
   }
 
@@ -349,7 +362,6 @@ card.onReady = function () {
         if ($el[0]) {
           $el[0].select();
         }
-
         break;
 
       case 'date':
@@ -361,11 +373,20 @@ card.onReady = function () {
           el.valueAsDate = new Date(response);
           el.select();
         }
-
         break;
 
       case 'multipleChoice':
-        return $input.find('.survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
+        if (currentQuestion.multipleSelections) {
+          var selections = response.split(', ');
+
+          for (j = 0; j < selections.length; j++) {
+            $input.find('.survey-input-options input[data-choice="' + selections[j] + '"]').prop('checked', true);
+          }
+        }
+        else {
+          $input.find('.survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
+        }
+        break;
     }
   }
 
@@ -377,20 +398,36 @@ card.onReady = function () {
     // validate response
     switch (currentQuestion.replyType) {
       case 'multipleChoice':
-        $response = $input.children().first();
+        $response = $input.find('.survey-input-options');
         clearEvent = 'change';
 
         if (_.isArray(currentQuestion.reply)) {
           var validOption = false;
 
           for (var i = 0; i < currentQuestion.reply.length; i++) {
-            if (currentQuestion.reply[i].choice === response) {
-              validOption = true;
-              break;
+            if (currentQuestion.multipleSelections) {
+              var selections = response.split(', ');
+
+              for (j = 0; j < selections.length; j++) {
+                if (currentQuestion.reply[i].choice === selections[j]) {
+                  validOption = true;
+                  break;
+                }
+              }
+
+              if (validOption) {
+                break;
+              }
+            }
+            else {
+              if (currentQuestion.reply[i].choice === response) {
+                validOption = true;
+                break;
+              }
             }
           }
 
-          if (!validOption) {
+          if (currentQuestion.required && !validOption) {
             valid = false;
           }
         }
