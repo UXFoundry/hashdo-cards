@@ -49,14 +49,7 @@ card.onReady = function () {
       renderResults(selectedIndex);
 
       // finally save state
-      card.state.save(
-        {
-          votes: locals.votes
-        },
-        function () {
-          // done
-        }
-      );
+      card.state.save({votes: locals.votes});
 
       // prevent abuse
       if (localStorage) {
@@ -90,6 +83,7 @@ card.onReady = function () {
         option = $option.text();
 
       $option.addClass('result');
+      $option.find('label').removeAttr('for');
 
       if (index === selectedIndex) {
         $option.addClass('selected');

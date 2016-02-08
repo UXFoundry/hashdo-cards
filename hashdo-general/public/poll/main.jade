@@ -10,7 +10,7 @@ block content
           if locals.expired
             .poll-option.result(data-index= index)
 
-              label(for= locals.id + '-' + index)
+              label
                 span.poll-option-bar(style='width: ' + ((locals.voteCounts[index].percentage / 100) * 130) + 'px')
                 span.poll-option-text= item
 
@@ -18,9 +18,9 @@ block content
 
           else
             .poll-option(data-index= index)
-              input(type='radio', name= locals.id, id= locals.id + '-' + index)
+              input(type='radio', name= locals.card.id + '-' + locals.id, id= locals.card.id + '-' + locals.id + '-' + index)
 
-              label(for= locals.id + '-' + index)
+              label(for= locals.card.id + '-' + locals.id + '-' + index)
                 span.poll-option-dot
                 span.poll-option-bar(style='width: 0')
                 span.poll-option-text= item
