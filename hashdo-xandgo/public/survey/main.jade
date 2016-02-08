@@ -2,25 +2,6 @@ extends /card
 
 block content
   .hdc-survey(data-status= locals.status)
-    .hdc-survey-modal
-      div
-        a(href='#close', title='Close') &nbsp;
-        .hdc-survey-question
-          h3
-          .hdc-survey-question-description
-          .hdc-survey-question-input
-
-          if !locals.complete
-            .hdc-survey-question-footer
-              .hdc-survey-question-done
-                | Done
-
-              .hdc-survey-question-next
-                | Next
-
-              .hdc-survey-question-back
-                | Back
-
     .hdc-survey-header
       .bg-icon &nbsp;
       h1= locals.survey.name

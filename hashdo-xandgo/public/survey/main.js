@@ -1,41 +1,32 @@
-/* global card, locals, _, $ */
+/* global card, locals, $, _lodash_survey */
 
 // custom lodash build:
-// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge
+// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge,noConflict
 
 card.onReady = function () {
   var currentQuestion, previousQuestionId,
+    $modal, $q, $close, $title, $description, $input, $done, $next, $back,
     currentQuestionIndex = 0,
     responses = locals.responses || {},
-    $card = $('#' + locals.card.id),
-    $modal = $card.find('.hdc-survey-modal');
+    $card = $('#' + locals.card.id);
 
-  // promote survey modal to global
-  if ($('.hdc-survey-modal.global').length === 0) {
-    var $globalModal = $modal.clone();
-    $globalModal.addClass('global');
-    $(document).find('body').prepend($globalModal);
+  // first survey loaded into document?
+  if (typeof _lodash_survey === 'undefined') {
 
-    $modal.remove();
+    // load css dependencies
+    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.css');
 
-    $modal = $globalModal;
-  }
+    // load js dependencies
+    card.require('https://cdn.hashdo.com/js/lodash.survey.js', function () {
 
-  var $q = $modal.find('.hdc-survey-question'),
-    $title = $q.find('h3'),
-    $description = $q.find('.hdc-survey-question-description'),
-    $input = $q.find('.hdc-survey-question-input'),
-    $done = $q.find('.hdc-survey-question-done'),
-    $next = $q.find('.hdc-survey-question-next'),
-    $back = $q.find('.hdc-survey-question-back');
-
-  // load lodash if needed and subscribe to state changes
-  if (typeof _ === 'undefined') {
-    card.require('https://cdn.hashdo.com/js/lodash.survey.min.js', function () {
+      // subscribe to any state changes
       subscribeToStateChanges();
     });
   }
   else {
+    // subsequent survey cards just need to subscribe to state changes.
+    // dependencies already loaded.
+
     subscribeToStateChanges();
   }
 
@@ -44,7 +35,7 @@ card.onReady = function () {
       var percentageComplete = 0;
 
       if (val && val.responses) {
-        var responseCount = _.keys(val.responses).length,
+        var responseCount = _lodash_survey.keys(val.responses).length,
           questionCount = getQuestionCount();
 
         percentageComplete = Math.floor((responseCount / questionCount) * 100);
@@ -61,6 +52,10 @@ card.onReady = function () {
         $progress.find('h3').html(percentageComplete + '%');
         $progress.find('.hdc-survey-progress-percentage').css('width', percentageComplete + '%');
         $progress.show();
+
+        if (percentageComplete < 100) {
+          $card.find('.hdc-survey-footer').html('Continue');
+        }
       }
     };
   }
@@ -68,7 +63,7 @@ card.onReady = function () {
   // summary footer click
   $card.find('.hdc-survey-footer.active').click(function () {
     // start or continue survey
-    (_.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
+    (_lodash_survey.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
   });
 
   // start a new survey
@@ -78,9 +73,7 @@ card.onReady = function () {
     if (currentQuestion) {
       currentQuestionIndex = 0;
 
-      // open modal
       openModal();
-
       renderQuestion();
     }
   }
@@ -91,9 +84,9 @@ card.onReady = function () {
     var latestId, latestResponse,
       max = 0;
 
-    for (var i = 0; i < _.keys(locals.responses).length; i++) {
-      if (locals.responses[_.keys(locals.responses)[i]].dateTimeStamp > max) {
-        latestId = _.keys(locals.responses)[i];
+    for (var i = 0; i < _lodash_survey.keys(locals.responses).length; i++) {
+      if (locals.responses[_lodash_survey.keys(locals.responses)[i]].dateTimeStamp > max) {
+        latestId = _lodash_survey.keys(locals.responses)[i];
         latestResponse = locals.responses[latestId].response;
 
         max = locals.responses[latestId].dateTimeStamp;
@@ -125,11 +118,37 @@ card.onReady = function () {
   }
 
   function openModal() {
-    $modal.addClass('open');
+    $(document).find('body').prepend('<div class="hdc-survey-modal open"><div><a href="#close" title="Close">&nbsp;</a><div class="hdc-survey-question"><h3>End Now</h3><div class="hdc-survey-question-description"></div><div class="hdc-survey-question-input"><div class="hdc-survey-input-options"><div class="hdc-survey-input-option"><input type="radio" data-choice="Yes" name="option-1" id="option-1-0"><label for="option-1-0"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">Yes</span></label></div><div class="hdc-survey-input-option"><input type="radio" data-choice="No" name="option-1" id="option-1-1"><label for="option-1-1"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">No</span></label></div></div></div><div class="hdc-survey-question-footer"><div class="hdc-survey-question-done" style="display: none;">Done</div><div class="hdc-survey-question-next" style="display: block;">Next</div><div class="hdc-survey-question-back" style="display: block;">Back</div></div></div></div></div>');
+
+    $modal = $('.hdc-survey-modal');
+    $q = $modal.find('.hdc-survey-question');
+    $close = $modal.find('a[href="#close"]');
+    $title = $q.find('h3');
+    $description = $q.find('.hdc-survey-question-description');
+    $input = $q.find('.hdc-survey-question-input');
+    $done = $q.find('.hdc-survey-question-done');
+    $next = $q.find('.hdc-survey-question-next');
+    $back = $q.find('.hdc-survey-question-back');
+
+    // attach event handlers for this survey instance
+    $back.on('click', onBack);
+    $next.on('click', onNext);
+    $done.on('click', onDone);
+    $close.on('click', closeModal);
   }
 
   function closeModal() {
-    $modal.removeClass('open');
+    $modal.remove();
+
+    $modal = undefined;
+    $q = undefined;
+    $close = undefined;
+    $title = undefined;
+    $description = undefined;
+    $input = undefined;
+    $done = undefined;
+    $next = undefined;
+    $back = undefined;
   }
 
   function resetModal() {
@@ -142,8 +161,8 @@ card.onReady = function () {
     $back.hide();
   }
 
-  // modal next
-  $next.click(function () {
+  // on modal next
+  function onNext() {
     var response = getResponse();
 
     if (validateResponse(response)) {
@@ -174,10 +193,10 @@ card.onReady = function () {
         endSurvey();
       }
     }
-  });
+  }
 
-  // modal back
-  $back.click(function () {
+  // on modal back
+  function onBack() {
     if (currentQuestionIndex > 0) {
       var previousQuestionIndex;
 
@@ -198,20 +217,15 @@ card.onReady = function () {
         renderQuestion();
       }
     }
-  });
+  }
 
-  // modal done
-  $done.click(function () {
+  // on modal done
+  function onDone() {
     endSurvey();
-  });
-
-  // modal close
-  $modal.find('a[href="#close"]').click(function () {
-    closeModal();
-  });
+  }
 
   function getQuestionCount() {
-    if (locals.questions && _.isArray(locals.questions)) {
+    if (locals.questions && _lodash_survey.isArray(locals.questions)) {
       return locals.questions.length;
     }
     else {
@@ -251,7 +265,7 @@ card.onReady = function () {
         inputHTML = '',
         value = '',
         showNext = true,
-        showBack = _.keys(responses).length > 0 && currentQuestionIndex > 0;
+        showBack = _lodash_survey.keys(responses).length > 0 && currentQuestionIndex > 0;
 
       resetModal();
 
@@ -276,7 +290,7 @@ card.onReady = function () {
             break;
 
           case 'website':
-            inputHTML = '<input type="text" placeholder="http://">';
+            inputHTML = '<input type="url" placeholder="http://">';
             break;
 
           case 'date':
@@ -286,7 +300,7 @@ card.onReady = function () {
           case 'multipleChoice':
             inputHTML = '<div class="hdc-survey-input-options">';
 
-            if (_.isArray(currentQuestion.reply)) {
+            if (_lodash_survey.isArray(currentQuestion.reply)) {
               for (var i = 0; i < currentQuestion.reply.length; i++) {
                 var controlType = currentQuestion.multipleSelections ? 'checkbox' : 'radio';
 
@@ -357,14 +371,14 @@ card.onReady = function () {
       case 'website':
       case 'userField':
       case 'userDetail':
-        return _.trim($input.find('input').val());
+        return _lodash_survey.trim($input.find('input').val());
 
       case 'date':
         return $input.find('input').val().length > 0 ? new Date($input.find('input').val()) : '';
 
       case 'rating':
       case 'number':
-        return _.toNumber($input.find('input').val()) || '';
+        return _lodash_survey.toNumber($input.find('input').val()) || '';
 
       case 'multipleChoice':
         if (currentQuestion.multipleSelections) {
@@ -391,7 +405,7 @@ card.onReady = function () {
       case 'rating':
       case 'userField':
       case 'userDetail':
-        $input.find('input').val(_.trim(response || ''));
+        $input.find('input').val(_lodash_survey.trim(response || ''));
         break;
 
       case 'date':
@@ -428,7 +442,7 @@ card.onReady = function () {
         $response = $input.find('.hdc-survey-input-options');
         clearEvent = 'change';
 
-        if (_.isArray(currentQuestion.reply)) {
+        if (_lodash_survey.isArray(currentQuestion.reply)) {
           var validOption = false;
 
           for (var i = 0; i < currentQuestion.reply.length; i++) {
@@ -520,13 +534,13 @@ card.onReady = function () {
         clearEvent = 'keypress';
 
         if (currentQuestion.required) {
-          if (!_.isDate(response)) {
+          if (!_lodash_survey.isDate(response)) {
             valid = false;
           }
         }
         else {
           if (response) {
-            if (!_.isDate(response)) {
+            if (!_lodash_survey.isDate(response)) {
               valid = false;
             }
           }
@@ -542,13 +556,13 @@ card.onReady = function () {
             valid = false;
           }
 
-          if (!_.isNumber(response)) {
+          if (!_lodash_survey.isNumber(response)) {
             valid = false;
           }
         }
         else {
           if (response) {
-            if (!_.isNumber(response)) {
+            if (!_lodash_survey.isNumber(response)) {
               valid = false;
             }
           }
@@ -560,13 +574,13 @@ card.onReady = function () {
         clearEvent = 'keypress';
 
         if (currentQuestion.required) {
-          if (!_.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
+          if (!_lodash_survey.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
             valid = false;
           }
         }
         else {
           if (response) {
-            if (!_.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
+            if (!_lodash_survey.inRange(response, currentQuestion.reply.min, currentQuestion.reply.max + 1)) {
               valid = false;
             }
           }
@@ -686,7 +700,7 @@ card.onReady = function () {
     if (locals.user) {
       var user = locals.user;
 
-      if (_.isArray(user.details)) {
+      if (_lodash_survey.isArray(user.details)) {
         for (var i = 0; i < user.details.length; i++) {
           if (user.details[i].label === detail) {
             return user.details[i].value;
@@ -773,7 +787,7 @@ card.onReady = function () {
   };
 
   function isFQDN(str, options) {
-    options = _.merge(options, default_fqdn_options);
+    options = _lodash_survey.merge(options, default_fqdn_options);
 
     /* Remove the optional trailing dot before checking validity */
     if (options.allow_trailing_dot && str[str.length - 1] === '.') {
@@ -921,7 +935,7 @@ card.onReady = function () {
       return false;
     }
 
-    options = _.merge(options, default_url_options);
+    options = _lodash_survey.merge(options, default_url_options);
 
     var protocol, auth, host, hostname, port, port_str, split;
 

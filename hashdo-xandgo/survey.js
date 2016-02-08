@@ -97,6 +97,7 @@ module.exports = {
 
           // js client side locals
           {
+            surveyId: survey.id,
             questions: survey.questions,
             responses: responses || {},
             user: user,

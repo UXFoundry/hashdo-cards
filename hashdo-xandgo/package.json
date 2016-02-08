@@ -1,6 +1,6 @@
 {
   "name": "hashdo-xandgo",
-  "version": "0.2.9",
+  "version": "0.3.17",
   "description": "X&Go related HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -13,6 +13,12 @@
     "lodash": "4.2.1",
     "moment": "2.11.2",
     "request": "2.69.0"
+  },
+  "devDependencies": {
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-autoprefixer": "3.1.0",
+    "gulp-less": "3.0.5",
+    "gulp-load-plugins": "1.2.0"
   },
   "pack": {
     "friendlyName": "X&Go",
