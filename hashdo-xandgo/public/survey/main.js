@@ -1,7 +1,7 @@
 /* global card, locals, $, _lodash_survey */
 
 // custom lodash build:
-// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge,noConflict
+// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge,startsWith,noConflict
 
 card.onReady = function () {
   var currentQuestion, previousQuestionId,
@@ -17,7 +17,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.modal.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/lodash.survey.js', function () {
+    card.require('https://cdn.hashdo.com/js/lodash/4.3.0/survey.min.js?v=1', function () {
 
       // subscribe to any state changes
       subscribeToStateChanges();
@@ -139,16 +139,7 @@ card.onReady = function () {
 
   function closeModal() {
     $modal.remove();
-
-    $modal = undefined;
-    $q = undefined;
-    $close = undefined;
-    $title = undefined;
-    $description = undefined;
-    $input = undefined;
-    $done = undefined;
-    $next = undefined;
-    $back = undefined;
+    $modal = $q = $close = $title = $description = $input = $done = $next = $back = undefined;
   }
 
   function resetModal() {
@@ -156,9 +147,7 @@ card.onReady = function () {
     $description.html('');
     $input.html('');
 
-    $done.hide();
-    $next.hide();
-    $back.hide();
+    $modal.find('.hdc-survey-question-footer div').hide();
   }
 
   // on modal next
@@ -337,6 +326,16 @@ card.onReady = function () {
             inputHTML = '<input type="text">';
             value = getUserDetailValue(currentQuestion.reply.detail);
             break;
+
+          case 'image':
+            inputHTML = '<label for="photo-' + currentQuestion.id + '"><div class="photo"><div class="placeholder"></div></div></label>';
+
+            if (!isNative()) {
+              inputHTML += '<input id="photo-' + currentQuestion.id + '" type="file" name="file" accept="image/*">';
+            }
+
+            inputHTML += '<input type="hidden" name="photo">';
+            break;
         }
 
         // overwrite value with previous response if any
@@ -346,9 +345,22 @@ card.onReady = function () {
           }
         }
 
+        // required
+        if (currentQuestion.required) {
+          if (description.length > 0) {
+            description += ' ';
+          }
+
+          description += '(required)';
+        }
+
         // populate description, field, buttons / links and value
         $description.html(description);
         $input.html(inputHTML);
+
+        if (currentQuestion.replyType === 'image') {
+          initImageQuestion();
+        }
 
         // populate response, if any
         setResponse(value);
@@ -393,6 +405,18 @@ card.onReady = function () {
         else {
           return $input.find('input[type=radio]:checked').parent().find('.hdc-survey-input-option-text').text();
         }
+
+      case 'image':
+        var bg = $input.find('.placeholder').css('background-image'),
+          start = 0,
+          end = bg.length;
+
+        if (_lodash_survey.startsWith(bg, 'url(')) {
+          start = 4;
+          end = bg.length - 5;
+        }
+
+        return bg.substr(start, end);
     }
   }
 
@@ -426,6 +450,15 @@ card.onReady = function () {
         }
         else {
           $input.find('.hdc-survey-input-options input[data-choice="' + response + '"]').prop('checked', true);
+        }
+        break;
+
+      case 'image':
+        if (response) {
+          $input.find('.placeholder').css({
+            'background-image': 'url(' + response + ')',
+            'background-size': '100px 100px'
+          });
         }
         break;
     }
@@ -586,6 +619,15 @@ card.onReady = function () {
           }
         }
         break;
+
+      case 'image':
+        $response = $input.find('photo');
+
+        if (currentQuestion.required) {
+          valid = (response && response.length > 0);
+        }
+
+        break;
     }
 
     if (!valid) {
@@ -708,6 +750,52 @@ card.onReady = function () {
         }
       }
     }
+  }
+
+  function initImageQuestion() {
+    if (isNative()) {
+
+    }
+    else {
+      $modal.find('#photo-' + currentQuestion.id).on('change', onFile);
+    }
+  }
+
+  function onFile() {
+    var $file = $(this);
+
+    if ($file.length > 0) {
+      if ($file[0].files && $file[0].files.length > 0) {
+        var file = $file[0].files[0],
+          reader = new FileReader(),
+          fileSize = ((file.size / 1024) / 1024).toFixed(4),
+          description = $description.html();
+
+        if (fileSize > 5) {
+          $description.html('<span style="color: #ff0000">Image too large. Max file size is 5Mb.</span>');
+
+          setTimeout(function () {
+            $description.html(description);
+          }, 5000);
+        }
+        else {
+          reader.readAsDataURL(file);
+
+          reader.onloadend = function () {
+            var base64 = reader.result;
+
+            $input.find('.placeholder').css({
+              'background-image': 'url(' + base64 + ')',
+              'background-size': '100px 100px'
+            });
+          };
+        }
+      }
+    }
+  }
+
+  function isNative() {
+    return (typeof(cordova) !== 'undefined' || typeof(phonegap) !== 'undefined');
   }
 
   function isEmail(str) {
