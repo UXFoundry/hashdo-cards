@@ -19,15 +19,26 @@ card.onReady = function () {
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/lodash/4.3.0/survey.min.js?v=1', function () {
 
+      // start or continue
+      attachStartOrContinueHandler();
+
       // subscribe to any state changes
       subscribeToStateChanges();
     });
   }
   else {
-    // subsequent survey cards just need to subscribe to state changes.
     // dependencies already loaded.
 
+    attachStartOrContinueHandler();
     subscribeToStateChanges();
+  }
+
+  // summary footer click
+  function attachStartOrContinueHandler() {
+    $card.find('.hdc-survey-footer.active').click(function () {
+      // start or continue survey
+      (_lodash_survey.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
+    });
   }
 
   function subscribeToStateChanges() {
@@ -59,12 +70,6 @@ card.onReady = function () {
       }
     };
   }
-
-  // summary footer click
-  $card.find('.hdc-survey-footer.active').click(function () {
-    // start or continue survey
-    (_lodash_survey.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
-  });
 
   // start a new survey
   function startSurvey() {
@@ -158,16 +163,23 @@ card.onReady = function () {
       previousQuestionId = currentQuestion.id;
 
       // save response
-      responses[currentQuestion.id] = {
-        response: response,
-        dateTimeStamp: new Date().getTime()
-      };
+      var save = true;
+      if (responses[currentQuestion.id] && responses[currentQuestion.id].response === response) {
+        save = false;
+      }
 
-      // save current question's response
-      card.state.save({
-        responses: responses,
-        previousQuestionId: previousQuestionId
-      });
+      if (save) {
+        responses[currentQuestion.id] = {
+          response: response,
+          dateTimeStamp: new Date().getTime()
+        };
+
+        // save current question's response
+        card.state.save({
+          responses: responses,
+          previousQuestionId: previousQuestionId
+        });
+      }
 
       // next question
       var nextQuestionIndex = getNextQuestionIndex(response);
@@ -187,23 +199,47 @@ card.onReady = function () {
   // on modal back
   function onBack() {
     if (currentQuestionIndex > 0) {
-      var previousQuestionIndex;
+      var response = getResponse();
 
-      previousQuestionId = previousQuestionId || locals.previousQuestionId;
+      if (validateResponse(response)) {
 
-      if (previousQuestionId && previousQuestionId !== currentQuestion.id) {
-        previousQuestionIndex = getQuestionIndexById(previousQuestionId);
-      }
-      else {
-        previousQuestionIndex = currentQuestionIndex - 1;
-      }
+        // save response
+        var save = true;
+        if (responses[currentQuestion.id] && responses[currentQuestion.id].response === response) {
+          save = false;
+        }
 
-      if (locals.questions[previousQuestionIndex]) {
-        currentQuestionIndex = previousQuestionIndex;
-        currentQuestion = locals.questions[previousQuestionIndex];
-        previousQuestionId = currentQuestion.id;
+        if (save) {
+          responses[currentQuestion.id] = {
+            response: response,
+            dateTimeStamp: new Date().getTime()
+          };
 
-        renderQuestion();
+          // save current question's response
+          card.state.save({
+            responses: responses,
+            previousQuestionId: previousQuestionId
+          });
+        }
+
+        var previousQuestionIndex;
+
+        previousQuestionId = previousQuestionId || locals.previousQuestionId;
+
+        if (previousQuestionId && previousQuestionId !== currentQuestion.id) {
+          previousQuestionIndex = getQuestionIndexById(previousQuestionId);
+        }
+        else {
+          previousQuestionIndex = currentQuestionIndex - 1;
+        }
+
+        if (locals.questions[previousQuestionIndex]) {
+          currentQuestionIndex = previousQuestionIndex;
+          currentQuestion = locals.questions[previousQuestionIndex];
+          previousQuestionId = currentQuestion.id;
+
+          renderQuestion();
+        }
       }
     }
   }
