@@ -13,6 +13,10 @@ module.exports = {
       description: 'The question.',
       required: true
     },
+    voteLabel: {
+      example: 'Vote',
+      description: 'Text for the vote label.'
+    },
     delimiter: {
       example: ',',
       description: 'Option delimiter.'
@@ -71,6 +75,7 @@ module.exports = {
       title: 'Quick Poll',
       question: inputs.question,
       options: options,
+      voteLabel: inputs.voteLabel || 'Vote',
       voteCounts: counts,
       totalVotes: state.votes.length,
       expired: state.expired,

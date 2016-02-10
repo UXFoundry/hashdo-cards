@@ -21,7 +21,7 @@ block content
               input(type='radio', name= locals.card.id + '-' + locals.id, id= locals.card.id + '-' + locals.id + '-' + index)
 
               label(for= locals.card.id + '-' + locals.id + '-' + index)
-                span.poll-option-dot
+                //span.poll-option-dot
                 span.poll-option-bar(style='width: 0')
                 span.poll-option-text= item
 
@@ -36,4 +36,4 @@ block footer
         .poll-expiry-date= locals.expiry
 
     if !locals.expired
-      a.link.vote.active Vote
+      a.link.vote.active= locals.voteLabel
