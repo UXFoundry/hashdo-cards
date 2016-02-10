@@ -195,6 +195,34 @@
           animation: hdc-survey-shake .5s linear;
         }
       }
+
+      .photo {
+        padding: 4px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 0 auto;
+        cursor: pointer;
+        height: 100px;
+        width: 100px;
+
+        .placeholder {
+          height: 100%;
+          width: 100%;
+          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAApAgMAAAADqzIAAAAADFBMVEUAAAAAAAAAAAAAAAA16TeWAAAABHRSTlMPAAII1x2cfAAAAMNJREFUKM+d0TEOwjAMAECLiqEDhaU7S5+QgS1P6OIUQYf+gDyhn+gjCAtP6BNY+gR2fgB2BsdF6lJLiXKRZdkyIIULIdz5UUd2QDEILXMS9sxSODKNkAXbyEsIj8iCytdgQcUBes3jGn4/mjm6xNivT9wg4jkxx9vgEk1DP6OwbCFDK5wsHS/kRFMn8rjCzDHbGfNFYkxeqjzQVXXCyc/aqLjJXmjceFIj7BCxAWFGbBPhjfhULPAKirBfs5T//XrN1w9T4lITagmWygAAAABJRU5ErkJggg==);
+          background-color: #f5f5f5;
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+        }
+
+        &.invalid {
+          border-bottom: 1px solid #ff0000;
+          animation: hdc-survey-shake .5s linear;
+        }
+      }
+
+      input[type=file] {
+        display: none;
+      }
     }
 
     .hdc-survey-question-footer {

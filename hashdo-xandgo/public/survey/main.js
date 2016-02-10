@@ -1,7 +1,7 @@
 /* global card, locals, $, _lodash_survey */
 
 // custom lodash build:
-// lodash include=keys,isArray,trim,toNumber,isDate,inRange,merge,startsWith,noConflict
+// lodash include=keys,isArray,trim,toNumber,isDate,isNumber,inRange,merge,startsWith,noConflict
 
 card.onReady = function () {
   var currentQuestion, previousQuestionId,
@@ -14,10 +14,10 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.css?v=1');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/lodash/4.3.0/survey.min.js?v=1', function () {
+    card.require('https://cdn.hashdo.com/js/lodash/4.3.0/survey.min.js?v=2', function () {
 
       // start or continue
       attachStartOrContinueHandler();
@@ -209,6 +209,10 @@ card.onReady = function () {
           save = false;
         }
 
+        if (currentQuestion.replyType === 'end') {
+          save = false;
+        }
+
         if (save) {
           responses[currentQuestion.id] = {
             response: response,
@@ -367,7 +371,7 @@ card.onReady = function () {
             inputHTML = '<label for="photo-' + currentQuestion.id + '"><div class="photo"><div class="placeholder"></div></div></label>';
 
             if (!isNative()) {
-              inputHTML += '<input id="photo-' + currentQuestion.id + '" type="file" name="file" accept="image/*">';
+              inputHTML += '<input id="photo-' + currentQuestion.id + '" type="file" name="file" accept="image/*;capture=camera">';
             }
 
             inputHTML += '<input type="hidden" name="photo">';
@@ -376,7 +380,7 @@ card.onReady = function () {
 
         // overwrite value with previous response if any
         if (locals.responses && locals.responses[currentQuestion.id]) {
-          if (locals.responses[currentQuestion.id].response) {
+          if (typeof locals.responses[currentQuestion.id].response !== 'undefined') {
             value = locals.responses[currentQuestion.id].response;
           }
         }
@@ -426,7 +430,7 @@ card.onReady = function () {
 
       case 'rating':
       case 'number':
-        return _lodash_survey.toNumber($input.find('input').val()) || '';
+        return _lodash_survey.toNumber($input.find('input').val());
 
       case 'multipleChoice':
         if (currentQuestion.multipleSelections) {
@@ -443,16 +447,23 @@ card.onReady = function () {
         }
 
       case 'image':
-        var bg = $input.find('.placeholder').css('background-image'),
-          start = 0,
-          end = bg.length;
+        var $img = $input.find('.placeholder.set');
 
-        if (_lodash_survey.startsWith(bg, 'url(')) {
-          start = 4;
-          end = bg.length - 5;
+        if ($img.length > 0) {
+          var bg = $img.css('background-image'),
+            start = 0,
+            end = bg.length;
+
+          if (_lodash_survey.startsWith(bg, 'url(')) {
+            start = 4;
+            end = bg.length - 5;
+          }
+
+          return bg.substr(start, end).replace(/"/g, '');
         }
-
-        return bg.substr(start, end);
+        else {
+          return '';
+        }
     }
   }
 
@@ -461,11 +472,14 @@ card.onReady = function () {
       case 'text':
       case 'email':
       case 'website':
-      case 'number':
-      case 'rating':
       case 'userField':
       case 'userDetail':
         $input.find('input').val(_lodash_survey.trim(response || ''));
+        break;
+
+      case 'number':
+      case 'rating':
+        $input.find('input').val(response);
         break;
 
       case 'date':
@@ -491,7 +505,7 @@ card.onReady = function () {
 
       case 'image':
         if (response) {
-          $input.find('.placeholder').css({
+          $input.find('.placeholder').addClass('set').css({
             'background-image': 'url(' + response + ')',
             'background-size': '100px 100px'
           });
@@ -657,7 +671,8 @@ card.onReady = function () {
         break;
 
       case 'image':
-        $response = $input.find('photo');
+        $response = $input.find('.photo');
+        clearEvent = 'click';
 
         if (currentQuestion.required) {
           valid = (response && response.length > 0);
@@ -820,7 +835,7 @@ card.onReady = function () {
           reader.onloadend = function () {
             var base64 = reader.result;
 
-            $input.find('.placeholder').css({
+            $input.find('.placeholder').addClass('set').css({
               'background-image': 'url(' + base64 + ')',
               'background-size': '100px 100px'
             });
