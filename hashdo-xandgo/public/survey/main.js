@@ -10,14 +10,17 @@ card.onReady = function () {
     responses = locals.responses || {},
     $card = $('#' + locals.card.id);
 
+  initSwiper();
+  initCustomInputs();
+
   // first survey loaded into document?
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.css?v=1');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v3.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/lodash/4.3.0/survey.min.js?v=2', function () {
+    card.require('https://cdn.hashdo.com/js/lodash/4.4.0/survey.min.js', function () {
 
       // start or continue
       attachStartOrContinueHandler();
@@ -69,6 +72,63 @@ card.onReady = function () {
         }
       }
     };
+  }
+
+  function initSwiper() {
+    if (locals.photoCount > 0) {
+      if (typeof Swiper === 'undefined') {
+        card.requireCSS('https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css');
+
+        card.require('https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js', function () {
+          new Swiper('#' + locals.card.id + ' .swiper-container', {
+            loop: true,
+            width: 225,
+            nextButton: '#' + locals.card.id + ' .swiper-button-next',
+            prevButton: '#' + locals.card.id + ' .swiper-button-prev'
+          });
+        });
+      }
+      else {
+        new Swiper('#' + locals.card.id + ' .swiper-container', {
+          loop: true,
+          width: 225,
+          nextButton: '#' + locals.card.id + ' .swiper-button-next',
+          prevButton: '#' + locals.card.id + ' .swiper-button-prev'
+        });
+      }
+    }
+  }
+
+  function initCustomInputs() {
+    var $inputs = $('.custom-checkbox input, .custom-radio input');
+
+    $inputs.on('change', function () {
+      var input = $(this),
+        wrapper = input.parent(),
+        checkedValue = $(this).attr('value');
+
+      if (!input.is(':checked')) {
+        input.val(checkedValue).prop('checked', false);
+        input.removeAttr('checked');
+        wrapper.removeClass('checked');
+      }
+      else {
+        input.val(checkedValue).prop('checked', true);
+        input.attr('checked', 'checked');
+        wrapper.addClass('checked');
+      }
+    });
+
+    $inputs.each(function () {
+      var input = $(this),
+        wrapper = input.parent().parent();
+
+      if (input.is(':disabled')) {
+        wrapper.addClass('disabled');
+      }
+    });
+
+    $inputs.trigger('change');
   }
 
   // start a new survey
@@ -334,12 +394,16 @@ card.onReady = function () {
                 var controlType = currentQuestion.multipleSelections ? 'checkbox' : 'radio';
 
                 inputHTML +=
-                  '<div class="hdc-survey-input-option">' +
-                  '<input type="' + controlType + '" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
-                  '<label for="option-' + currentQuestionIndex + '-' + i + '">' +
-                  '<span class="hdc-survey-input-option-dot"></span>' +
-                  '<span class="hdc-survey-input-option-text">' + currentQuestion.reply[i].choice + '</span>' +
-                  '</label>' +
+                  '<div class="' + controlType + '">' +
+                    '<label>' +
+                      '<span class="custom-' + controlType + '">' +
+                        '<input type="' + controlType + '" data-choice="' + currentQuestion.reply[i].choice + '" name="option-' + currentQuestionIndex + '" id="option-' + currentQuestionIndex + '-' + i + '">' +
+                        '<span class="box">' +
+                          '<span class="tick"></span>' +
+                        '</span>' +
+                        currentQuestion.reply[i].choice +
+                      '</span>' +
+                    '</label>' +
                   '</div>';
               }
             }
@@ -437,13 +501,13 @@ card.onReady = function () {
           var selections = [];
 
           $input.find('input[type=checkbox]:checked').each(function () {
-            selections.push($(this).parent().find('.hdc-survey-input-option-text').text());
+            selections.push($(this).attr('data-choice'));
           });
 
           return selections.join(', ');
         }
         else {
-          return $input.find('input[type=radio]:checked').parent().find('.hdc-survey-input-option-text').text();
+          return $input.find('input[type=radio]:checked').attr('data-choice');
         }
 
       case 'image':
@@ -1029,7 +1093,7 @@ card.onReady = function () {
       for (var i = 0; i < blocks.length; ++i) {
         // test for a :: which can not be at the string start/end
         // since those cases have been handled above
-        if (blocks[i] === '' && i > 0 && i < blocks.length -1) {
+        if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
           if (foundOmissionBlock)
             return false; // multiple :: in address
 
@@ -1066,7 +1130,7 @@ card.onReady = function () {
   };
 
   function isURL(url, options) {
-    if(!url || url.length >= 2083 || /\s/.test(url)) {
+    if (!url || url.length >= 2083 || /\s/.test(url)) {
       return false;
     }
 

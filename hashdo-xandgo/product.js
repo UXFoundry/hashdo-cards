@@ -34,7 +34,11 @@ module.exports = {
       version = version || 0;
 
       if (state.product && state.version === version) {
-        callback(null, state.product);
+        if (state.product.photos.length === 0) {
+          card.client$Support = false;
+        }
+
+        callback(null, state.product, {photoCount: state.product.photos.length});
       }
       else {
         XandGo.getProduct(inputs.apiKey, inputs.secret, inputs.productId, function (product) {
@@ -45,7 +49,11 @@ module.exports = {
             state.product = product;
             state.version = version;
 
-            callback(null, viewModel);
+            if (product.photos.length === 0) {
+              card.client$Support = false;
+            }
+
+            callback(null, viewModel, {photoCount: product.photos.length});
           }
           else {
             callback(new Error('Could not find product with ID ' + (inputs.productId || '?')));

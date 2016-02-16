@@ -34,7 +34,11 @@ module.exports = {
       version = version || 0;
 
       if (state.place && state.version === version) {
-        callback(null, state.place);
+        if (state.place.photos.length === 0) {
+          card.client$Support = false;
+        }
+
+        callback(null, state.place, {photoCount: state.place.photos.length});
       }
       else {
         XandGo.getPlace(inputs.apiKey, inputs.secret, inputs.placeId, function (place) {
@@ -45,7 +49,11 @@ module.exports = {
             state.place = place;
             state.version = version;
 
-            callback(null, viewModel);
+            if (place.photos.length === 0) {
+              card.client$Support = false;
+            }
+
+            callback(null, viewModel, {photoCount: place.photos.length});
           }
           else {
             callback(new Error('Could not find place with ID ' + (inputs.placeId || '?')));

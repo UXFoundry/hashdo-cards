@@ -141,7 +141,11 @@ exports.getSurvey = function(apiKey, apiSecret, surveyId, currentVersion, callba
         function (err, response, body) {
           if (!err) {
             if (body.success) {
-              callback(body.survey, newVersion);
+              var survey = body.survey;
+
+              survey.photos = parsePhotos(survey);
+
+              callback(survey, newVersion);
             }
             else {
               callback();

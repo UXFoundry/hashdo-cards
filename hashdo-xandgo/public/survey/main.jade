@@ -1,6 +1,16 @@
 extends /card
 
 block content
+  if locals.survey.photos.length > 0
+    .swiper-container
+      .swiper-wrapper
+        each img in locals.survey.photos
+          .swiper-slide
+            img(src= img, width='225', height='143')
+
+      .swiper-button-next.swiper-button-white
+      .swiper-button-prev.swiper-button-white
+
   .hdc-survey(data-status= locals.status)
     .hdc-survey-header
       .bg-icon &nbsp;
@@ -12,8 +22,8 @@ block content
       .hdc-survey-progress-bar
         .hdc-survey-progress-percentage(style='width: ' + locals.percentageComplete + '%')
 
-    .hdc-survey-body
-      if locals.survey.description
+    if locals.survey.description
+      .hdc-survey-body
         p= locals.survey.description
 
     if locals.complete
