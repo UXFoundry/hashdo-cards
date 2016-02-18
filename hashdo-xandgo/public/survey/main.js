@@ -20,7 +20,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v3.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/lodash/4.4.0/survey.min.js', function () {
+    card.require('https://cdn.hashdo.com/js/lodash/4.5.0/survey.min.js', function () {
 
       // start or continue
       attachStartOrContinueHandler();
