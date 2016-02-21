@@ -17,7 +17,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v3.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v6.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/lodash/4.5.0/survey.min.js', function () {
@@ -228,7 +228,7 @@ card.onReady = function () {
         save = false;
       }
 
-      if (save) {
+      if (save && typeof(response) !== 'undefined') {
         responses[currentQuestion.id] = {
           response: response,
           dateTimeStamp: new Date().getTime()
@@ -273,7 +273,7 @@ card.onReady = function () {
           save = false;
         }
 
-        if (save) {
+        if (save && typeof(response) !== 'undefined') {
           responses[currentQuestion.id] = {
             response: response,
             dateTimeStamp: new Date().getTime()
@@ -286,16 +286,7 @@ card.onReady = function () {
           });
         }
 
-        var previousQuestionIndex;
-
-        previousQuestionId = previousQuestionId || locals.previousQuestionId;
-
-        if (previousQuestionId && previousQuestionId !== currentQuestion.id) {
-          previousQuestionIndex = getQuestionIndexById(previousQuestionId);
-        }
-        else {
-          previousQuestionIndex = currentQuestionIndex - 1;
-        }
+        var previousQuestionIndex = getPreviousQuestionIndex(response);
 
         if (locals.questions[previousQuestionIndex]) {
           currentQuestionIndex = previousQuestionIndex;
@@ -763,23 +754,131 @@ card.onReady = function () {
     var nextQuestionIndex = currentQuestionIndex + 1;
 
     // apply multiple choice jump logic
-    if (currentQuestion.replyType === 'multipleChoice') {
-      for (var i = 0; i < currentQuestion.reply.length; i++) {
-        if (currentQuestion.reply[i].choice === response) {
-          if (currentQuestion.reply[i].jumpTo) {
-            if (currentQuestion.reply[i].jumpTo === 'end') {
-              nextQuestionIndex = Math.max();
-            }
-            else {
-              nextQuestionIndex = getQuestionIndexById(currentQuestion.reply[i].jumpTo);
-              break;
+    if (typeof(response) !== 'undefined') {
+      if (currentQuestion.replyType === 'multipleChoice') {
+        for (var i = 0; i < currentQuestion.reply.length; i++) {
+          if (currentQuestion.reply[i].choice === response) {
+            if (currentQuestion.reply[i].jumpTo) {
+              if (currentQuestion.reply[i].jumpTo === 'end') {
+                nextQuestionIndex = Math.max();
+              }
+              else {
+                nextQuestionIndex = getQuestionIndexById(currentQuestion.reply[i].jumpTo);
+                break;
+              }
             }
           }
         }
       }
     }
 
-    return nextQuestionIndex;
+    // process any conditions on the next question
+    var skip = processConditions(nextQuestionIndex);
+
+    // skip
+    if (skip) {
+      currentQuestionIndex = nextQuestionIndex;
+      return getNextQuestionIndex();
+    }
+    else {
+      return nextQuestionIndex;
+    }
+  }
+
+  function getPreviousQuestionIndex(response) {
+    var previousQuestionIndex = currentQuestionIndex - 1;
+
+    previousQuestionId = previousQuestionId || locals.previousQuestionId;
+
+    if (previousQuestionId && previousQuestionId !== currentQuestion.id) {
+      previousQuestionIndex = getQuestionIndexById(previousQuestionId);
+    }
+
+    // process any conditions on the previous question
+    var skip = processConditions(previousQuestionIndex);
+
+    // skip
+    if (skip) {
+      currentQuestionIndex = previousQuestionIndex;
+      return getPreviousQuestionIndex();
+    }
+    else {
+      return previousQuestionIndex;
+    }
+  }
+
+  function processConditions(questionIndex) {
+    var question = getQuestion(questionIndex),
+      skip = false;
+
+    if (question && _lodash_survey.isArray(question.conditions)) {
+      var results = {};
+
+      for (var i = 0; i < question.conditions.length; i++) {
+        results[question.conditions[i].operator] = results[question.conditions[i].operator] || [];
+        results[question.conditions[i].operator].push(validateCondition(question.conditions[i]));
+      }
+
+      // ands
+      if (_lodash_survey.isArray(results.and)) {
+        if (results.and.indexOf(false) > -1) {
+          skip = true;
+        }
+      }
+
+      // ors
+      if (!skip && _lodash_survey.isArray(results.or)) {
+        if (results.or.indexOf(true) === -1) {
+          skip = true;
+        }
+      }
+    }
+
+    return skip;
+  }
+
+  function validateCondition(condition) {
+    if (condition) {
+      var question = getQuestionById(condition.questionId);
+
+      if (question) {
+        var response = responses[question.id];
+
+        if (response) {
+          switch (condition.operation) {
+            case '=':
+              return condition.response == response.response;
+
+            case '!=':
+              return condition.response != response.response;
+
+            case '*':
+              return isWildcardMatch(response.response, condition.response);
+
+            case '>':
+              return condition.response > response.response;
+
+            case '>=':
+              return condition.response >= response.response;
+
+            case '<':
+              return condition.response < response.response;
+
+            case '<=':
+              return condition.response <= response.response;
+          }
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        return true;
+      }
+    }
+    else {
+      return true;
+    }
   }
 
   function endSurvey() {
@@ -1203,5 +1302,49 @@ card.onReady = function () {
     }
 
     return true;
+  }
+
+  function isWildcardMatch(input, pattern) {
+    return makeRe(pattern, true).test(input);
+  }
+
+  var reCache = {};
+
+  function makeRe(pattern, shouldNegate) {
+    var cacheKey = pattern + shouldNegate;
+
+    if (reCache[cacheKey]) {
+      return reCache[cacheKey];
+    }
+
+    var negated = false;
+
+    if (pattern[0] === '!') {
+      negated = true;
+      pattern = pattern.slice(1);
+    }
+
+    pattern = escapeStringRegexp(pattern).replace(/\\\*/g, '.*');
+
+    if (negated && shouldNegate) {
+      pattern = '(?!' + pattern + ')';
+    }
+
+    var re = new RegExp('^' + pattern + '$', 'i');
+
+    re.negated = negated;
+
+    reCache[cacheKey] = re;
+
+    return re;
+  }
+
+  function escapeStringRegexp(str) {
+    if (typeof str !== 'string') {
+      return str;
+    }
+    else {
+      return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+    }
   }
 };
