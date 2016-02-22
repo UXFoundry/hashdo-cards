@@ -67,10 +67,20 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
 
   .hdc-survey-question {
-    padding: 15px;
+    padding: 5px;
 
-    h3 {
-      margin: 0;
+    .hdc-survey-question-title {
+      font-weight: 400;
+
+      p {
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
 
     .hdc-survey-question-description {
@@ -82,7 +92,7 @@
     }
 
     .hdc-survey-question-input {
-      margin: 20px 0 40px 0;
+      margin: 20px 0;
 
       // text, range
       input {
@@ -105,7 +115,7 @@
       }
 
       .hdc-survey-input-options {
-        padding-bottom: 10px;
+        padding-bottom: 20px;
 
         &.invalid {
           border-bottom: 1px solid #ff0000;
@@ -204,9 +214,15 @@
   .checkbox {
     margin-top: 0;
     margin-bottom: 10px;
+    width: 180px;
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    label {
+      padding-left: 25px;
+      text-indent: -25px;
     }
   }
 
@@ -218,7 +234,7 @@
   .custom-checkbox > .box {
     position: relative;
     display: inline-block;
-    top: 3px;
+    top: 8px;
     width: 18px;
     height: 18px;
     border: 1px solid #d0d0d0;
@@ -244,7 +260,7 @@
     width: 10px;
     height: 6px;
     margin: 0 auto;
-    margin-top: -6px;
+    margin-top: -7px;
     border-bottom: 3px solid #0075ee;
     border-left: 3px solid #0075ee;
     transition: transform 0.28s ease 0s;
@@ -283,9 +299,15 @@
   .radio {
     margin-top: 0;
     margin-bottom: 10px;
+    width: 180px;
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    label {
+      padding-left: 25px;
+      text-indent: -25px;
     }
   }
 
@@ -297,7 +319,7 @@
   .custom-radio > .box {
     position: relative;
     display: inline-block;
-    top: 3px;
+    top: 6px;
     width: 18px;
     height: 18px;
     border: 1px solid #d0d0d0;

@@ -17,10 +17,10 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v6.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.modal.v10.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/lodash/4.5.0/survey.min.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.lodash.4.5.1.js', function () {
 
       // start or continue
       attachStartOrContinueHandler();
@@ -183,12 +183,12 @@ card.onReady = function () {
   }
 
   function openModal() {
-    $(document).find('body').prepend('<div class="hdc-survey-modal open"><div><a href="#close" title="Close">&nbsp;</a><div class="hdc-survey-question"><h3>End Now</h3><div class="hdc-survey-question-description"></div><div class="hdc-survey-question-input"><div class="hdc-survey-input-options"><div class="hdc-survey-input-option"><input type="radio" data-choice="Yes" name="option-1" id="option-1-0"><label for="option-1-0"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">Yes</span></label></div><div class="hdc-survey-input-option"><input type="radio" data-choice="No" name="option-1" id="option-1-1"><label for="option-1-1"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">No</span></label></div></div></div><div class="hdc-survey-question-footer"><div class="hdc-survey-question-done" style="display: none;">Done</div><div class="hdc-survey-question-next" style="display: block;">Next</div><div class="hdc-survey-question-back" style="display: block;">Back</div></div></div></div></div>');
+    $(document).find('body').prepend('<div class="hdc-survey-modal open"><div><a href="#close" title="Close">&nbsp;</a><div class="hdc-survey-question"><div class="hdc-survey-question-title"></div><div class="hdc-survey-question-description"></div><div class="hdc-survey-question-input"><div class="hdc-survey-input-options"><div class="hdc-survey-input-option"><input type="radio" data-choice="Yes" name="option-1" id="option-1-0"><label for="option-1-0"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">Yes</span></label></div><div class="hdc-survey-input-option"><input type="radio" data-choice="No" name="option-1" id="option-1-1"><label for="option-1-1"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">No</span></label></div></div></div><div class="hdc-survey-question-footer"><div class="hdc-survey-question-done" style="display: none;">Done</div><div class="hdc-survey-question-next" style="display: block;">Next</div><div class="hdc-survey-question-back" style="display: block;">Back</div></div></div></div></div>');
 
     $modal = $('.hdc-survey-modal');
     $q = $modal.find('.hdc-survey-question');
     $close = $modal.find('a[href="#close"]');
-    $title = $q.find('h3');
+    $title = $q.find('.hdc-survey-question-title');
     $description = $q.find('.hdc-survey-question-description');
     $input = $q.find('.hdc-survey-question-input');
     $done = $q.find('.hdc-survey-question-done');
@@ -196,7 +196,13 @@ card.onReady = function () {
     $back = $q.find('.hdc-survey-question-back');
 
     // attach event handlers for this survey instance
-    $back.on('click', onBack);
+    if (locals.allowBack) {
+      $back.on('click', onBack);
+    }
+    else {
+      $back.hide();
+    }
+
     $next.on('click', onNext);
     $done.on('click', onDone);
     $close.on('click', closeModal);
@@ -355,7 +361,7 @@ card.onReady = function () {
       if (currentQuestion.replyType === 'end') {
         $done.show();
 
-        if (showBack) {
+        if (showBack && locals.allowBack) {
           $back.show();
         }
       }
@@ -464,7 +470,7 @@ card.onReady = function () {
           $next.show();
         }
 
-        if (showBack) {
+        if (showBack && locals.allowBack) {
           $back.show();
         }
       }
@@ -495,7 +501,7 @@ card.onReady = function () {
             selections.push($(this).attr('data-choice'));
           });
 
-          return selections.join(', ');
+          return selections.join(String.fromCharCode(30));
         }
         else {
           return $input.find('input[type=radio]:checked').attr('data-choice');
@@ -547,7 +553,7 @@ card.onReady = function () {
 
       case 'multipleChoice':
         if (currentQuestion.multipleSelections) {
-          var selections = response.split(', ');
+          var selections = response.split(String.fromCharCode(30));
 
           for (j = 0; j < selections.length; j++) {
             $input.find('.hdc-survey-input-options input[data-choice="' + selections[j] + '"]').prop('checked', true);
@@ -585,7 +591,7 @@ card.onReady = function () {
 
           for (var i = 0; i < currentQuestion.reply.length; i++) {
             if (currentQuestion.multipleSelections) {
-              var selections = response.split(', ');
+              var selections = response.split(String.fromCharCode(30));
 
               for (j = 0; j < selections.length; j++) {
                 if (currentQuestion.reply[i].choice === selections[j]) {

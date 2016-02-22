@@ -102,7 +102,8 @@ module.exports = {
             responses: responses || {},
             user: user,
             previousQuestionId: state.previousQuestionId,
-            photoCount: survey.photos ? survey.photos.length : 0
+            photoCount: survey.photos ? survey.photos.length : 0,
+            allowBack: survey.allowBack
           }
         );
       });

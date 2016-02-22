@@ -32,9 +32,7 @@ block content
 
     else
       if locals.responseCount > 0
-        .hdc-survey-footer.active
-          | Continue
+        .hdc-survey-footer.active= locals.survey.continueLabel || 'Continue'
 
       else
-        .hdc-survey-footer.active
-          | Start survey
+        .hdc-survey-footer.active= locals.survey.startLabel || 'Continue'
