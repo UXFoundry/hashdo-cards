@@ -851,28 +851,46 @@ card.onReady = function () {
         var response = responses[question.id];
 
         if (response) {
-          switch (condition.operation) {
-            case '=':
-              return condition.response == response.response;
+          var responseArray = [response.response],
+            resultArray = [];
 
-            case '!=':
-              return condition.response != response.response;
-
-            case '*':
-              return isWildcardMatch(response.response, condition.response);
-
-            case '>':
-              return condition.response > response.response;
-
-            case '>=':
-              return condition.response >= response.response;
-
-            case '<':
-              return condition.response < response.response;
-
-            case '<=':
-              return condition.response <= response.response;
+          if (question.replyType === 'multipleChoice' && question.multipleSelections) {
+            responseArray = response.response.split(String.fromCharCode(30));
           }
+
+          for (var i = 0; i < responseArray.length; i++) {
+            switch (condition.operation) {
+              case '=':
+                resultArray.push(condition.response == responseArray[i]);
+                break;
+
+              case '!=':
+                resultArray.push(condition.response != responseArray[i]);
+                break;
+
+              case '*':
+                resultArray.push(isWildcardMatch(response.response, responseArray[i]));
+                break;
+
+              case '>':
+                resultArray.push(condition.response > responseArray[i]);
+                break;
+
+              case '>=':
+                resultArray.push(condition.response >= responseArray[i]);
+                break;
+
+              case '<':
+                resultArray.push(condition.response < responseArray[i]);
+                break;
+
+              case '<=':
+                resultArray.push(condition.response <= responseArray[i]);
+                break;
+            }
+          }
+
+          return resultArray.indexOf(true) > -1;
         }
         else {
           return true;
