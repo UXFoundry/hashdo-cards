@@ -8,7 +8,8 @@ card.onReady = function () {
     $modal, $q, $close, $title, $description, $input, $done, $next, $back,
     currentQuestionIndex = 0,
     responses = locals.responses || {},
-    $card = $('#' + locals.card.id);
+    $card = $('#' + locals.card.id),
+    baseXGoAPIUrl = 'http://xandgo.com/api/';
 
   initSwiper();
   initCustomInputs();
@@ -40,35 +41,51 @@ card.onReady = function () {
   function attachStartOrContinueHandler() {
     $card.find('.hdc-survey-footer.active').click(function () {
       // start or continue survey
-      (_lodash_survey.keys(locals.responses).length === 0 ? startSurvey : continueSurvey).call();
+      (_lodash_survey.keys(responses).length === 0 ? startSurvey : continueSurvey).call();
     });
   }
 
   function subscribeToStateChanges() {
     card.state.onChange = function (val) {
-      var percentageComplete = 0;
-
-      if (val && val.responses) {
-        var responseCount = _lodash_survey.keys(val.responses).length,
-          questionCount = getQuestionCount();
-
-        percentageComplete = Math.floor((responseCount / questionCount) * 100);
-      }
-
-      if (val.complete) {
-        percentageComplete = 100;
-        $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
-      }
-
-      if (percentageComplete > 0) {
+      if (val) {
         var $progress = $card.find('.hdc-survey-progress');
 
-        $progress.find('h3').html(percentageComplete + '%');
-        $progress.find('.hdc-survey-progress-percentage').css('width', percentageComplete + '%');
-        $progress.show();
+        if (val.reopen) {
+          $progress.find('h3').html('');
+          $progress.find('.hdc-survey-progress-percentage').css('width', '0');
+          $progress.hide();
 
-        if (percentageComplete < 100) {
-          $card.find('.hdc-survey-footer').html('Continue');
+          currentQuestion = previousQuestionId = undefined;
+          currentQuestionIndex = 0;
+          responses = {};
+
+          $card.find('.hdc-survey-footer').addClass('active').html(locals.startLabel);
+          attachStartOrContinueHandler();
+        }
+        else {
+          var percentageComplete = 0;
+
+          if (val.responses) {
+            var responseCount = _lodash_survey.keys(val.responses).length,
+              questionCount = getQuestionCount();
+
+            percentageComplete = Math.floor((responseCount / questionCount) * 100);
+          }
+
+          if (val.complete) {
+            percentageComplete = 100;
+            $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
+          }
+
+          if (percentageComplete > 0) {
+            $progress.find('h3').html(percentageComplete + '%');
+            $progress.find('.hdc-survey-progress-percentage').css('width', percentageComplete + '%');
+            $progress.show();
+
+            if (percentageComplete < 100) {
+              $card.find('.hdc-survey-footer').html('Continue');
+            }
+          }
         }
       }
     };
@@ -140,6 +157,8 @@ card.onReady = function () {
 
       openModal();
       renderQuestion();
+
+      card.proxy.post(baseXGoAPIUrl + 'survey/begin', {});
     }
   }
 
@@ -149,12 +168,12 @@ card.onReady = function () {
     var latestId, latestResponse,
       max = 0;
 
-    for (var i = 0; i < _lodash_survey.keys(locals.responses).length; i++) {
-      if (locals.responses[_lodash_survey.keys(locals.responses)[i]].dateTimeStamp > max) {
-        latestId = _lodash_survey.keys(locals.responses)[i];
-        latestResponse = locals.responses[latestId].response;
+    for (var i = 0; i < _lodash_survey.keys(responses).length; i++) {
+      if (responses[_lodash_survey.keys(responses)[i]].dateTimeStamp > max) {
+        latestId = _lodash_survey.keys(responses)[i];
+        latestResponse = responses[latestId].response;
 
-        max = locals.responses[latestId].dateTimeStamp;
+        max = responses[latestId].dateTimeStamp;
       }
     }
 
@@ -168,17 +187,17 @@ card.onReady = function () {
         currentQuestionIndex = nextQuestionIndex;
         currentQuestion = locals.questions[nextQuestionIndex];
 
-        // open modal
         openModal();
-
         renderQuestion();
+
+        card.proxy.post(baseXGoAPIUrl + 'survey/continue', {});
       }
       else {
-        endSurvey();
+        closeSurvey();
       }
     }
     else {
-      endSurvey();
+      closeSurvey();
     }
   }
 
@@ -257,7 +276,7 @@ card.onReady = function () {
         renderQuestion();
       }
       else {
-        endSurvey();
+        closeSurvey();
       }
     }
   }
@@ -440,9 +459,9 @@ card.onReady = function () {
         }
 
         // overwrite value with previous response if any
-        if (locals.responses && locals.responses[currentQuestion.id]) {
-          if (typeof locals.responses[currentQuestion.id].response !== 'undefined') {
-            value = locals.responses[currentQuestion.id].response;
+        if (responses && responses[currentQuestion.id]) {
+          if (typeof responses[currentQuestion.id].response !== 'undefined') {
+            value = responses[currentQuestion.id].response;
           }
         }
 
@@ -906,14 +925,46 @@ card.onReady = function () {
   }
 
   function endSurvey() {
-    // remove events
-    $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
+    closeSurvey();
+
+    var completeCount = locals.completeCount + 1;
 
     // flag as complete
     card.state.save({
       complete: true,
+      completeCount: completeCount,
       completeDateTimeStamp: new Date().getTime()
     });
+
+    // save responses
+    var responseToSave = {},
+      responseQuestionIds = _lodash_survey.keys(responses);
+
+    if (_lodash_survey.isArray(responseQuestionIds)) {
+      for (var i = 0; i < responseQuestionIds.length; i++) {
+        var question = getQuestionById(responseQuestionIds[i]);
+        responseToSave[question.message] = responses[responseQuestionIds[i]].response;
+      }
+    }
+
+    // proxy complete call to X&Go
+    card.proxy.post(baseXGoAPIUrl + 'survey/complete', {responses: responseToSave});
+
+    // reopen?
+    if (locals.limit === 0 || completeCount < locals.limit) {
+      card.state.save({
+        complete: false,
+        completeCount: completeCount,
+        completeDateTimeStamp: null,
+        responses: null,
+        reopen: true
+      });
+    }
+  }
+
+  function closeSurvey() {
+    // remove events
+    $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
 
     closeModal();
   }

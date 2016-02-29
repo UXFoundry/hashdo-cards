@@ -37,15 +37,17 @@ module.exports = {
 
     // enable client side state and proxy support
     card.clientStateSupport = true;
+    card.clientProxySupport = true;
 
     // previously cached?
-    if (state.survey) {
+    if (state.responses) {
 
       // render readonly card if already completed
       if (state.complete) {
 
         // disable client side state & proxy support
         card.clientStateSupport = false;
+        card.clientProxySupport = false;
 
         callback(null, {
           survey: state.survey,
@@ -62,15 +64,15 @@ module.exports = {
               state.version = newVersion;
               state.survey = newSurvey;
 
-              execCardDataCallback(newSurvey, state.responses, callback);
+              execCardDataCallback(newSurvey, state.responses, state.completeCount, callback);
             }
             else {
-              execCardDataCallback(state.survey, state.responses, callback);
+              execCardDataCallback(state.survey, state.responses, state.completeCount, callback);
             }
           });
         }
         else {
-          execCardDataCallback(state.survey, state.responses, callback);
+          execCardDataCallback(state.survey, state.responses, state.completeCount, callback);
         }
       }
     }
@@ -80,11 +82,11 @@ module.exports = {
         state.survey = survey;
         state.responses = {};
 
-        execCardDataCallback(survey, state.responses, callback);
+        execCardDataCallback(survey, state.responses, state.completeCount, callback);
       });
     }
 
-    function execCardDataCallback(survey, responses, callback) {
+    function execCardDataCallback(survey, responses, completeCount, callback) {
       XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
         callback && callback(null,
 
@@ -101,9 +103,12 @@ module.exports = {
             questions: survey.questions,
             responses: responses || {},
             user: user,
+            limit: survey.limit,
+            completeCount: completeCount || 0,
             previousQuestionId: state.previousQuestionId,
             photoCount: survey.photos ? survey.photos.length : 0,
-            allowBack: survey.allowBack
+            allowBack: survey.allowBack,
+            startLabel: survey.startLabel || 'Start survey'
           }
         );
       });
