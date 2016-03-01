@@ -33,6 +33,7 @@ module.exports = {
     var XandGo = require('./lib/xandgo'),
       card = this,
       Moment = require('moment'),
+      CUID = require('cuid'),
       _ = require('lodash');
 
     // enable client side state and proxy support
@@ -40,14 +41,19 @@ module.exports = {
     card.clientProxySupport = true;
 
     // previously cached?
-    if (state.responses) {
+    if (state.survey) {
 
       // render readonly card if already completed
-      if (state.complete) {
+      if (state.survey.limit !== 0 && state.instances.length > state.survey.limit) {
 
         // disable client side state & proxy support
         card.clientStateSupport = false;
         card.clientProxySupport = false;
+
+        // enable js support if photos present
+        if (state.survey.photos.length > 0) {
+          card.client$Support = true;
+        }
 
         callback(null, {
           survey: state.survey,
@@ -64,15 +70,15 @@ module.exports = {
               state.version = newVersion;
               state.survey = newSurvey;
 
-              execCardDataCallback(newSurvey, state.responses, state.completeCount, callback);
+              execCardDataCallback(newSurvey, {}, state.instances, callback);
             }
             else {
-              execCardDataCallback(state.survey, state.responses, state.completeCount, callback);
+              execCardDataCallback(state.survey, {}, state.instances, callback);
             }
           });
         }
         else {
-          execCardDataCallback(state.survey, state.responses, state.completeCount, callback);
+          execCardDataCallback(state.survey, state.responses, state.instances, callback);
         }
       }
     }
@@ -81,12 +87,13 @@ module.exports = {
         state.version = version;
         state.survey = survey;
         state.responses = {};
+        state.instances = [CUID()];
 
-        execCardDataCallback(survey, state.responses, state.completeCount, callback);
+        execCardDataCallback(survey, state.responses, state.instances, callback);
       });
     }
 
-    function execCardDataCallback(survey, responses, completeCount, callback) {
+    function execCardDataCallback(survey, responses, instances, callback) {
       XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
         callback && callback(null,
 
@@ -94,7 +101,8 @@ module.exports = {
           {
             survey: survey,
             responseCount: _.keys(responses || {}).length,
-            percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100)
+            percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
+            instances: instances
           },
 
           // js client side locals
@@ -104,9 +112,9 @@ module.exports = {
             responses: responses || {},
             user: user,
             limit: survey.limit,
-            completeCount: completeCount || 0,
+            instances: instances,
             previousQuestionId: state.previousQuestionId,
-            photoCount: survey.photos ? survey.photos.length : 0,
+            photoCount: survey.photos.length,
             allowBack: survey.allowBack,
             startLabel: survey.startLabel || 'Start survey'
           }

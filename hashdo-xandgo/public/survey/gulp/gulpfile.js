@@ -13,8 +13,8 @@ var AUTOPREFIXER_BROWSERS = [
   'ie_mob >= 10'
 ];
 
-gulp.task('less-survey-modal', function (done) {
-  gulp.src('../less/survey.modal.less')
+gulp.task('less', function (done) {
+  gulp.src('../less/survey.less')
     .pipe(plugins.less({
       compress: true
     }))
@@ -22,4 +22,15 @@ gulp.task('less-survey-modal', function (done) {
     .pipe(gulp.dest('../less/'));
 
   done && done();
+});
+
+gulp.task('js', function () {
+  return gulp.src([
+      '../js/cuid.1.3.8.js',
+      '../js/lodash.custom.4.5.1.js',
+      '../js/noconflict.js'
+    ])
+    .pipe(plugins.concat('survey.min.js'))
+    .pipe(plugins.uglify())
+    .pipe(gulp.dest('../js'))
 });
