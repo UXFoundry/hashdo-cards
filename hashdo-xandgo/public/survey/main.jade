@@ -1,15 +1,23 @@
 extends /card
 
 block content
-  if locals.survey.photos.length > 0
-    .swiper-container
-      .swiper-wrapper
-        each img in locals.survey.photos
-          .swiper-slide
-            img(src= img, width='225', height='143')
+  if !locals.complete
+    if locals.survey.photos.length > 0
+      .swiper-container
+        .swiper-wrapper
+          each img in locals.survey.photos
+            .swiper-slide
+              img(src= img, width='225', height='143')
 
-      .swiper-button-next.swiper-button-white
-      .swiper-button-prev.swiper-button-white
+        .swiper-button-next.swiper-button-white
+        .swiper-button-prev.swiper-button-white
+
+  else
+    if locals.survey.photos.length > 0
+      .swiper-container
+        .swiper-wrapper
+          .swiper-slide
+            img(src= locals.survey.photos[0], width='225', height='143')
 
   .hdc-survey(data-status= locals.status)
     .hdc-survey-header
@@ -19,8 +27,7 @@ block content
 
       if locals.instances && locals.instances.length > 1
         h3
-          span.hdc-survey-response-count= locals.instances.length
-          | &nbsp;response#{locals.instances.length === 1 ? '' : 's'}
+          span.hdc-survey-response-count= locals.instances.length + ' response' + (locals.instances.length === 1 ? '' : 's')
       else
         h3
           span.hdc-survey-response-count

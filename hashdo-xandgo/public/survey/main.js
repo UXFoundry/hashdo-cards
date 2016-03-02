@@ -49,7 +49,7 @@ card.onReady = function () {
     card.state.onChange = function (val) {
       if (val) {
         if (val.instances) {
-          $card.find('.hdc-survey-response-count').html(val.instances.length);
+          $card.find('.hdc-survey-response-count').html(val.instances.length + ' response' + (val.instances.length === 1 ? '' : 's'));
         }
         
         if (val.currentInstanceId === currentInstanceId) {

@@ -16,6 +16,11 @@ module.exports = {
       secure: true,
       required: true
     },
+    requestId: {
+      example: '552fa62425186c6012edcf18',
+      description: 'The current request\'s ID.',
+      required: true
+    },
     userId: {
       example: '552fa62425186c6012edcf18',
       description: 'The current user\'s X&Go ID.',
@@ -52,11 +57,6 @@ module.exports = {
         // disable client side state & proxy support
         card.clientStateSupport = false;
         card.clientProxySupport = false;
-
-        // enable js support if photos present
-        if (state.survey.photos.length > 0) {
-          card.client$Support = true;
-        }
 
         callback(null, {
           survey: state.survey,
