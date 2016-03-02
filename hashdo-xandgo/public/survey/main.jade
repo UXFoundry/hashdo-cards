@@ -17,10 +17,13 @@ block content
       h1= locals.survey.name
       h3= locals.survey.questions.length + ' question survey'
 
-      if locals.instances.length > 1
+      if locals.instances && locals.instances.length > 1
         h3
           span.hdc-survey-response-count= locals.instances.length
           | &nbsp;response#{locals.instances.length === 1 ? '' : 's'}
+      else
+        h3
+          span.hdc-survey-response-count
 
     .hdc-survey-progress(class= locals.responseCount > 0 || locals.complete ? 'visible' : '')
       h3= locals.percentageComplete + '%'

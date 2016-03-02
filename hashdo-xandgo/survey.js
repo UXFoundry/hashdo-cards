@@ -43,8 +43,11 @@ module.exports = {
     // previously cached?
     if (state.survey) {
 
+      // legacy state support
+      state.instances = state.instances || [];
+
       // render readonly card if already completed
-      if (state.survey.limit !== 0 && state.instances.length > state.survey.limit) {
+      if (state.complete || (state.survey.limit !== 0 && state.instances.length > state.survey.limit)) {
 
         // disable client side state & proxy support
         card.clientStateSupport = false;
