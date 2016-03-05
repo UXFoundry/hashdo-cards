@@ -19,7 +19,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v10.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v11.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v3.js', function () {
@@ -461,7 +461,7 @@ card.onReady = function () {
             break;
 
           case 'image':
-            inputHTML = '<label for="photo-' + currentQuestion.id + '"><div class="photo"><div class="placeholder"></div></div></label>';
+            inputHTML = '<label for="photo-' + currentQuestion.id + '"><div class="photo"><div class="placeholder" data-photo="' + currentQuestion.id + '"></div></div></label>';
 
             if (!isNative()) {
               inputHTML += '<input id="photo-' + currentQuestion.id + '" type="file" name="file" accept="image/*;capture=camera">';
@@ -1062,11 +1062,19 @@ card.onReady = function () {
 
   function initImageQuestion() {
     if (isNative()) {
-
+      $modal.find('.placeholder[data-photo="' + currentQuestion.id + '"]').on('click', function () {
+        $card.trigger('hdc:photo', {
+          callback: onPhoto
+        });
+      });
     }
     else {
       $modal.find('#photo-' + currentQuestion.id).on('change', onFile);
     }
+  }
+
+  function onPhoto(base64) {
+    console.log(base64);
   }
 
   function onFile() {
