@@ -552,7 +552,10 @@ card.onReady = function () {
             end = bg.length - 5;
           }
 
-          return bg.substr(start, end).replace(/"/g, '');
+          return {
+            publicId: $img.attr('data-publicid'),
+            src: bg.substr(start, end).replace(/"/g, '')
+          };
         }
         else {
           return '';
@@ -598,8 +601,8 @@ card.onReady = function () {
 
       case 'image':
         if (response) {
-          $input.find('.placeholder').addClass('set').css({
-            'background-image': 'url(' + response + ')',
+          $input.find('.placeholder').addClass('set').attr('data-publicid', response.publicId).css({
+            'background-image': 'url(' + response.src + ')',
             'background-size': '100px 100px'
           });
         }
@@ -768,7 +771,7 @@ card.onReady = function () {
         clearEvent = 'click';
 
         if (currentQuestion.required) {
-          valid = (response && response.length > 0);
+          valid = (response && response.src && response.src.length > 0);
         }
 
         break;
@@ -959,7 +962,7 @@ card.onReady = function () {
     }
 
     // proxy complete call to X&Go
-    card.proxy.post(baseXGoAPIUrl + 'survey/complete', {responses: responseToSave});
+    card.proxy.post(baseXGoAPIUrl + 'survey/complete', {responses: JSON.stringify(responseToSave)});
 
     // reopen?
     if (locals.limit === 0 || (locals.instances.length + 1) < locals.limit) {
@@ -1064,6 +1067,7 @@ card.onReady = function () {
     if (isNative()) {
       $modal.find('.placeholder[data-photo="' + currentQuestion.id + '"]').on('click', function () {
         $card.trigger('hdc:photo', {
+          surveyId: locals.surveyId,
           callback: onPhoto
         });
       });
@@ -1073,8 +1077,13 @@ card.onReady = function () {
     }
   }
 
-  function onPhoto(base64) {
-    console.log(base64);
+  function onPhoto(photo) {
+    if (photo) {
+      $input.find('.placeholder').addClass('set').attr('data-publicid', photo.publicId).css({
+        'background-image': 'url(' + photo.src + ')',
+        'background-size': '100px 100px'
+      });
+    }
   }
 
   function onFile() {
