@@ -87,12 +87,17 @@ module.exports = {
     }
     else {
       XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, null, function (survey, version) {
-        state.version = version;
-        state.survey = survey;
-        state.responses = {};
-        state.instances = [CUID()];
+        if (survey) {
+          state.version = version;
+          state.survey = survey;
+          state.responses = {};
+          state.instances = [CUID()];
 
-        execCardDataCallback(survey, state.responses, state.instances, callback);
+          execCardDataCallback(survey, state.responses, state.instances, callback);
+        }
+        else {
+          callback(new Error('Could not find survey with ID ' + (inputs.surveyId || '?')));
+        }
       });
     }
 
