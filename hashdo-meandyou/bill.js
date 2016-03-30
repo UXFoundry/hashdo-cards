@@ -128,7 +128,16 @@ module.exports = {
           dataTOTAL = 0.00,
           dataCOUNT = 0,
           talkTOTAL = 0.00,
-          talkCOUNT = 0;
+          talkCOUNT = 0,
+
+          smsIntTOTAL = 0.00,
+          smsIntCOUNT = 0,
+          mmsIntTOTAL = 0.00,
+          mmsIntCOUNT = 0,
+          dataIntTOTAL = 0.00,
+          dataIntCOUNT = 0,
+          talkIntTOTAL = 0.00,
+          talkIntCOUNT = 0;
 
         if (data && data.OutOfBundle && data.OutOfBundle.Items) {
           for (var j = 0; j < data.OutOfBundle.Items.length; j++) {
@@ -157,6 +166,26 @@ module.exports = {
                 talkCOUNT++;
                 talkTOTAL = talkTOTAL + parseFloat(chItems.Amount);
               }
+              else if (chItems.EventAbbreviation.toLowerCase() == "mosmsr"){
+                chItems.EventAbbreviation = 'International roaming SMS';
+                smsIntCOUNT++;
+                smsIntTOTAL = smsIntTOTAL + parseFloat(chItems.Amount);
+              }
+              else if (chItems.EventAbbreviation.toLowerCase() == "mmsr"){
+                chItems.EventAbbreviation = 'International roaming MMS';
+                mmsIntCOUNT++;
+                mmsIntTOTAL = mmsIntTOTAL + parseFloat(chItems.Amount);
+              }
+              else if (chItems.EventAbbreviation.toLowerCase() == "mtcr" || chItems.EventAbbreviation.toLowerCase() == "mocr" ){
+                chItems.EventAbbreviation = 'International roaming talk';
+                talkIntCOUNT++;
+                talkIntTOTAL = talkIntTOTAL + parseFloat(chItems.Amount);
+              }
+              else if (chItems.EventAbbreviation.toLowerCase() == "datar"){
+                chItems.EventAbbreviation = 'International roaming data';
+                dataIntCOUNT++;
+                dataIntTOTAL = dataIntTOTAL + parseFloat(chItems.Amount);
+              }
               else {
                 myBillSoFarHtml += '<tr><td>' + chItems.EventAbbreviation + '</td><td align="right"><span>R</span> ' + chItems.Amount + '</td></tr>';
               }
@@ -178,6 +207,22 @@ module.exports = {
 
         if (mmsCOUNT != 0) {
           myBillSoFarHtml += '<tr><td>MMS </td><td align="right"><span>R</span> ' + parseFloat(mmsTOTAL).toFixed(2) + '</td></tr>';
+        }
+
+        if (talkIntCOUNT != 0){
+          myBillSoFarHtml += '<tr><td>International roaming talk </td><td align="right"><span>R</span> '+ parseFloat(talkIntTOTAL).toFixed(2) + '</td></tr>';
+        }
+
+        if (dataIntCOUNT != 0){
+          myBillSoFarHtml += '<tr><td>International roaming data </td><td align="right"><span>R</span> '+ parseFloat(dataIntTOTAL).toFixed(2) + '</td></tr>';
+        }
+
+        if (smsIntCOUNT != 0){
+          myBillSoFarHtml += '<tr><td>International roaming SMS </td><td align="right"><span>R</span> '+ parseFloat(smsIntTOTAL).toFixed(2) + '</td></tr>';
+        }
+
+        if (mmsIntCOUNT != 0){
+          myBillSoFarHtml += '<tr><td>MMS </td><td align="right"><span>R</span> '+ parseFloat(mmsIntTOTAL).toFixed(2) + '</td></tr>';
         }
 
         if (serviceData.itemizedBilling != 0) {
