@@ -1,20 +1,4 @@
-.hdc-survey-modal {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-
-  /* hide for now */
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-
+.hdc-modal > div {
   button,
   input,
   optgroup,
@@ -24,47 +8,6 @@
     font: inherit;
     margin: 0;
   }
-
-  &.open {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  a[href='#close'] {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: transparent;
-
-    &:after {
-      content: 'x';
-      display: block;
-
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      width: 1.5em;
-
-      text-decoration: none;
-      text-shadow: none;
-      text-align: center;
-      color: #ccc;
-    }
-  }
-}
-
-.hdc-survey-modal > div {
-  width: 200px;
-  background: #fff;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 0 auto;
-
-  padding: 10px;
-  border-radius: 1px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
 
   .hdc-survey-question {
     padding: 5px;
@@ -83,72 +26,77 @@
       }
     }
 
-    .hdc-survey-question-description {
-      color: #B1B1B1;
-      font-size: 14px;
-      line-height: 13px;
-      font-weight: 300;
-      margin: 5px 0 0 0;
-    }
+    .hdc-survey-question-body {
+      max-height: 80vh;
+      overflow-y: scroll;
 
-    .hdc-survey-question-input {
-      margin: 20px 0;
-
-      // text, range
-      input {
-        border: none;
-        border-radius: 0;
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-        color: #4D4D4D;
-        width: 100%;
-        background: #fff;
-
-        &:focus {
-          outline: 0;
-        }
-
-        &.invalid {
-          border-bottom: 1px solid #ff0000;
-          animation: hdc-survey-shake .5s linear;
-        }
+      .hdc-survey-question-description {
+        color: #B1B1B1;
+        font-size: 14px;
+        line-height: 15px;
+        font-weight: 300;
+        margin: 5px 0 0 0;
       }
 
-      .hdc-survey-input-options {
-        padding-bottom: 20px;
+      .hdc-survey-question-input {
+        margin: 20px 0;
 
-        &.invalid {
-          border-bottom: 1px solid #ff0000;
-          animation: hdc-survey-shake .5s linear;
-        }
-      }
-
-      .photo {
-        padding: 4px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        margin: 0 auto;
-        cursor: pointer;
-        height: 100px;
-        width: 100px;
-
-        .placeholder {
-          height: 100%;
+        // text, range
+        input {
+          border: none;
+          border-radius: 0;
+          border-bottom: 1px solid #ddd;
+          padding: 10px 0;
+          color: #4D4D4D;
           width: 100%;
-          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAApAgMAAAADqzIAAAAADFBMVEUAAAAAAAAAAAAAAAA16TeWAAAABHRSTlMPAAII1x2cfAAAAMNJREFUKM+d0TEOwjAMAECLiqEDhaU7S5+QgS1P6OIUQYf+gDyhn+gjCAtP6BNY+gR2fgB2BsdF6lJLiXKRZdkyIIULIdz5UUd2QDEILXMS9sxSODKNkAXbyEsIj8iCytdgQcUBes3jGn4/mjm6xNivT9wg4jkxx9vgEk1DP6OwbCFDK5wsHS/kRFMn8rjCzDHbGfNFYkxeqjzQVXXCyc/aqLjJXmjceFIj7BCxAWFGbBPhjfhULPAKirBfs5T//XrN1w9T4lITagmWygAAAABJRU5ErkJggg==);
-          background-color: #f5f5f5;
-          background-repeat: no-repeat;
-          background-position: 50% 50%;
+          background: #fff;
+
+          &:focus {
+            outline: 0;
+          }
+
+          &.invalid {
+            border-bottom: 1px solid #ff0000;
+            animation: hdc-survey-shake .5s linear;
+          }
         }
 
-        &.invalid {
-          border-bottom: 1px solid #ff0000;
-          animation: hdc-survey-shake .5s linear;
-        }
-      }
+        .hdc-survey-input-options {
+          padding-bottom: 20px;
 
-      input[type=file] {
-        display: none;
+          &.invalid {
+            border-bottom: 1px solid #ff0000;
+            animation: hdc-survey-shake .5s linear;
+          }
+        }
+
+        .photo {
+          padding: 4px;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          margin: 0 auto;
+          cursor: pointer;
+          height: 100px;
+          width: 100px;
+
+          .placeholder {
+            height: 100%;
+            width: 100%;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAApAgMAAAADqzIAAAAADFBMVEUAAAAAAAAAAAAAAAA16TeWAAAABHRSTlMPAAII1x2cfAAAAMNJREFUKM+d0TEOwjAMAECLiqEDhaU7S5+QgS1P6OIUQYf+gDyhn+gjCAtP6BNY+gR2fgB2BsdF6lJLiXKRZdkyIIULIdz5UUd2QDEILXMS9sxSODKNkAXbyEsIj8iCytdgQcUBes3jGn4/mjm6xNivT9wg4jkxx9vgEk1DP6OwbCFDK5wsHS/kRFMn8rjCzDHbGfNFYkxeqjzQVXXCyc/aqLjJXmjceFIj7BCxAWFGbBPhjfhULPAKirBfs5T//XrN1w9T4lITagmWygAAAABJRU5ErkJggg==);
+            background-color: #f5f5f5;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+          }
+
+          &.invalid {
+            border-bottom: 1px solid #ff0000;
+            animation: hdc-survey-shake .5s linear;
+          }
+        }
+
+        input[type=file] {
+          display: none;
+        }
       }
     }
 

@@ -1,22 +1,19 @@
 {
-  "name": "hashdo-xandgo",
-  "version": "0.3.47",
-  "description": "X&Go related HashDo cards.",
+  "name": "hashdo-e4f",
+  "version": "0.1.0",
+  "description": "Exchange4Free card pack.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
     "hashdo",
     "card",
-    "xandgo"
+    "exchange"
   ],
   "dependencies": {
-    "cloudinary": "1.3.1",
-    "cuid": "1.3.8",
-    "lodash": "4.7.0",
-    "moment": "2.12.0",
-    "request": "2.69.0"
+    "lodash": "4.6.1",
+    "soap": "0.13.0"
   },
   "devDependencies": {
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "3.1.0",
     "gulp-concat": "2.6.0",
     "gulp-less": "3.0.5",
@@ -25,12 +22,9 @@
     "gulp-uglify": "1.5.3"
   },
   "pack": {
-    "friendlyName": "X&Go",
+    "friendlyName": "Exchange4Free",
     "cards": [
-      "rate",
-      "place",
-      "product",
-      "survey"
+      "quote"
     ]
   }
 }

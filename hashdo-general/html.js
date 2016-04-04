@@ -13,11 +13,7 @@ module.exports = {
   },
 
   getCardData: function (inputs, state, callback) {
-    var viewModel = {
-      html: inputs.html
-    };
-
-    callback(null, viewModel);
+    callback(null, {html: inputs.html});
   }
 };
 

@@ -5,7 +5,7 @@
 
 card.onReady = function () {
   var currentQuestion, previousQuestionId,
-    $modal, $q, $close, $title, $description, $input, $done, $next, $back,
+    $modal, $q, $title, $description, $input, $done, $next, $back,
     currentQuestionIndex = 0,
     responses = locals.responses || {},
     $card = $('#' + locals.card.id),
@@ -19,7 +19,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v11.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v15.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v3.js', function () {
@@ -210,11 +210,22 @@ card.onReady = function () {
   }
 
   function openModal() {
-    $(document).find('body').prepend('<div class="hdc-survey-modal open"><div><a href="#close" title="Close">&nbsp;</a><div class="hdc-survey-question"><div class="hdc-survey-question-title"></div><div class="hdc-survey-question-description"></div><div class="hdc-survey-question-input"><div class="hdc-survey-input-options"><div class="hdc-survey-input-option"><input type="radio" data-choice="Yes" name="option-1" id="option-1-0"><label for="option-1-0"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">Yes</span></label></div><div class="hdc-survey-input-option"><input type="radio" data-choice="No" name="option-1" id="option-1-1"><label for="option-1-1"><span class="hdc-survey-input-option-dot"></span><span class="hdc-survey-input-option-text">No</span></label></div></div></div><div class="hdc-survey-question-footer"><div class="hdc-survey-question-done" style="display: none;">Done</div><div class="hdc-survey-question-next" style="display: block;">Next</div><div class="hdc-survey-question-back" style="display: block;">Back</div></div></div></div></div>');
+    $modal = card.modal.open(
+      '<div class="hdc-survey-question">' +
+        '<div class="hdc-survey-question-title"></div>' +
+        '<div class="hdc-survey-question-body">' +
+          '<div class="hdc-survey-question-description"></div>' +
+          '<div class="hdc-survey-question-input"></div>' +
+        '</div>' +
+        '<div class="hdc-survey-question-footer">' +
+          '<div class="hdc-survey-question-done" style="display: none;">Done</div>' +
+          '<div class="hdc-survey-question-next" style="display: block;">Next</div>' +
+          '<div class="hdc-survey-question-back" style="display: block;">Back</div>' +
+        '</div>' +
+      '</div>'
+    );
 
-    $modal = $('.hdc-survey-modal');
     $q = $modal.find('.hdc-survey-question');
-    $close = $modal.find('a[href="#close"]');
     $title = $q.find('.hdc-survey-question-title');
     $description = $q.find('.hdc-survey-question-description');
     $input = $q.find('.hdc-survey-question-input');
@@ -232,15 +243,10 @@ card.onReady = function () {
 
     $next.on('click', onNext);
     $done.on('click', onDone);
-    $close.on('click', closeModal);
-  }
 
-  function closeModal() {
-    if ($modal) {
-      $modal.remove();
-    }
-    
-    $modal = $q = $close = $title = $description = $input = $done = $next = $back = undefined;
+    card.modal.onClose = function () {
+      $q = $title = $description = $input = $done = $next = $back = undefined;
+    };
   }
 
   function resetModal() {
@@ -988,7 +994,8 @@ card.onReady = function () {
     // remove events
     $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
 
-    closeModal();
+    // modal modal
+    card.modal.close();
   }
 
   function getUserFieldValue(field) {
