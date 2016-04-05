@@ -19,7 +19,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v15.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v16.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v3.js', function () {
@@ -212,8 +212,8 @@ card.onReady = function () {
   function openModal() {
     $modal = card.modal.open(
       '<div class="hdc-survey-question">' +
-        '<div class="hdc-survey-question-title"></div>' +
         '<div class="hdc-survey-question-body">' +
+          '<div class="hdc-survey-question-title"></div>' +
           '<div class="hdc-survey-question-description"></div>' +
           '<div class="hdc-survey-question-input"></div>' +
         '</div>' +
