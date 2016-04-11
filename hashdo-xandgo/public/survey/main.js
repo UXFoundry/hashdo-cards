@@ -19,7 +19,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v16.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v17.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v4.js', function () {
@@ -232,6 +232,9 @@ card.onReady = function () {
     $done = $q.find('.hdc-survey-question-done');
     $next = $q.find('.hdc-survey-question-next');
     $back = $q.find('.hdc-survey-question-back');
+
+    // set max height
+    $q.find('.hdc-survey-question-body').css('max-height', getViewportSize().height - 75);
 
     // attach event handlers for this survey instance
     if (locals.allowBack) {
@@ -1464,5 +1467,27 @@ card.onReady = function () {
     else {
       return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
     }
+  }
+
+  function getViewportSize() {
+    var x = 0, y = 0;
+
+    if (window.innerHeight) {
+      x = window.innerWidth;
+      y = window.innerHeight;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight) {
+      x = document.documentElement.clientWidth;
+      y = document.documentElement.clientHeight;
+    }
+    else if (document.body) {
+      x = document.body.clientWidth;
+      y = document.body.clientHeight;
+    }
+
+    return {
+      width: x,
+      height: y
+    };
   }
 };
