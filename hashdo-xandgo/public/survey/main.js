@@ -22,7 +22,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.v17.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/survey.v4.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.v5.js', function () {
       // start or continue
       attachStartOrContinueHandler();
 
@@ -49,7 +49,7 @@ card.onReady = function () {
     card.state.onChange = function (val) {
       if (val) {
         if (val.instances) {
-          $card.find('.hdc-survey-response-count').html(val.instances.length + ' response' + (val.instances.length === 1 ? '' : 's'));
+          $card.find('.hdc-survey-response-count').html(val.instances.length + ' ' + (val.instances.length === 1 ? locals.labels.reponse : locals.labels.reponses));
         }
         
         if (val.currentInstanceId === currentInstanceId) {
@@ -66,7 +66,7 @@ card.onReady = function () {
 
           if (val.complete) {
             percentageComplete = 100;
-            $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
+            $card.find('.hdc-survey-footer').removeClass('active').html(locals.labels.completed).off('click');
           }
 
           if (percentageComplete > 0) {
@@ -75,7 +75,7 @@ card.onReady = function () {
             $progress.show();
 
             if (percentageComplete < 100) {
-              $card.find('.hdc-survey-footer').html('Continue');
+              $card.find('.hdc-survey-footer').html(locals.labels.continue);
             }
           }
         }
@@ -205,7 +205,7 @@ card.onReady = function () {
     currentQuestionIndex = 0;
     responses = {};
 
-    $card.find('.hdc-survey-footer').addClass('active').html(locals.startLabel);
+    $card.find('.hdc-survey-footer').addClass('active').html(locals.labels.start);
     attachStartOrContinueHandler();
   }
 
@@ -218,9 +218,9 @@ card.onReady = function () {
           '<div class="hdc-survey-question-input"></div>' +
         '</div>' +
         '<div class="hdc-survey-question-footer">' +
-          '<div class="hdc-survey-question-done" style="display: none;">Done</div>' +
-          '<div class="hdc-survey-question-next" style="display: block;">Next</div>' +
-          '<div class="hdc-survey-question-back" style="display: block;">Back</div>' +
+          '<div class="hdc-survey-question-done" style="display: none;">' + locals.labels.done + '</div>' +
+          '<div class="hdc-survey-question-next" style="display: block;">' + locals.labels.next + '</div>' +
+          '<div class="hdc-survey-question-back" style="display: block;">' + locals.labels.back + '</div>' +
         '</div>' +
       '</div>'
     );
@@ -493,7 +493,7 @@ card.onReady = function () {
             description += ' ';
           }
 
-          description += '(required)';
+          description += '(' + locals.labels.required + ')';
         }
 
         // populate description, field, buttons / links and value
@@ -995,7 +995,7 @@ card.onReady = function () {
 
   function closeSurvey() {
     // remove events
-    $card.find('.hdc-survey-footer').removeClass('active').html('Completed').off('click');
+    $card.find('.hdc-survey-footer').removeClass('active').html(locals.labels.completed).off('click');
 
     // modal modal
     card.modal.close();

@@ -23,11 +23,11 @@ block content
     .hdc-survey-header
       .bg-icon &nbsp;
       h1= locals.survey.name
-      h3= locals.survey.questions.length + ' question survey'
+      h3= locals.labels.questionCount
 
       if locals.instances && locals.instances.length > 1
         h3
-          span.hdc-survey-response-count= locals.instances.length + ' response' + (locals.instances.length === 1 ? '' : 's')
+          span.hdc-survey-response-count= locals.instances.length + ' ' + (locals.instances.length === 1 ? locals.labels.response : locals.labels.response)
       else
         h3
           span.hdc-survey-response-count
@@ -43,11 +43,11 @@ block content
 
     if locals.complete
       .hdc-survey-footer
-        | Completed - #{locals.completeDate}
+        | #{locals.labels.completed} - #{locals.completeDate}
 
     else
       if locals.responseCount > 0
-        .hdc-survey-footer.active= locals.survey.continueLabel || 'Continue'
+        .hdc-survey-footer.active= locals.labels.continue
 
       else
-        .hdc-survey-footer.active= locals.survey.startLabel || 'Start survey'
+        .hdc-survey-footer.active= locals.labels.start

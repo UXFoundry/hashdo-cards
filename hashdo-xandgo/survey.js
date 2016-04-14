@@ -68,7 +68,14 @@ module.exports = {
       else {
         // try for a newer version if no responses
         if (_.keys(state.responses).length === 0) {
-          XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, state.version, function (newSurvey, newVersion) {
+          var version = state.version;
+
+          // reopened survey's responses will be set to null. Force API fetch
+          if (state.responses === null) {
+            version = 0;
+          }
+
+          XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, version, function (newSurvey, newVersion) {
             if (newSurvey) {
               state.version = newVersion;
               state.survey = newSurvey;
@@ -110,7 +117,15 @@ module.exports = {
             survey: survey,
             responseCount: _.keys(responses || {}).length,
             percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
-            instances: instances
+            instances: instances,
+            labels: {
+              questionCount: lookupTranslation(survey.translations, user.language, 'labels', 'questionCount', '{{COUNT}} question survey').replace('{{COUNT}}', survey.questions.length),
+              response: lookupTranslation(survey.translations, user.language, 'labels', 'response', 'response'),
+              responses: lookupTranslation(survey.translations, user.language, 'labels', 'responses', 'responses'),
+              completed: lookupTranslation(survey.translations, user.language, 'labels', 'completed', 'Completed'),
+              continue: lookupTranslation(survey.translations, user.language, 'labels', 'continue', 'Continue'),
+              start: lookupTranslation(survey.translations, user.language, 'labels', 'start', 'Start')
+            }
           },
 
           // js client side locals
@@ -124,7 +139,17 @@ module.exports = {
             previousQuestionId: state.previousQuestionId,
             photoCount: survey.photos.length,
             allowBack: survey.allowBack,
-            startLabel: survey.startLabel || 'Start survey'
+            labels: {
+              start: lookupTranslation(survey.translations, user.language, 'labels', 'start', 'Start'),
+              next: lookupTranslation(survey.translations, user.language, 'labels', 'next', 'Next'),
+              back: lookupTranslation(survey.translations, user.language, 'labels', 'back', 'Back'),
+              done: lookupTranslation(survey.translations, user.language, 'labels', 'done', 'Done'),
+              required: lookupTranslation(survey.translations, user.language, 'labels', 'required', 'required'),
+              response: lookupTranslation(survey.translations, user.language, 'labels', 'response', 'response'),
+              responses: lookupTranslation(survey.translations, user.language, 'labels', 'responses', 'responses'),
+              completed: lookupTranslation(survey.translations, user.language, 'labels', 'completed', 'Completed'),
+              continue: lookupTranslation(survey.translations, user.language, 'labels', 'continue', 'Continue')
+            }
           }
         );
       });
@@ -146,6 +171,20 @@ module.exports = {
       else {
         return '';
       }
+    }
+
+    function lookupTranslation(translations, languageCode, section, key, defaultValue) {
+      if (translations) {
+        if (translations[languageCode]) {
+          if (translations[languageCode][section]) {
+            if (translations[languageCode][section][key]) {
+              return translations[languageCode][section][key];
+            }
+          }
+        }
+      }
+
+      return defaultValue;
     }
   }
 };
