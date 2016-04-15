@@ -62,7 +62,20 @@ module.exports = {
           survey: state.survey,
           percentageComplete: 100,
           complete: true,
-          completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset)
+          completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset),
+          labels: getLabels(state.survey.translations, state.language || 'en',
+            {
+              questionCount: '{{COUNT}} question survey',
+              response: 'response',
+              responses: 'responses',
+              completed: 'Completed',
+              continue: 'Continue',
+              start: 'Start'
+            },
+            {
+              count: state.survey.questions.length
+            }
+          )
         });
       }
       else {
@@ -110,48 +123,61 @@ module.exports = {
 
     function execCardDataCallback(survey, responses, instances, callback) {
       XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
-        callback && callback(null,
+        if (!user) {
+          callback(new Error('Unknown User: ' + (inputs.userId || '?')));
+        }
+        else {
+          // save user's language to state
+          state.language = user.language;
 
-          // jade locals
-          {
-            survey: survey,
-            responseCount: _.keys(responses || {}).length,
-            percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
-            instances: instances,
-            labels: {
-              questionCount: lookupTranslation(survey.translations, user.language, 'labels', 'questionCount', '{{COUNT}} question survey').replace('{{COUNT}}', survey.questions.length),
-              response: lookupTranslation(survey.translations, user.language, 'labels', 'response', 'response'),
-              responses: lookupTranslation(survey.translations, user.language, 'labels', 'responses', 'responses'),
-              completed: lookupTranslation(survey.translations, user.language, 'labels', 'completed', 'Completed'),
-              continue: lookupTranslation(survey.translations, user.language, 'labels', 'continue', 'Continue'),
-              start: lookupTranslation(survey.translations, user.language, 'labels', 'start', 'Start')
-            }
-          },
+          callback && callback(null,
 
-          // js client side locals
-          {
-            surveyId: survey.id,
-            questions: survey.questions,
-            responses: responses || {},
-            user: user,
-            limit: survey.limit,
-            instances: instances,
-            previousQuestionId: state.previousQuestionId,
-            photoCount: survey.photos.length,
-            allowBack: survey.allowBack,
-            labels: {
-              start: lookupTranslation(survey.translations, user.language, 'labels', 'start', 'Start'),
-              next: lookupTranslation(survey.translations, user.language, 'labels', 'next', 'Next'),
-              back: lookupTranslation(survey.translations, user.language, 'labels', 'back', 'Back'),
-              done: lookupTranslation(survey.translations, user.language, 'labels', 'done', 'Done'),
-              required: lookupTranslation(survey.translations, user.language, 'labels', 'required', 'required'),
-              response: lookupTranslation(survey.translations, user.language, 'labels', 'response', 'response'),
-              responses: lookupTranslation(survey.translations, user.language, 'labels', 'responses', 'responses'),
-              completed: lookupTranslation(survey.translations, user.language, 'labels', 'completed', 'Completed'),
-              continue: lookupTranslation(survey.translations, user.language, 'labels', 'continue', 'Continue')
+            // jade locals
+            {
+              survey: survey,
+              responseCount: _.keys(responses || {}).length,
+              percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
+              instances: instances,
+              labels: getLabels(survey.translations, user.language,
+                {
+                  questionCount: '{{COUNT}} question survey',
+                  response: 'response',
+                  responses: 'responses',
+                  completed: 'Completed',
+                  continue: 'Continue',
+                  start: 'Start'
+                },
+                {
+                  count: survey.questions.length
+                }
+              )
+            },
+
+            // js client side locals
+            {
+              surveyId: survey.id,
+              questions: survey.questions,
+              responses: responses || {},
+              user: user,
+              limit: survey.limit,
+              instances: instances,
+              previousQuestionId: state.previousQuestionId,
+              photoCount: survey.photos.length,
+              allowBack: survey.allowBack,
+              labels: getLabels(survey.translations, user.language, {
+                start: 'Start',
+                next: 'Next',
+                back: 'Back',
+                done: 'Done',
+                required: 'required',
+                response: 'response',
+                responses: 'responses',
+                completed: 'Completed',
+                continue: 'Continue'
+              })
             }
-          }
-        );
+          );
+        }
       });
     }
 
@@ -171,6 +197,23 @@ module.exports = {
       else {
         return '';
       }
+    }
+
+    function getLabels(translations, languageCode, defaults, values) {
+      var labels = {};
+
+      _.each(_.keys(defaults), function (defaultKey) {
+        labels[defaultKey] = lookupTranslation(translations, languageCode, 'labels', defaultKey, defaults[defaultKey])
+
+        // replace any tokens with provided values
+        if (values) {
+          _.each(_.keys(values), function (valueKey) {
+            labels[defaultKey] = labels[defaultKey].replace('{{' + valueKey.toUpperCase() + '}}', values[valueKey])
+          });
+        }
+      });
+
+      return labels;
     }
 
     function lookupTranslation(translations, languageCode, section, key, defaultValue) {
