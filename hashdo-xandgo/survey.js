@@ -124,7 +124,7 @@ module.exports = {
     function execCardDataCallback(survey, responses, instances, callback) {
       XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
         if (!user) {
-          callback(new Error('Unknown User: ' + (inputs.userId || '?')));
+          callback(new Error('Unknown User: ' + inputs.userId + ', key: ' + inputs.apiKey + ', secret: ' + inputs.secret));
         }
         else {
           // save user's language to state

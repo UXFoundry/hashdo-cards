@@ -43,6 +43,16 @@ module.exports = {
       description: 'A valid me&you API key',
       required: !process.env.ME_YOU_API_KEY,
       secure: true
+    },
+    maintenanceFrom: {
+      example: '23 April 2016 16:00',
+      description: 'Maintenance from datetime (UTC)',
+      label: 'Maintenance From (UTC)'
+    },
+    maintenanceTo: {
+      example: '24 April 2016 05:00',
+      description: 'Maintenance from datetime (UTC)',
+      label: 'Maintenance To (UTC)'
     }
   },
 
@@ -62,6 +72,20 @@ module.exports = {
       callback(null, viewModel);
     }
     else {
+      // maintenance
+      if (inputs.maintenanceFrom && inputs.maintenanceTo) {
+        if (Moment.utc().isAfter(Moment.utc(inputs.maintenanceFrom, 'D MMMM YYYY HH:mm')) && Moment.utc().isBefore(Moment.utc(inputs.maintenanceTo, 'D MMMM YYYY HH:mm'))) {
+          callback(null, {maintenance: true});
+          return;
+        }
+      }
+
+      // CDRatror changes
+      var cdrMode = false;
+      if (Moment.utc().isAfter(Moment.utc('24 April 2016 05:00', 'D MMMM YYYY HH:mm')) && Moment.utc().isBefore(Moment.utc('01 May 2016 05:00', 'D MMMM YYYY HH:mm'))) {
+        cdrMode = true;
+      }
+
       MeAndYou.getSimBalance(inputs.apiUrl, inputs.customerId, inputs.merchantId, inputs.session, inputs.apiKey, inputs.MSISDN, function (err, data) {
         var valueBundles = '',
           dataBundles = '';
@@ -140,7 +164,8 @@ module.exports = {
           number: inputs.MSISDN,
           valueBundles: valueBundles,
           dataBundles: dataBundles,
-          date: Moment.utc().format('Do MMMM YYYY')
+          date: Moment.utc().format('Do MMMM YYYY'),
+          cdrMode: cdrMode
         };
 
         state.name = viewModel.name;
