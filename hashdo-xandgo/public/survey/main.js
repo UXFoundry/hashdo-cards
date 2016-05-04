@@ -22,7 +22,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.v17.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/survey.v5.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.v6.js', function () {
       // start or continue
       attachStartOrContinueHandler();
 
@@ -892,52 +892,64 @@ card.onReady = function () {
       var question = getQuestionById(condition.questionId);
 
       if (question) {
-        var response = responses[question.id];
+        if (condition.userGroupId) {
+          var usersGroups = locals.user.groups || [];
 
-        if (response) {
-          var responseArray = [response.response],
-            resultArray = [];
-
-          if (question.replyType === 'multipleChoice' && question.multipleSelections) {
-            responseArray = response.response.split(String.fromCharCode(30));
+          if (usersGroups.indexOf(condition.userGroupId) > -1) {
+            return true;
           }
-
-          for (var i = 0; i < responseArray.length; i++) {
-            switch (condition.operation) {
-              case '=':
-                resultArray.push(condition.response == responseArray[i]);
-                break;
-
-              case '!=':
-                resultArray.push(condition.response != responseArray[i]);
-                break;
-
-              case '*':
-                resultArray.push(isWildcardMatch(response.response, responseArray[i]));
-                break;
-
-              case '>':
-                resultArray.push(condition.response > responseArray[i]);
-                break;
-
-              case '>=':
-                resultArray.push(condition.response >= responseArray[i]);
-                break;
-
-              case '<':
-                resultArray.push(condition.response < responseArray[i]);
-                break;
-
-              case '<=':
-                resultArray.push(condition.response <= responseArray[i]);
-                break;
-            }
+          else {
+            return false;
           }
-
-          return resultArray.indexOf(true) > -1;
         }
         else {
-          return true;
+          var response = responses[question.id];
+
+          if (response) {
+            var responseArray = [response.response],
+              resultArray = [];
+
+            if (question.replyType === 'multipleChoice' && question.multipleSelections) {
+              responseArray = response.response.split(String.fromCharCode(30));
+            }
+
+            for (var i = 0; i < responseArray.length; i++) {
+              switch (condition.operation) {
+                case '=':
+                  resultArray.push(condition.response == responseArray[i]);
+                  break;
+
+                case '!=':
+                  resultArray.push(condition.response != responseArray[i]);
+                  break;
+
+                case '*':
+                  resultArray.push(isWildcardMatch(response.response, responseArray[i]));
+                  break;
+
+                case '>':
+                  resultArray.push(condition.response > responseArray[i]);
+                  break;
+
+                case '>=':
+                  resultArray.push(condition.response >= responseArray[i]);
+                  break;
+
+                case '<':
+                  resultArray.push(condition.response < responseArray[i]);
+                  break;
+
+                case '<=':
+                  resultArray.push(condition.response <= responseArray[i]);
+                  break;
+              }
+            }
+
+            return resultArray.indexOf(true) > -1;
+          }
+          else {
+            return true;
+          }
         }
       }
       else {

@@ -82,9 +82,9 @@ module.exports = {
 
       // CDRatror changes
       var cdrMode = false;
-      if (Moment.utc().isAfter(Moment.utc('24 April 2016 05:00', 'D MMMM YYYY HH:mm')) && Moment.utc().isBefore(Moment.utc('01 May 2016 05:00', 'D MMMM YYYY HH:mm'))) {
-        cdrMode = true;
-      }
+      // if (Moment.utc().isAfter(Moment.utc('24 April 2016 05:00', 'D MMMM YYYY HH:mm')) && Moment.utc().isBefore(Moment.utc('01 May 2016 05:00', 'D MMMM YYYY HH:mm'))) {
+      //   cdrMode = true;
+      // }
 
       MeAndYou.getSimBalance(inputs.apiUrl, inputs.customerId, inputs.merchantId, inputs.session, inputs.apiKey, inputs.MSISDN, function (err, data) {
         var valueBundles = '',
