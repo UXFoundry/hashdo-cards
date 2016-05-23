@@ -63,7 +63,7 @@ module.exports = {
           percentageComplete: 100,
           complete: true,
           completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset),
-          labels: getLabels(state.survey.translations, state.language || 'en',
+          labels: translateLabels(state.survey.translations, state.language || 'en',
             {
               questionCount: '{{COUNT}} question survey',
               response: 'response',
@@ -130,15 +130,17 @@ module.exports = {
           // save user's language to state
           state.language = user.language;
 
+          user.language = 'es';
+
           callback && callback(null,
 
             // jade locals
             {
-              survey: survey,
+              survey: translateSurvey(survey.translations, user.language, survey),
               responseCount: _.keys(responses || {}).length,
               percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
               instances: instances,
-              labels: getLabels(survey.translations, user.language,
+              labels: translateLabels(survey.translations, user.language,
                 {
                   questionCount: '{{COUNT}} question survey',
                   response: 'response',
@@ -156,7 +158,7 @@ module.exports = {
             // js client side locals
             {
               surveyId: survey.id,
-              questions: survey.questions,
+              questions: translateQuestions(survey.translations, user.language, survey.questions),
               responses: responses || {},
               user: user,
               limit: survey.limit,
@@ -164,7 +166,7 @@ module.exports = {
               previousQuestionId: state.previousQuestionId,
               photoCount: survey.photos.length,
               allowBack: survey.allowBack,
-              labels: getLabels(survey.translations, user.language, {
+              labels: translateLabels(survey.translations, user.language, {
                 start: 'Start',
                 next: 'Next',
                 back: 'Back',
@@ -199,16 +201,23 @@ module.exports = {
       }
     }
 
-    function getLabels(translations, languageCode, defaults, values) {
+    function translateSurvey(translations, languageCode, survey) {
+      survey.name = lookupTranslation(translations, languageCode, null, 'name', survey.name);
+      survey.description = lookupTranslation(translations, languageCode, null, 'description', survey.description);
+
+      return survey;
+    }
+
+    function translateLabels(translations, languageCode, defaults, values) {
       var labels = {};
 
       _.each(_.keys(defaults), function (defaultKey) {
-        labels[defaultKey] = lookupTranslation(translations, languageCode, 'labels', defaultKey, defaults[defaultKey])
+        labels[defaultKey] = lookupTranslation(translations, languageCode, 'labels', defaultKey, defaults[defaultKey]);
 
         // replace any tokens with provided values
         if (values) {
           _.each(_.keys(values), function (valueKey) {
-            labels[defaultKey] = labels[defaultKey].replace('{{' + valueKey.toUpperCase() + '}}', values[valueKey])
+            labels[defaultKey] = labels[defaultKey].replace('{{' + valueKey.toUpperCase() + '}}', values[valueKey]);
           });
         }
       });
@@ -216,12 +225,69 @@ module.exports = {
       return labels;
     }
 
+    function translateQuestions(translations, languageCode, questions) {
+      if (questions && _.isArray(questions)) {
+        _.forEach(questions, function (question) {
+          question.message = lookupQuestionTranslation(translations, languageCode, question);
+
+          if (question.replyType === 'multipleChoice') {
+            if (question.reply && _.isArray(question.reply)) {
+              _.forEach(question.reply, function (reply) {
+                reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply._id, reply.choice);
+              });
+            }
+          }
+        });
+      }
+
+      return questions;
+    }
+
     function lookupTranslation(translations, languageCode, section, key, defaultValue) {
       if (translations) {
         if (translations[languageCode]) {
-          if (translations[languageCode][section]) {
-            if (translations[languageCode][section][key]) {
-              return translations[languageCode][section][key];
+          if (section) {
+            if (translations[languageCode][section]) {
+              if (translations[languageCode][section][key]) {
+                return translations[languageCode][section][key];
+              }
+            }
+          }
+          else {
+            if (translations[languageCode][key]) {
+              return translations[languageCode][key];
+            }
+          }
+        }
+      }
+
+      return defaultValue;
+    }
+
+    function lookupQuestionTranslation(translations, languageCode, question) {
+      if (translations) {
+        if (translations[languageCode]) {
+          if (translations[languageCode].questions) {
+            if (translations[languageCode].questions[question.id]) {
+              return translations[languageCode].questions[question.id].question;
+            }
+          }
+        }
+      }
+
+      return question.message;
+    }
+
+    function lookupQuestionChoiceTranslation(translations, languageCode, questionId, choiceId, defaultValue) {
+      if (translations) {
+        if (translations[languageCode]) {
+          if (translations[languageCode].questions) {
+            if (translations[languageCode].questions[questionId]) {
+              if (translations[languageCode].questions[questionId].choices) {
+                if (translations[languageCode].questions[questionId].choices[choiceId]) {
+                  return translations[languageCode].questions[questionId].choices[choiceId];
+                }
+              }
             }
           }
         }

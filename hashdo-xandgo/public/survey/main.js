@@ -22,7 +22,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.v17.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/survey.v6.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.v7.js', function () {
       // start or continue
       attachStartOrContinueHandler();
 
