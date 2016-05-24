@@ -237,6 +237,24 @@ module.exports = {
               });
             }
           }
+
+          if (question.conditions && _.isArray(question.conditions)) {
+            _.forEach(question.conditions, function (condition) {
+              if (condition.questionId) {
+                _.forEach(questions, function (previousQuestion) {
+                  if (previousQuestion.id === condition.questionId) {
+                    if (previousQuestion.reply && _.isArray(previousQuestion.reply)) {
+                      _.forEach(previousQuestion.reply, function (previousQuestionReply) {
+                        if (previousQuestionReply._id === condition.responseId) {
+                          condition.response = previousQuestionReply.choice;
+                        }
+                      });
+                    }
+                  }
+                });
+              }
+            });
+          }
         });
       }
 
