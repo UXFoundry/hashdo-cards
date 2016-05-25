@@ -37,8 +37,8 @@ module.exports = {
   getCardData: function (inputs, state, callback) {
     var XandGo = require('./lib/xandgo'),
       card = this,
-      Moment = require('moment'),
       CUID = require('cuid'),
+      Moment = require('moment'),
       _ = require('lodash');
 
     // enable client side state and proxy support
@@ -65,12 +65,12 @@ module.exports = {
           completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset),
           labels: translateLabels(state.survey.translations, state.language || 'en',
             {
-              questionCount: '{{COUNT}} question survey',
-              response: 'response',
-              responses: 'responses',
-              completed: 'Completed',
-              continue: 'Continue',
-              start: 'Start'
+              'questionCount': '{{COUNT}} question survey',
+              'response': 'response',
+              'responses': 'responses',
+              'completed': 'Completed',
+              'continue': 'Continue',
+              'start': 'Start'
             },
             {
               count: state.survey.questions.length
@@ -130,8 +130,6 @@ module.exports = {
           // save user's language to state
           state.language = user.language;
 
-          user.language = 'es';
-
           callback && callback(null,
 
             // jade locals
@@ -142,12 +140,12 @@ module.exports = {
               instances: instances,
               labels: translateLabels(survey.translations, user.language,
                 {
-                  questionCount: '{{COUNT}} question survey',
-                  response: 'response',
-                  responses: 'responses',
-                  completed: 'Completed',
-                  continue: 'Continue',
-                  start: 'Start'
+                  'questionCount': '{{COUNT}} question survey',
+                  'response': 'response',
+                  'responses': 'responses',
+                  'completed': 'Completed',
+                  'continue': 'Continue',
+                  'start': 'Start'
                 },
                 {
                   count: survey.questions.length
@@ -167,15 +165,15 @@ module.exports = {
               photoCount: survey.photos.length,
               allowBack: survey.allowBack,
               labels: translateLabels(survey.translations, user.language, {
-                start: 'Start',
-                next: 'Next',
-                back: 'Back',
-                done: 'Done',
-                required: 'required',
-                response: 'response',
-                responses: 'responses',
-                completed: 'Completed',
-                continue: 'Continue'
+                'start': 'Start',
+                'next': 'Next',
+                'back': 'Back',
+                'done': 'Done',
+                'required': 'required',
+                'response': 'response',
+                'responses': 'responses',
+                'completed': 'Completed',
+                'continue': 'Continue'
               })
             }
           );
@@ -233,7 +231,7 @@ module.exports = {
           if (question.replyType === 'multipleChoice') {
             if (question.reply && _.isArray(question.reply)) {
               _.forEach(question.reply, function (reply) {
-                reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply._id, reply.choice);
+                reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply.choice);
               });
             }
           }
@@ -243,12 +241,16 @@ module.exports = {
               if (condition.questionId) {
                 _.forEach(questions, function (previousQuestion) {
                   if (previousQuestion.id === condition.questionId) {
-                    if (previousQuestion.reply && _.isArray(previousQuestion.reply)) {
-                      _.forEach(previousQuestion.reply, function (previousQuestionReply) {
-                        if (previousQuestionReply._id === condition.responseId) {
-                          condition.response = previousQuestionReply.choice;
+                    if (translations[languageCode]) {
+                      if (translations[languageCode].questions) {
+                        if (translations[languageCode].questions[previousQuestion.id]) {
+                          if (translations[languageCode].questions[previousQuestion.id].choices) {
+                            if (translations[languageCode].questions[previousQuestion.id].choices[condition.response]) {
+                              condition.response = translations[languageCode].questions[previousQuestion.id].choices[condition.response];
+                            }
+                          }
                         }
-                      });
+                      }
                     }
                   }
                 });
@@ -296,14 +298,14 @@ module.exports = {
       return question.message;
     }
 
-    function lookupQuestionChoiceTranslation(translations, languageCode, questionId, choiceId, defaultValue) {
+    function lookupQuestionChoiceTranslation(translations, languageCode, questionId, choice) {
       if (translations) {
         if (translations[languageCode]) {
           if (translations[languageCode].questions) {
             if (translations[languageCode].questions[questionId]) {
               if (translations[languageCode].questions[questionId].choices) {
-                if (translations[languageCode].questions[questionId].choices[choiceId]) {
-                  return translations[languageCode].questions[questionId].choices[choiceId];
+                if (translations[languageCode].questions[questionId].choices[choice]) {
+                  return translations[languageCode].questions[questionId].choices[choice];
                 }
               }
             }
@@ -311,7 +313,7 @@ module.exports = {
         }
       }
 
-      return defaultValue;
+      return choice;
     }
   }
 };
