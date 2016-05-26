@@ -228,6 +228,7 @@ module.exports = {
         _.forEach(questions, function (question) {
           question.message = lookupQuestionTranslation(translations, languageCode, question);
 
+          // translate multiple choice options
           if (question.replyType === 'multipleChoice') {
             if (question.reply && _.isArray(question.reply)) {
               _.forEach(question.reply, function (reply) {
@@ -236,6 +237,7 @@ module.exports = {
             }
           }
 
+          // translate conditions to facilitate option matches
           if (question.conditions && _.isArray(question.conditions)) {
             _.forEach(question.conditions, function (condition) {
               if (condition.questionId) {
@@ -245,8 +247,8 @@ module.exports = {
                       if (translations[languageCode].questions) {
                         if (translations[languageCode].questions[previousQuestion.id]) {
                           if (translations[languageCode].questions[previousQuestion.id].choices) {
-                            if (translations[languageCode].questions[previousQuestion.id].choices[condition.response]) {
-                              condition.response = translations[languageCode].questions[previousQuestion.id].choices[condition.response];
+                            if (translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)]) {
+                              condition.response = translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)];
                             }
                           }
                         }
@@ -304,8 +306,8 @@ module.exports = {
           if (translations[languageCode].questions) {
             if (translations[languageCode].questions[questionId]) {
               if (translations[languageCode].questions[questionId].choices) {
-                if (translations[languageCode].questions[questionId].choices[choice]) {
-                  return translations[languageCode].questions[questionId].choices[choice];
+                if (translations[languageCode].questions[questionId].choices[encodeKey(choice)]) {
+                  return translations[languageCode].questions[questionId].choices[encodeKey(choice)];
                 }
               }
             }
@@ -314,6 +316,18 @@ module.exports = {
       }
 
       return choice;
+    }
+
+    // encode mongodb key
+    function encodeKey(key) {
+      if (key && _.isString(key)) {
+        return key
+          .replace(/\$/g, '\uFF04')
+          .replace(/\./g, '\uFF0E');
+      }
+      else {
+        return key;
+      }
     }
   }
 };
