@@ -124,15 +124,15 @@ module.exports = {
                   callback(null, state);
                 }
                 else {
-                  callback(new Error('Could not get thumbnail data or thumbnail is too small from iFramely.'));
+                  callback('Could not get thumbnail data or thumbnail is too small from iFramely.');
                 }
               }
               else {
-                callback(new Error('Could not get general meta data from iFramely.'));
+                callback('Could not get general meta data from iFramely.');
               }
             }
             else {
-              callback(new Error('Invalid response from iFramely.'));
+              callback('Invalid response from iFramely.');
             }
           }
           else {
