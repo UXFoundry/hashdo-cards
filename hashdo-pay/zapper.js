@@ -118,24 +118,23 @@ module.exports = {
     inputs.siteId = inputs.siteId || process.env.ZAPPER_SITE_ID;
     inputs.posApiUrl = inputs.posApiUrl || process.env.ZAPPER_POS_API_URL;
     inputs.posKey = inputs.posKey || process.env.ZAPPER_POS_KEY;
-    inputs.posKey = inputs.posKey || process.env.ZAPPER_POS_SECRET;
+    inputs.posSecret = inputs.posSecret || process.env.ZAPPER_POS_SECRET;
     
     var Currency = require('currency-symbol.js'),
       Request = require('request'),
       Sha256 = require('crypto').createHash('sha256'),
       _ = require('lodash');
 
-    Sha256.update(inputs.posSecret + '&' + inputs.posKey);
+    Sha256.update((inputs.posSecret + '&' + inputs.posKey).toUpperCase());
 
     var apiRequestUrl = _.trimEnd(inputs.posApiUrl, '/') + '/api/v2/merchants/' + inputs.merchantId + '/sites/' + inputs.siteId + '/payments?PosReference=' + paymentInfo[0];
 
     var apiRequestHeaders = {
       siteid: inputs.siteId,
       poskey: inputs.posKey,
-      possecret: inputs.posSecret,
       signature: Sha256.digest('hex')
     };
-
+    
     var viewModel = {
       symbol: Currency.symbolize(inputs.currency.toUpperCase()),
       amount: (Number(inputs.amount) / 100).toFixed(2),
@@ -204,18 +203,27 @@ module.exports = {
     }
     else {
       // Check the API to see if it was completed.
+      console.log('Requesting payment status using ' + apiRequestUrl);
+      
       Request({
         url: apiRequestUrl,
         headers: apiRequestHeaders,
         json: true
       },
       function (err, response, body) {
-        if (!err && response && response.statusCode === 200 && body && body.data && body.data.length > 0) {
+        if (err) {
+          console.error('Error getting payment status', err);
+        }
+        else if (response && response.statusCode === 200 && body && body.data && body.data.length > 0) {
           // Update the state.
           state.status = 'complete';
           state.response = body;
 
           paymentComplete();
+        }
+        else if (response && response.statusCode !== 200) {
+          console.error('Error getting payment status', body);
+          newPayment();
         }
         else {
           newPayment();
