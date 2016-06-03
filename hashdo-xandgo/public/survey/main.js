@@ -532,7 +532,7 @@ card.onReady = function () {
 
       case 'rating':
       case 'number':
-        return _lodash_survey.toNumber($input.find('input').val());
+        return $input.find('input').val().length > 0 ? _lodash_survey.toNumber($input.find('input').val()) : '';
 
       case 'multipleChoice':
         if (currentQuestion.multipleSelections) {

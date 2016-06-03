@@ -1,6 +1,6 @@
 {
   "name": "hashdo-pay",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Make payments via HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -10,8 +10,8 @@
   ],
   "dependencies": {
     "currency-symbol.js": "0.1.0",
-    "lodash": "4.6.1",
-    "request": "2.69.0"
+    "lodash": "4.13.1",
+    "request": "2.72.0"
   },
   "pack": {
     "friendlyName": "Pay",

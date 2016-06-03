@@ -3,14 +3,21 @@ extends /card
 block content
   if !locals.complete
     if locals.survey.photos.length > 0
-      .swiper-container
-        .swiper-wrapper
-          each img in locals.survey.photos
+      if locals.survey.photos.length === 1
+        .swiper-container
+          .swiper-wrapper
             .swiper-slide
-              img(src= img, width='225', height='143')
+              img(src= locals.survey.photos[0], width='225', height='143')
 
-        .swiper-button-next.swiper-button-white
-        .swiper-button-prev.swiper-button-white
+      else
+        .swiper-container
+          .swiper-wrapper
+            each img in locals.survey.photos
+              .swiper-slide
+                img(src= img, width='225', height='143')
+
+          .swiper-button-next.swiper-button-white
+          .swiper-button-prev.swiper-button-white
 
   else
     if locals.survey.photos.length > 0
