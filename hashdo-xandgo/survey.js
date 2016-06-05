@@ -224,7 +224,7 @@ module.exports = {
     }
 
     function translateQuestions(translations, languageCode, questions) {
-      if (questions && _.isArray(questions)) {
+      if (translations && questions && _.isArray(questions)) {
         _.forEach(questions, function (question) {
           question.message = lookupQuestionTranslation(translations, languageCode, question);
 
