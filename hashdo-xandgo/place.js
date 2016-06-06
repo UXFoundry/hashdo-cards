@@ -56,7 +56,7 @@ module.exports = {
             callback(null, viewModel, {photoCount: place.photos.length});
           }
           else {
-            callback(new Error('Could not find place with ID ' + (inputs.placeId || '?')));
+            callback('Could not find place with ID ' + (inputs.placeId || '?'));
           }
         });
       }

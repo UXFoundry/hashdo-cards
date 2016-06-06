@@ -56,7 +56,7 @@ module.exports = {
             callback(null, viewModel, {photoCount: product.photos.length});
           }
           else {
-            callback(new Error('Could not find product with ID ' + (inputs.productId || '?')));
+            callback('Could not find product with ID ' + (inputs.productId || '?'));
           }
         });
       }
