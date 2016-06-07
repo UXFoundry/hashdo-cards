@@ -1,0 +1,122 @@
+@card-padding: 10px;
+@card-text-color: rgb(77, 77, 77);
+@card-light-gray-color: rgb(204, 204, 204);
+@card-gray-color: rgb(153, 153, 153);
+@card-blue-color: rgb(0, 124, 255);
+@card-light-blue-color: rgb(201, 228, 255);
+
+.hdc {
+  &.general.booking {
+
+    .hdc-content .hdc-inner {
+      padding: 0;
+      color: @card-text-color;
+    }
+
+    img.heading-img {
+      width: 100%;
+    }
+
+    .card-heading {
+      padding: @card-padding;
+    }
+
+    .shifting-select {
+      box-sizing: border-box;
+      border-top: 1px dashed @card-light-gray-color;
+      height: 32px;
+      position: relative;
+      width: 1000%;
+      transition: background-color .4s ease-in-out;
+
+      & + .block {
+        border-top: 1px dashed @card-light-gray-color;
+      }
+
+      &.changed {
+        background-color: @card-light-blue-color;
+      }
+
+      .inner {
+        @inner-side-padding: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 30px;
+        padding: 5px @inner-side-padding 0;
+
+        a, div {
+          display: inline-block;
+          text-transform: uppercase;
+          text-align: center;
+          text-decoration: none;
+          color: @card-text-color;
+          font-weight: 300;
+          border-radius: 3px;
+          padding: 2px (@card-padding - @inner-side-padding);
+          vertical-align: middle;
+          user-drag: none;
+          -webkit-user-drag: none;
+          user-select: none;
+          transition: color .2s ease-in-out,
+                      background .2s ease-in-out;
+        }
+
+        a {
+          &:hover {
+            color: @card-blue-color;
+          }
+
+          &.selected {
+            background-color: @card-blue-color;
+            color: white;
+          }
+        }
+
+        div {
+          color: @card-gray-color;
+          font-size: 11px;
+        }
+      }
+    }
+
+
+    .make-booking {
+      box-sizing: border-box;
+      display: table;
+      cursor: pointer;
+      width: 100%;
+      padding: @card-padding;
+      border-top: 1px dashed @card-light-gray-color;
+      transition: opacity .2s ease-in-out;
+
+      span {
+        font-weight: 300;
+        display: table-cell;
+
+        & + span {
+          text-align: right;
+        }
+      }
+
+      &:hover {
+        color: @card-blue-color;
+      }
+
+      &.disabled {
+        opacity: .5;
+        color: inherit;
+        cursor: default;
+      }
+    }
+
+    h3, h5 {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    h5 {
+      font-weight: 300;
+    }
+  }
+}
