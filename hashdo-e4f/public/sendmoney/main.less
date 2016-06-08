@@ -1,0 +1,125 @@
+// Color variables (appears count calculates by raw css)
+
+div.hidden
+{
+   display: none
+}
+
+.hidden
+{
+	 display: none
+}
+
+.hot-container {
+	margin-top: 100px;
+	min-height: 100px;
+	text-align: center;
+	width: 100%;
+	p {
+		margin-top: 10px;
+	}
+}
+a {
+	margin: 0 10px;
+	text-decoration: none;
+}
+
+#overlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	background: #000;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+#loading {
+	width: 50px;
+	height: 57px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -28px 0 0 -25px;
+}
+
+.hdc-error-text {
+	border-color: transparent !important;
+	border: none !important;
+	color: #ff0000;
+}
+
+.hdc-errormodal-done {
+	text-align:right;
+}
+
+// Color variables (appears count calculates by raw css)
+@color0: #2b2b2b; // Appears 5 times
+@color1: #45484d; // Appears 5 times
+@color2: #000000; // Appears 4 times
+@color3: #ffffff;
+
+
+// Height variables (appears count calculates by raw css)
+@height1: 30px; // Appears 2 times
+
+h1 {
+	color: @color0;
+	font-family: arial, helvetica;
+	font-size: 22px;
+}
+select {
+	background-color: @color3;
+	color: @color3;
+	height: @height1;
+	left:0px;
+	margin-bottom: 9px;
+	margin-left: 0px;
+	margin-right: 9px;
+	position: relative;
+	width: 200px;	
+}
+
+input {
+	background: @color3;
+	font-family: arial;
+	font-size: 14px;
+	font-weight: normal;
+	height: 24px;
+	margin-bottom: 3px;
+	margin-left: 2px;
+	text-indent: 5px;
+	width: 200px;
+}
+.btn {
+	background: -moz-linear-gradient(top, @color1 0%, @color2 100%);
+	background: -webkit-linear-gradient(top, @color1 0%,@color2 100%);
+	background: @color1;
+	background: linear-gradient(to bottom, @color1 0%,@color2 100%);
+	border: none;
+	bottom: 10px;
+	color: #f8bc44;
+	cursor: pointer;
+	display: block;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@color1', endColorstr='@color2',GradientType=0 );
+	font-family: arial;
+	font-size: 16px;
+	font-weight: normal;
+	height: @height1;
+	line-height: @height1;
+	margin: 5px;
+	text-align: center;
+	width: 200px;
+}
+td {
+	color: @color0;
+	font-family: Arial;
+	font-size: 12px;
+	font-weight: bold;
+}
+h2 {
+	color: @color0;
+	font-family: arial, helvetica;
+	font-size: 17px;
+}
+

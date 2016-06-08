@@ -1,6 +1,6 @@
 {
   "name": "hashdo-e4f",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Exchange4Free card pack.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -9,22 +9,12 @@
     "exchange"
   ],
   "dependencies": {
-    "lodash": "4.6.1",
-    "soap": "0.13.0"
-  },
-  "devDependencies": {
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-autoprefixer": "3.1.0",
-    "gulp-concat": "2.6.0",
-    "gulp-less": "3.0.5",
-    "gulp-load-plugins": "1.2.0",
-    "gulp-rename": "1.2.2",
-    "gulp-uglify": "1.5.3"
+    "request": "2.72.0"
   },
   "pack": {
     "friendlyName": "Exchange4Free",
     "cards": [
-      "quote"
+      "sendmoney"
     ]
   }
 }
