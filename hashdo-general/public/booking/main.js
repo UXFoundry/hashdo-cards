@@ -2,9 +2,10 @@
 
 card.onReady = function () {
   var $card = $('#' + locals.card.id),
-      $shiftMonths = $card.find('.shifting-select.months'),
-      $shiftDays = $card.find('.shifting-select.days'),
-      $shiftHours = $card.find('.shifting-select.hours'),
+      $hdcInner = $card.find('.hdc-inner'),
+      $shiftMonths = $hdcInner.find('.shifting-select.months'),
+      $shiftDays = $hdcInner.find('.shifting-select.days'),
+      $shiftHours = $hdcInner.find('.shifting-select.hours'),
       selectedHour = false,
       selectedDay = false,
       selectedMonth = false,
@@ -84,16 +85,33 @@ card.onReady = function () {
     setUpHammer($shiftDays, dayClick);   // update hammer with new days
   },
 
+  flip = function(side) {
+    $hdcInner.addClass("scale");  // add/remove class in delayed fashion
+
+    setTimeout(function() {
+      side === 'back' ? $hdcInner.addClass("flip") : $hdcInner.removeClass("flip");
+    }, 500);
+
+    setTimeout(function() {
+      $hdcInner.removeClass("scale");
+    }, 1000);
+  },
+
   updateBookingAction = function() {
-    var bookingActionElem = $card.find('.make-booking');
+    var $bookingActionElem = $card.find('.make-booking');
     if (selectedHour && selectedDay && selectedMonth && selectedYear) { // enable action if all values are selected
-      bookingActionElem.removeClass('disabled').on('click', function(ev) {
-        console.log('BOOKING ACTION CLICKED');
+      $bookingActionElem.removeClass('disabled').on('click', function(ev) {
+        flip('back');
       });
     } else {
-      bookingActionElem.addClass('disabled').off('click');
+      $bookingActionElem.addClass('disabled').off('click');
     }
   };
+
+  document.getElementById('flip').addEventListener('click', function(ev) {
+    flip('front');
+  });
+
 
   if (typeof Hammer === 'undefined') {
     var disabledAmd = false;

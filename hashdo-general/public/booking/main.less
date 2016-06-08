@@ -4,16 +4,50 @@
 @card-gray-color: rgb(153, 153, 153);
 @card-blue-color: rgb(0, 124, 255);
 @card-light-blue-color: rgb(201, 228, 255);
+@card-border-radius: 4px;
 
 .hdc {
   &.general.booking {
+    border: none;
+    z-index: 2;
+    overflow: visible;
+    box-shadow: none;
 
     .hdc-content .hdc-inner {
       padding: 0;
       color: @card-text-color;
+      transition: box-shadow .5s, transform .5s, -webkit-transform .5s;
+      transform-style: preserve-3d;
+      border: 1px solid @card-light-gray-color;
+      border-radius: @card-border-radius;
+      height: 320px;
+
+      &.scale,
+      &.flip.scale {
+        box-shadow: 0 0 15px rgba(0,0,0,.2);
+      }
+
+      &.flip,
+      & > .back {
+        transform: rotateY(180deg);
+      }
+
+      & > div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+        overflow: hidden;
+        border-radius: @card-border-radius - 1;
+      }
     }
 
-    img.heading-img {
+    .heading-img {
+      background-size: cover !important;
+      height: 132px;
       width: 100%;
     }
 
