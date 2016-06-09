@@ -82,7 +82,7 @@ module.exports = {
 
     // locals sent to client-side javascript
     var clientLocals = {
-
+      hours: hours,
     };
 
     callback(null, viewModel, clientLocals);
@@ -97,7 +97,8 @@ function parseMonths(curMonth, curYear) {
   var months = moment.monthsShort().map(function(month, i) {
     var year = curMonth > i ? curYear + 1 : curYear;
     return {
-      index: getDaysInMonth(i, year) + '-' + month + '-' + year,
+      index: i,
+      date: getDaysInMonth(i, year) + '-' + month + '-' + year,
       name: month,
     };
   });

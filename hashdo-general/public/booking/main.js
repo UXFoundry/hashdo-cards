@@ -7,9 +7,13 @@ card.onReady = function () {
       $shiftDays = $hdcInner.find('.shifting-select.days'),
       $shiftHours = $hdcInner.find('.shifting-select.hours'),
       $bookingSummary = $card.find('.booking-summary'),
+      now = new Date(),
+      curMonth = now.getMonth(),
+      curDay = now.getDate(),
       selectedHour = false,
       selectedDay = false,
       selectedMonth = false,
+      selectedMonthIndex = false,
       selectedYear = false,
 
   containM = function (m, m_min) {
@@ -52,8 +56,9 @@ card.onReady = function () {
   },
 
   monthClick = function(elem) {
-    var data = elem.attr('data-index').split('-');
+    var data = elem.attr('data-date').split('-');
     selectedMonth = data[1];
+    selectedMonthIndex = parseInt(elem.attr('data-index'), 10);  // to easily compare months when rendering days
     selectedYear = data[2];
 
     updateDays(data[0]);  // re-render days
@@ -61,7 +66,8 @@ card.onReady = function () {
   },
 
   dayClick = function(elem) {
-    selectedDay = elem.text();
+    selectedDay = parseInt(elem.text(), 10);
+    updateHours();
     updateBookingAction();
   },
 
@@ -73,17 +79,50 @@ card.onReady = function () {
   updateDays = function(days) {
     selectedDay = false;  // reset selected day
 
-    for (var i = 1, html = ''; i <= days; i++) {
+    var i = curMonth === selectedMonthIndex ? curDay : 1,  // if its current month, days start from todays day
+        html = '';
+
+    for (; i <= days; i++) {
       html += '<a href="#">' + i + '</a>';
     }
 
-    $shiftDays.addClass("changed").find('.inner').html(html);  // add/remove class in delayed fashion
+    updateShifing($shiftDays, html, dayClick);
+  },
+
+  updateHours = function() {
+    selectedHour = false;  // reset selected day
+
+    var hours = locals.hours,
+        html = '';
+
+    if (curMonth === selectedMonthIndex && curDay === selectedDay) { // if selected day is today then check time
+      var bookingHours = now.getHours() + 2,            // add 2 more hours, no point in booking thats right now
+          indexOfHour = locals.hours.indexOf(bookingHours + ':00');
+
+      if (indexOfHour !== -1) {
+        hours = hours.slice(indexOfHour);  // cut of unavailable hours
+      } else {
+        html = 'No available hours!';                  // no hours available
+
+        return $shiftHours.find('.inner').html('<span class="unavailable">' + html + '</span>');
+      }
+    }
+
+    hours.forEach(function(hour, i) {
+      html += '<a href="#">' + hour + '</a>';
+    });
+
+    updateShifing($shiftHours, html, hourClick);
+  },
+
+  updateShifing = function($shiftingModule, html, handleClick) {
+    $shiftingModule.addClass("changed").find('.inner').html(html);  // add/remove class in delayed fashion
 
     setTimeout(function() {
-      $shiftDays.removeClass("changed");
+      $shiftingModule.removeClass("changed");
     }, 1000);
 
-    setUpHammer($shiftDays, dayClick);   // update hammer with new days
+    setUpHammer($shiftingModule, handleClick);   // update hammer
   },
 
   flip = function(side) {
@@ -154,11 +193,12 @@ card.onReady = function () {
     return false;
   }
 
-  document.getElementById('go-back').addEventListener('click', function(ev) {
+  // instantiate submit and go-back buttons
+  $card.find('button#go-back').on('click', function(ev) {
     flip('front');
   });
 
-  document.getElementById('submit').addEventListener('click', function(ev) {
+  $card.find('button#submit').on('click', function(ev) {
     var $inputName = $card.find('input#name');
         $inputEmail = $card.find('input#email'),
         enableSubmit = true;
@@ -178,9 +218,8 @@ card.onReady = function () {
     }
 
     if (enableSubmit) {  // if submit is enabled
-      console.log('SUBMIT');
+      console.log('SUBMIT');  // connect to timekit API
     }
-
   });
 
 

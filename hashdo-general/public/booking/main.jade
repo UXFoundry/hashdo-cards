@@ -14,7 +14,7 @@ block content
       .inner
         each month in locals.months
           if month.name
-            a(data-index=month.index href="#")= month.name
+            a(data-index=month.index data-date=month.date href="#")= month.name
           else
             div=month
 
