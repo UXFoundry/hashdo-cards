@@ -4,7 +4,7 @@ block content
 
   //- front of the card
   div.front
-    .heading-img(style='background-image: no-repeat url(' + locals.img + ') center center;')
+    .heading-img(style='background: no-repeat url(' + locals.img + ') center center;')
 
     .card-heading
       h3= locals.title
@@ -36,4 +36,19 @@ block content
 
   //- back of the card
   div.back
-    a#flip= 'flip back'
+    .heading-img(style='background: no-repeat url(' + locals.img + ') center center;')
+    form
+      input(type='text', id='name' placeholder='Name' value=locals.userName)
+      input(type='email', id='email' placeholder='Email' value=locals.userEmail)
+
+    .back-block
+      h4.light="You've requested a booking on"
+      h2.booking-summary
+        span.date=""
+        span=" "
+        span.time=""
+
+      div
+        button.btn-white.go-back#go-back= '<'
+        button.btn-blue#submit= 'Submit'
+

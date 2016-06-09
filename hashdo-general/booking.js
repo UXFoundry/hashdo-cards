@@ -29,6 +29,16 @@ module.exports = {
       required: true,
       secure: true
     },
+    userName: {  // will be suplied
+      example: 'Ivan Rogic',
+      description: 'Name of the user performing the booking action',
+      secure: true
+    },
+    userEmail: {
+      example: 'booking-user@gmail.com',
+      description: 'Email of the user performing the booking action',
+      secure: true
+    }
   },
 
   getCardData: function (inputs, state, callback) {
@@ -66,6 +76,8 @@ module.exports = {
       title: inputs.title,
       months: months,
       hours: hours,
+      userName: inputs.userName,
+      userEmail: inputs.userEmail
     };
 
     // locals sent to client-side javascript
@@ -85,7 +97,7 @@ function parseMonths(curMonth, curYear) {
   var months = moment.monthsShort().map(function(month, i) {
     var year = curMonth > i ? curYear + 1 : curYear;
     return {
-      index: getDaysInMonth(i, year) + '-' + i + '-' + year,
+      index: getDaysInMonth(i, year) + '-' + month + '-' + year,
       name: month,
     };
   });

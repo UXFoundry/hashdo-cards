@@ -6,6 +6,7 @@ card.onReady = function () {
       $shiftMonths = $hdcInner.find('.shifting-select.months'),
       $shiftDays = $hdcInner.find('.shifting-select.days'),
       $shiftHours = $hdcInner.find('.shifting-select.hours'),
+      $bookingSummary = $card.find('.booking-summary'),
       selectedHour = false,
       selectedDay = false,
       selectedMonth = false,
@@ -20,11 +21,11 @@ card.onReady = function () {
   setUpHammer = function ($shiftModule, handleClick) {
     var ht = new Hammer($shiftModule[0]),
         $inner = $shiftModule.find('.inner'),
-        m_current = 0,                              // current active margin-left
-        m_last = 0,                                 // last recorded margin-left
-        m_min = $card.width() - $inner.width();     // minimum possible margin-left
+        m_current = 0,                                  // current active margin-left
+        m_last = 0,                                     // last recorded margin-left
+        m_min = $card.width() - $inner.width() - 4;     // minimum possible margin-left (4 is border width)
 
-    $inner.css('margin-left', 0);                   // reset to default
+    $inner.css('margin-left', 0);                       // reset to default
 
     ht.on('pan', function (ev) {
       m_current = containM(m_last + ev.deltaX, m_min);
@@ -97,19 +98,89 @@ card.onReady = function () {
     }, 1000);
   },
 
+  renderBookingSummary = function() {
+    $bookingSummary.find('.date').text(selectedMonth + ' ' + selectedDay);
+    $bookingSummary.find('.time').text(selectedHour);
+  },
+
   updateBookingAction = function() {
     var $bookingActionElem = $card.find('.make-booking');
     if (selectedHour && selectedDay && selectedMonth && selectedYear) { // enable action if all values are selected
       $bookingActionElem.removeClass('disabled').on('click', function(ev) {
         flip('back');
+        renderBookingSummary();
       });
     } else {
       $bookingActionElem.addClass('disabled').off('click');
     }
-  };
+  },
 
-  document.getElementById('flip').addEventListener('click', function(ev) {
+  isEmail = function(str) {
+    var atSym = str.lastIndexOf('@');
+
+    // no local-part
+    if (atSym < 1) {
+      return false;
+    }
+
+    // no domain
+    if (atSym == str.length - 1) {
+      return false;
+    }
+
+    // there may only be 64 octets in the local-part
+    if (atSym > 64) {
+      return false;
+    }
+
+    // there may only be 255 octets in the domain
+    if (str.length - atSym > 255) {
+      return false;
+    }
+
+    // Is the domain plausible?
+    var lastDot = str.lastIndexOf('.');
+
+    // Check if it is a dot-atom such as example.com
+    if (lastDot > atSym + 1 && lastDot < str.length - 1) {
+      return true;
+    }
+
+    //  Check if could be a domain-literal.
+    if (str.charAt(atSym + 1) == '[' && str.charAt(str.length - 1) == ']') {
+      return true;
+    }
+
+    return false;
+  }
+
+  document.getElementById('go-back').addEventListener('click', function(ev) {
     flip('front');
+  });
+
+  document.getElementById('submit').addEventListener('click', function(ev) {
+    var $inputName = $card.find('input#name');
+        $inputEmail = $card.find('input#email'),
+        enableSubmit = true;
+
+    if (!$inputName.val()) {          // if input is invalid
+      $inputName.addClass('invalid');
+      enableSubmit = false;
+    } else {
+      $inputName.removeClass('invalid');
+    }
+
+    if (!isEmail($inputEmail.val())) {  // if input is invalid
+      $inputEmail.addClass('invalid');
+      enableSubmit = false;
+    } else {
+      $inputEmail.removeClass('invalid');
+    }
+
+    if (enableSubmit) {  // if submit is enabled
+      console.log('SUBMIT');
+    }
+
   });
 
 
