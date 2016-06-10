@@ -17,6 +17,12 @@ module.exports = {
       description: 'Title of the booking company',
       required: true
     },
+    timekitApp: {
+      example: 'hashdo-booking',
+      description: 'Name of the timekit app',
+      required: true,
+      secure: true
+    },
     timekitEmail: {
       example: 'ivan.rogic@toptal.com',
       description: 'Email of timekit user account',
@@ -42,47 +48,29 @@ module.exports = {
   },
 
   getCardData: function (inputs, state, callback) {
-    var timekit = require('timekit-sdk');
-
-    timekit.configure({
-        app:                        'hashdo-booking',           // app name registered with timekit (get in touch)
-        apiBaseUrl:                 'https://api.timekit.io/',  // API endpoint (do not change)
-        apiVersion:                 'v2',                       // version of API to call (do not change)
-        inputTimestampFormat:       'Y-m-d h:ia',               // default timestamp format that you supply
-        outputTimestampFormat:      'Y-m-d h:ia',               // default timestamp format that you want the API to return
-        timezone:                   'Europe/Zagreb',            // override user's timezone for custom formatted timestamps in another timezone
-        convertResponseToCamelcase: false,                      // should keys in JSON response automatically be converted from snake_case to camelCase?
-        convertRequestToSnakecase:  true                        // should keys in JSON requests automatically be converted from camelCase to snake_case?
-    });
-
-    timekit.auth({
-      email: inputs.timekitEmail,
-      password: inputs.timekitPassword
-    }).then(function(response) {
-      console.log(response.data.api_token);
-    }).catch(function(response){
-      console.log(response);
-    });
-
     var now = new Date(),
         month = now.getMonth(),
         year = now.getFullYear(),
         months = parseMonths(month, year),
-        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00' ];
+        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00' ];
 
     // locals sent to server-side jade
-    var viewModel = {
+    viewModel = {
       img: inputs.img,
       title: inputs.title,
       months: months,
       hours: hours,
       userName: inputs.userName,
       userEmail: inputs.userEmail
-    };
+    },
 
     // locals sent to client-side javascript
-    var clientLocals = {
-      hours: hours,
+    clientLocals = {
+      timekit: {
+        app: inputs.timekitApp,
+        email: inputs.timekitEmail,
+        password: inputs.timekitPassword
+      }
     };
 
     callback(null, viewModel, clientLocals);

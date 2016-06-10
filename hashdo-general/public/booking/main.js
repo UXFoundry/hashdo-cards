@@ -31,20 +31,22 @@ card.onReady = function () {
 
     $inner.css('margin-left', 0);                       // reset to default
 
-    ht.on('pan', function (ev) {
-      m_current = containM(m_last + ev.deltaX, m_min);
-      $inner.css('margin-left', m_current);
+    if (m_min < 0) {  // if there is need for slider
+      ht.on('pan', function (ev) {
+        m_current = containM(m_last + ev.deltaX, m_min);
+        $inner.css('margin-left', m_current);
 
-      ev.srcEvent.stopPropagation();
-    });
+        ev.srcEvent.stopPropagation();
+      });
 
-    ht.on('panend', function (ev) {
-      var v = -ev.velocityX * -m_min / 3;
-      m_last = m_current;
-      m_current = containM(m_current + v, m_min);
+      ht.on('panend', function (ev) {
+        var v = -ev.velocityX * -m_min / 3;
+        m_last = m_current;
+        m_current = containM(m_current + v, m_min);
 
-      ev.srcEvent.stopPropagation();
-    });
+        ev.srcEvent.stopPropagation();
+      });
+    }
 
     $inner.find('a').on('click', function(ev) {
       ev.preventDefault();
@@ -67,8 +69,33 @@ card.onReady = function () {
 
   dayClick = function(elem) {
     selectedDay = parseInt(elem.text(), 10);
-    updateHours();
-    updateBookingAction();
+    selectedHour = false;     // reset selected day
+    updateBookingAction();    // disable book action
+
+    $shiftHours.find('.inner').html('<span class="unavailable">Checking available hours...</span>');  // loader
+
+    timekit.findTime({
+      "emails": [
+          locals.timekit.email
+      ],
+      "start": selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T8:00+02:00',  // format:  2016-6-6T8:00+02:00
+      "filters": {
+        "and": [
+          { "specific_time": {"start": 8, "end": 16}}  // insert values from user input
+        ]
+      },
+      "future": "8 hours",  // insert values from user input
+      "length": "1 hour",   // insert values from user input
+      "sort": "asc",
+      "ignore_all_day_events": false,
+      "all_solutions": false
+    }).then(function(response) {
+
+      updateHours(response.data);
+
+    }).catch(function(response) {
+      console.log('HANDLE FIND TIME ERROR - ' + response);  // handle error
+    });
   },
 
   hourClick = function(elem) {
@@ -86,23 +113,21 @@ card.onReady = function () {
       html += '<a href="#">' + i + '</a>';
     }
 
-    updateShifing($shiftDays, html, dayClick);
+    updateShifting($shiftDays, html, dayClick);
   },
 
-  updateHours = function() {
-    selectedHour = false;  // reset selected day
-
-    var hours = locals.hours,
+  updateHours = function(availableHours) {
+    var hours = availableHours.map(function(h) { return h.start }),  // parse timekit hours
         html = '';
 
     if (curMonth === selectedMonthIndex && curDay === selectedDay) { // if selected day is today then check time
       var bookingHours = now.getHours() + 2,            // add 2 more hours, no point in booking thats right now
-          indexOfHour = locals.hours.indexOf(bookingHours + ':00');
+          indexOfHour = hours.indexOf(bookingHours + ':00');
 
       if (indexOfHour !== -1) {
-        hours = hours.slice(indexOfHour);  // cut of unavailable hours
+        hours = hours.slice(indexOfHour);               // cut of unavailable hours
       } else {
-        html = 'No available hours!';                  // no hours available
+        html = 'No available hours!';                   // no hours available
 
         return $shiftHours.find('.inner').html('<span class="unavailable">' + html + '</span>');
       }
@@ -112,17 +137,17 @@ card.onReady = function () {
       html += '<a href="#">' + hour + '</a>';
     });
 
-    updateShifing($shiftHours, html, hourClick);
+    updateShifting($shiftHours, html, hourClick);
   },
 
-  updateShifing = function($shiftingModule, html, handleClick) {
-    $shiftingModule.addClass("changed").find('.inner').html(html);  // add/remove class in delayed fashion
+  updateShifting = function($shiftModule, html, handleClick) {
+    $shiftModule.addClass("changed").find('.inner').html(html);  // add/remove class in delayed fashion
 
     setTimeout(function() {
-      $shiftingModule.removeClass("changed");
+      $shiftModule.removeClass("changed");
     }, 1000);
 
-    setUpHammer($shiftingModule, handleClick);   // update hammer
+    setUpHammer($shiftModule, handleClick);   // update hammer
   },
 
   flip = function(side) {
@@ -146,6 +171,7 @@ card.onReady = function () {
     var $bookingActionElem = $card.find('.make-booking');
     if (selectedHour && selectedDay && selectedMonth && selectedYear) { // enable action if all values are selected
       $bookingActionElem.removeClass('disabled').on('click', function(ev) {
+        ev.preventDefault();
         flip('back');
         renderBookingSummary();
       });
@@ -191,7 +217,38 @@ card.onReady = function () {
     }
 
     return false;
-  }
+  },
+
+  setUpTimekit = function() {
+    var authAttempt = 3;  // retry to auth if failed
+
+    timekit.configure({
+        app:                        locals.timekit.app,          // app name registered with timekit (get in touch)
+        apiBaseUrl:                 'https://api.timekit.io/',  // API endpoint (do not change)
+        apiVersion:                 'v2',                       // version of API to call (do not change)
+        inputTimestampFormat:       'Y-m-d H:i',               // default timestamp format that you supply
+        outputTimestampFormat:      'H:i',               // default timestamp format that you want the API to return
+        // timezone:                   'Europe/Zagreb',            // override user's timezone for custom formatted timestamps in another timezone
+        convertResponseToCamelcase: true,                      // should keys in JSON response automatically be converted from snake_case to camelCase?
+        convertRequestToSnakecase:  false                        // should keys in JSON requests automatically be converted from camelCase to snake_case?
+    });
+
+    timekit.auth({
+      email: locals.timekit.email,
+      password: locals.timekit.password
+    }).then(function(response) {
+      // 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49'
+      // setUser with apiToken from response or api token from DB
+      timekit.setUser(locals.timekit.email, response.data.apiToken);
+    }).catch(function(response) {
+      setTimeout(function() {  // try again
+        if (authAttempt > 0) {
+          setUpTimekit();
+          authAttempt--;
+        }
+      }, 3000);
+    });
+  };
 
   // instantiate submit and go-back buttons
   $card.find('button#go-back').on('click', function(ev) {
@@ -240,10 +297,17 @@ card.onReady = function () {
       setUpHammer($shiftDays, dayClick);
       setUpHammer($shiftHours, hourClick);
     });
-  }
-  else {
+  } else {
     setUpHammer($shiftMonths, monthClick);
     setUpHammer($shiftDays, dayClick);
     setUpHammer($shiftHours, hourClick);
+  }
+
+  if (typeof timekit === 'undefined') {
+    card.require('https://cdnjs.cloudflare.com/ajax/libs/timekit-js-sdk/1.5.0/timekit-sdk.min.js', function () {
+      setUpTimekit();
+    });
+  } else {
+      setUpTimekit();
   }
 };
