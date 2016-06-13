@@ -157,6 +157,7 @@ module.exports = {
             {
               surveyId: survey.id,
               questions: translateQuestions(survey.translations, user.language, survey.questions),
+              questionImages: survey.questionImages,
               responses: responses || {},
               user: user,
               limit: survey.limit,

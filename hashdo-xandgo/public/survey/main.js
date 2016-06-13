@@ -19,7 +19,7 @@ card.onReady = function () {
   if (typeof _lodash_survey === 'undefined') {
 
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v17.css');
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v18.css');
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v7.js', function () {
@@ -28,6 +28,9 @@ card.onReady = function () {
 
       // subscribe to any state changes
       subscribeToStateChanges();
+
+      // preload question images
+      preloadQuestionImages();
     });
   }
   else {
@@ -35,6 +38,18 @@ card.onReady = function () {
 
     attachStartOrContinueHandler();
     subscribeToStateChanges();
+    preloadQuestionImages();
+  }
+
+  // preload question images
+  function preloadQuestionImages() {
+    // preload question images
+    if (locals.questionImages) {
+      for (var i = 0; i < _lodash_survey.keys(locals.questionImages).length; i++) {
+        var pi = new Image();
+        pi.src = locals.questionImages[_lodash_survey.keys(locals.questionImages)[i]];
+      }
+    }
   }
 
   // summary footer click
@@ -392,12 +407,17 @@ card.onReady = function () {
         inputHTML = '',
         value = '',
         showNext = true,
-        showBack = _lodash_survey.keys(responses).length > 0 && currentQuestionIndex > 0;
+        showBack = currentQuestionIndex > 0;
 
       resetModal();
 
       // populate question
       $title.html(currentQuestion.message);
+
+      // question image?
+      if (locals.questionImages && locals.questionImages[currentQuestion.id]) {
+        $title.prepend('<img src="' + locals.questionImages[currentQuestion.id] + '" style="max-width: 200px; display: block; margin: 0 auto;">');
+      }
 
       if (currentQuestion.replyType === 'end') {
         $done.show();
@@ -488,7 +508,7 @@ card.onReady = function () {
         }
 
         // required
-        if (currentQuestion.required) {
+        if (currentQuestion.required && currentQuestion.replyType !== 'none') {
           if (description.length > 0) {
             description += ' ';
           }
