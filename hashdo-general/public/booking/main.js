@@ -1,4 +1,6 @@
 /* global card, locals, $ */
+// apiToken - TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49
+// calendarID - cc4657b1-fc68-4f05-bc73-7f21ee033464
 
 card.onReady = function () {
   var $card = $('#' + locals.card.id),
@@ -7,6 +9,12 @@ card.onReady = function () {
       $shiftDays = $hdcInner.find('.shifting-select.days'),
       $shiftHours = $hdcInner.find('.shifting-select.hours'),
       $bookingSummary = $card.find('.booking-summary'),
+      // booking config
+      timezone = '+2',        // GMT
+      bookingInterval = 60,   // In minutes
+      startTime = 8,          // Client starts working (hours)
+      workingHours = 8,       // Client working hours
+
       now = new Date(),
       curMonth = now.getMonth(),
       curDay = now.getDate(),
@@ -72,29 +80,29 @@ card.onReady = function () {
     selectedHour = false;     // reset selected day
     updateBookingAction();    // disable book action
 
-    $shiftHours.find('.inner').html('<span class="unavailable">Checking available hours...</span>');  // loader
+    $shiftHours.find('.inner').html('<span>Checking available hours...</span>');  // loader
 
     timekit.findTime({
       "emails": [
           locals.timekit.email
       ],
-      "start": selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T8:00+02:00',  // format:  2016-6-6T8:00+02:00
+      "start": selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T' + startTime + ':00:00' + timezone,
       "filters": {
         "and": [
-          { "specific_time": {"start": 8, "end": 16}}  // insert values from user input
+          { "specific_time": {"start": startTime, "end": startTime + workingHours}}
         ]
       },
-      "future": "8 hours",  // insert values from user input
-      "length": "1 hour",   // insert values from user input
+      "future": workingHours + " hours",
+      "length": bookingInterval + " minutes",
       "sort": "asc",
       "ignore_all_day_events": false,
       "all_solutions": false
     }).then(function(response) {
-
+      console.log(response);
       updateHours(response.data);
 
     }).catch(function(response) {
-      console.log('HANDLE FIND TIME ERROR - ' + response);  // handle error
+      console.log('HANDLE FIND TIME ERROR - ', response);  // handle error
     });
   },
 
@@ -223,24 +231,26 @@ card.onReady = function () {
     var authAttempt = 3;  // retry to auth if failed
 
     timekit.configure({
-        app:                        locals.timekit.app,          // app name registered with timekit (get in touch)
-        apiBaseUrl:                 'https://api.timekit.io/',  // API endpoint (do not change)
-        apiVersion:                 'v2',                       // version of API to call (do not change)
-        inputTimestampFormat:       'Y-m-d H:i',               // default timestamp format that you supply
+        app:                        locals.timekit.app,           // app name registered with timekit (get in touch)
+        apiBaseUrl:                 'https://api.timekit.io/',    // API endpoint (do not change)
+        apiVersion:                 'v2',                         // version of API to call (do not change)
+        // inputTimestampFormat:       'Y-m-d h:ia',               // default timestamp format that you supply
         outputTimestampFormat:      'H:i',               // default timestamp format that you want the API to return
-        // timezone:                   'Europe/Zagreb',            // override user's timezone for custom formatted timestamps in another timezone
-        convertResponseToCamelcase: true,                      // should keys in JSON response automatically be converted from snake_case to camelCase?
-        convertRequestToSnakecase:  false                        // should keys in JSON requests automatically be converted from camelCase to snake_case?
+        // timezone:                   'Europe/Copenhagen',        // override user's timezone for custom formatted timestamps in another timezone
+        // convertResponseToCamelcase: false,                      // should keys in JSON response automatically be converted from snake_case to camelCase?
+        // convertRequestToSnakecase:  true                        // should keys in JSON requests automatically be converted from camelCase to snake_case?
     });
 
     timekit.auth({
       email: locals.timekit.email,
       password: locals.timekit.password
     }).then(function(response) {
+      console.log(response);
       // 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49'
       // setUser with apiToken from response or api token from DB
-      timekit.setUser(locals.timekit.email, response.data.apiToken);
+      timekit.setUser(locals.timekit.email, response.data.api_token);
     }).catch(function(response) {
+      console.log(response);
       setTimeout(function() {  // try again
         if (authAttempt > 0) {
           setUpTimekit();
@@ -258,16 +268,18 @@ card.onReady = function () {
   $card.find('button#submit').on('click', function(ev) {
     var $inputName = $card.find('input#name');
         $inputEmail = $card.find('input#email'),
+        nameValue = $inputName.val().trim(),
+        emailValue = $inputEmail.val().trim(),
         enableSubmit = true;
 
-    if (!$inputName.val()) {          // if input is invalid
+    if (!nameValue) {          // if input is invalid
       $inputName.addClass('invalid');
       enableSubmit = false;
     } else {
       $inputName.removeClass('invalid');
     }
 
-    if (!isEmail($inputEmail.val())) {  // if input is invalid
+    if (!isEmail(emailValue)) {  // if input is invalid
       $inputEmail.addClass('invalid');
       enableSubmit = false;
     } else {
@@ -275,7 +287,74 @@ card.onReady = function () {
     }
 
     if (enableSubmit) {  // if submit is enabled
-      console.log('SUBMIT');  // connect to timekit API
+      // TODO: disable submit click | add text indication inside submit button
+      var bookingTime = parseBookingTime();
+
+      timekit.createBooking({
+        "graph": "confirm_decline",
+        "action": "create",
+        "event": {
+          "start": bookingTime.start,
+          "end": bookingTime.end,
+          "what": "Mens haircut",
+          "where": "Sesame St, Middleburg, FL 32068, USA",
+          // "description": "Please arrive 10 minutes before you time begin",
+          "calendar_id": "cc4657b1-fc68-4f05-bc73-7f21ee033464",
+        },
+        "customer": {
+          "name": nameValue,
+          "email": emailValue,
+          // "phone": "1-591-001-5403",
+          // "voip": "McFly",
+          // "timezone": "America/Los_Angeles"
+        }
+      }).then(function(response) {
+        console.log(response);
+
+        // timekit.updateBooking({
+        //   "id": response.data.id,
+        //   "action": "confirm"
+        // }).then(function(response) {
+        //   console.log(response);
+        // }).catch(function(response) {
+        //   console.log('HANDLE UPDATE BOOKING - ', response);  // handle error
+        // });
+
+      }).catch(function(response) {
+        // TO CHECK - still books the meeting even tho in that time other booking has been scheduled already
+        // if booking already reserved - flip the card back and show unavailable hour (red indicator)
+        var hourElem = $shiftHours.find('a.selected');
+        hourElem.replaceWith('<span class="unavailable">' + hourElem.text() + '</span>');
+        selectedHour = false;
+        updateBookingAction();
+        flip('front');
+      });
+
+      function parseBookingTime() {
+        var eventDate = selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T',
+            parseEndHour = function() {
+              var splitTime = selectedHour.split(':'),
+                  hours = parseInt(splitTime[0], 10),
+                  minutes = parseInt(splitTime[1], 10) + bookingInterval;
+
+              if (minutes >= bookingInterval) {
+                minutes = minutes - bookingInterval;
+                hours++;
+
+                if (minutes < 10) {
+                  minutes = '0' + minutes;
+                }
+              }
+
+              return hours + ':' + minutes;
+            };
+
+        return {
+          start: eventDate + selectedHour + ':00' + timezone,
+          end: eventDate + parseEndHour() + ':00' + timezone
+        };
+      }
+
     }
   });
 

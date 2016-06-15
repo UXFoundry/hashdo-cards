@@ -41,7 +41,7 @@ module.exports = {
       secure: true
     },
     userEmail: {
-      example: 'booking-user@gmail.com',
+      example: 'rogic89@gmail.com',
       description: 'Email of the user performing the booking action',
       secure: true
     }

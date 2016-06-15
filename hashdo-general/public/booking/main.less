@@ -2,6 +2,7 @@
 @card-text-color: rgb(77, 77, 77);
 @card-light-gray-color: rgb(204, 204, 204);
 @card-gray-color: rgb(153, 153, 153);
+@card-red-color: rgb(226, 34, 34);
 @card-blue-color: rgb(0, 124, 255);
 @card-medium-blue-color: rgb(55, 153, 255);
 @card-light-blue-color: rgb(201, 228, 255);
@@ -82,7 +83,11 @@
         height: 30px;
         padding: 5px @inner-side-padding 0;
 
-        a, div {
+        a, div, span {
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: 300;
+          padding: 2px (@card-padding - @inner-side-padding);
           text-transform: uppercase;
           text-align: center;
           text-decoration: none;
@@ -94,12 +99,21 @@
           user-select: none;
           transition: color .2s ease-in-out,
                       background .2s ease-in-out;
+
+          /* need 1px separation because of unavailable hour */
+          margin-left: 1px;
+          &:first-child {
+            margin-left: 0;
+          }
         }
 
-        a, div, span.unavailable {
-          display: inline-block;
-          font-weight: 300;
-          padding: 2px (@card-padding - @inner-side-padding);
+        span {
+          text-transform: initial;
+          &.unavailable {
+            background-color: @card-red-color;
+            cursor: not-allowed;
+            color: white;
+          }
         }
 
         a {
@@ -119,7 +133,6 @@
         }
       }
     }
-
 
     .make-booking {
       box-sizing: border-box;
@@ -171,7 +184,6 @@
       }
     }
 
-
     form {
       display: block;
       padding: @card-padding;
@@ -204,7 +216,6 @@
           margin-top: .5em;
         }
       }
-
     }
 
     button {
@@ -261,9 +272,8 @@
           width: 80%;
         }
       }
-
-
     }
+
   }
 }
 
