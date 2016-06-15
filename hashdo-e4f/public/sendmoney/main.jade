@@ -1,6 +1,7 @@
 extends /card
 
 block content
+	link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
 	.payInCountryBlock
 		h1 Pay In
 		div
@@ -15,7 +16,7 @@ block content
 		.paymethodIn
 			select(id='paymethodIn',name='paymethodIn').paymethodInSelect
 	.payOutCountryBlock.hidden
-		h1 Pay Out 
+		h1 Pay Out
 		select(id='payOut',name='payOutCountries').payOutCountrySelect
 			option(value='Default') Select Pay Out Country
 			each payOutCountry in payOutCountries
@@ -40,15 +41,18 @@ block content
 		table
 			tr
 				td TransferFee
-				td 
+			tr
+				td
 					input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
 			tr
 				td Rate
-				td 
+			tr
+				td
 					input(type="text", name="Rate", readonly="readonly").exchangeRateValue
 			tr
 				td Amount
-				td 
+			tr
+				td
 					input(type="text", name="Amount", readonly="readonly").AmountValue
 	.acceptQuote.hidden
 		a.btn.button.acceptQuoteButton Accept Quote
@@ -60,19 +64,23 @@ block content
 		table
 			tr
 				td Bank Name
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankName", readonly="readonly").beneficiaryBankName
 			tr
 				td Account Number
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryAccountNumber", readonly="readonly").beneficiaryAccountNumber
 			tr
 				td Branch Code
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBranchCode", readonly="readonly").beneficiaryBranchCode
 			tr
 				td Bank Country
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").beneficiaryBankCountry
 	.beneficiaryAccept.hidden
 		a.btn.button.acceptBeneficiary Accept Beneficary
@@ -133,39 +141,66 @@ block content
 		h1 Payment Details
 		table
 			tr
+				td Enter Reference to Appear
+			tr
+				td
+					input(type="text", name="beneficiaryReference").pdReferenceToAppear
+			tr
 				td Beneficiary Name
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryName", readonly="readonly").pdBeneficiaryName
 			tr
 				td Phone Number
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryPhoneNumber", readonly="readonly").pdPhoneNumber
 			tr
-				td Reference to Appear
-				td 
-					input(type="text", name="beneficiaryReference").pdReferenceToAppear
-			tr
 				td Amount to Transfer
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdAmounttoTransfer
 			tr
 				td Currency you are Sending
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdCurrencySending
 			tr
 				td Currency Paid Out
-				td 
+			tr
+				td
 					input(type="text", name="pdCurrencyPaidOut", readonly="readonly").pdCurrencyPaidOut
 			tr
 				td Exchange Rate
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdExchangeRate
 			tr
 				td Transfer Fee
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTransferFee
 			tr
 				td Total Paid Out
-				td 
+			tr
+				td
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
 		a.btn.button.confirmFinal Confirm Payment
+	.cardExpired.hidden
+		table
+			tr
+				td Your transaction session has expired. Please note that due to security restrictions, the time from commencing the transaction to completion must be within a 10 minute window. Please re-create your transaction.
+	.cardCompleted.hidden
+		table
+			tr
+				td Your transaction is completed. Details as follows:
+			tr
+				td Transaction ID
+			tr
+				td
+					input(type="transactionID", name="transactionID", readonly="readonly").transactionID
+			tr
+				td Transaction ID
+			tr
+				td
+					input(type="transactionID", name="transactionID", readonly="readonly").transactionID
