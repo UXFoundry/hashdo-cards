@@ -23,6 +23,18 @@ module.exports = {
       required: true,
       secure: true
     },
+    timekitApiToken: {
+      example: 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49',
+      description: 'User timekit API token',
+      required: false,
+      secure: true
+    },
+    timekitCalendarId: {
+      example: 'cc4657b1-fc68-4f05-bc73-7f21ee033464',
+      description: 'User timekit CalendarID',
+      required: false,
+      secure: true
+    },
     timekitEmail: {
       example: 'ivan.rogic@toptal.com',
       description: 'Email of timekit user account',
@@ -52,7 +64,7 @@ module.exports = {
         month = now.getMonth(),
         year = now.getFullYear(),
         months = parseMonths(month, year),
-        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00' ];
+        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00' ];  // TODO - generate from inputs
 
     // locals sent to server-side jade
     viewModel = {
@@ -69,7 +81,9 @@ module.exports = {
       timekit: {
         app: inputs.timekitApp,
         email: inputs.timekitEmail,
-        password: inputs.timekitPassword
+        password: inputs.timekitPassword,
+        apiToken: inputs.timekitApiToken,
+        calendarId: inputs.timekitCalendarId
       }
     };
 

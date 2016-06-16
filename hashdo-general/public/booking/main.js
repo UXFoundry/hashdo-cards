@@ -1,6 +1,5 @@
 /* global card, locals, $ */
 // apiToken - TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49
-// calendarID - cc4657b1-fc68-4f05-bc73-7f21ee033464
 
 card.onReady = function () {
   var $card = $('#' + locals.card.id),
@@ -8,12 +7,15 @@ card.onReady = function () {
       $shiftMonths = $hdcInner.find('.shifting-select.months'),
       $shiftDays = $hdcInner.find('.shifting-select.days'),
       $shiftHours = $hdcInner.find('.shifting-select.hours'),
-      $bookingSummary = $card.find('.booking-summary'),
+      // action buttons
+      $priAction = $card.find('button#pri'),
+      $secAction = $card.find('button#sec'),
       // booking config
       timezone = '+2',        // GMT
       bookingInterval = 60,   // In minutes
       startTime = 8,          // Client starts working (hours)
       workingHours = 8,       // Client working hours
+      calendarId = locals.timekit.calendarId || false,
 
       now = new Date(),
       curMonth = now.getMonth(),
@@ -61,7 +63,7 @@ card.onReady = function () {
       $inner.find('a.selected').removeClass('selected');
       var elem = $(this);
       elem.addClass('selected');
-      handleClick && handleClick(elem);
+      handleClick(elem);
     });
   },
 
@@ -98,11 +100,9 @@ card.onReady = function () {
       "ignore_all_day_events": false,
       "all_solutions": false
     }).then(function(response) {
-      console.log(response);
       updateHours(response.data);
-
     }).catch(function(response) {
-      console.log('HANDLE FIND TIME ERROR - ', response);  // handle error
+      $shiftHours.find('.inner').html('<span>Error, please try again!</span>');
     });
   },
 
@@ -129,19 +129,19 @@ card.onReady = function () {
         html = '';
 
     if (curMonth === selectedMonthIndex && curDay === selectedDay) { // if selected day is today then check time
-      var bookingHours = now.getHours() + 2,            // add 2 more hours, no point in booking thats right now
-          indexOfHour = hours.indexOf(bookingHours + ':00');
+      var bookingHours = new Date().getHours() + 2,            // add 2 more hours, no point in booking thats right now
+          indexOfHour = hours.indexOf(bookingHours + ':00');  // TODO - check interval
 
       if (indexOfHour !== -1) {
         hours = hours.slice(indexOfHour);               // cut of unavailable hours
       } else {
         html = 'No available hours!';                   // no hours available
 
-        return $shiftHours.find('.inner').html('<span class="unavailable">' + html + '</span>');
+        return $shiftHours.find('.inner').html('<span>' + html + '</span>');
       }
     }
 
-    hours.forEach(function(hour, i) {
+    hours.forEach(function(hour) {
       html += '<a href="#">' + hour + '</a>';
     });
 
@@ -171,8 +171,8 @@ card.onReady = function () {
   },
 
   renderBookingSummary = function() {
-    $bookingSummary.find('.date').text(selectedMonth + ' ' + selectedDay);
-    $bookingSummary.find('.time').text(selectedHour);
+    $card.find('.booking-summary .date').text(selectedMonth + ' ' + selectedDay);
+    $card.find('.booking-summary .time').text(selectedHour);
   },
 
   updateBookingAction = function() {
@@ -180,8 +180,8 @@ card.onReady = function () {
     if (selectedHour && selectedDay && selectedMonth && selectedYear) { // enable action if all values are selected
       $bookingActionElem.removeClass('disabled').on('click', function(ev) {
         ev.preventDefault();
-        flip('back');
         renderBookingSummary();
+        flip('back');
       });
     } else {
       $bookingActionElem.addClass('disabled').off('click');
@@ -228,136 +228,178 @@ card.onReady = function () {
   },
 
   setUpTimekit = function() {
-    var authAttempt = 3;  // retry to auth if failed
 
     timekit.configure({
-        app:                        locals.timekit.app,           // app name registered with timekit (get in touch)
-        apiBaseUrl:                 'https://api.timekit.io/',    // API endpoint (do not change)
-        apiVersion:                 'v2',                         // version of API to call (do not change)
-        // inputTimestampFormat:       'Y-m-d h:ia',               // default timestamp format that you supply
-        outputTimestampFormat:      'H:i',               // default timestamp format that you want the API to return
-        // timezone:                   'Europe/Copenhagen',        // override user's timezone for custom formatted timestamps in another timezone
-        // convertResponseToCamelcase: false,                      // should keys in JSON response automatically be converted from snake_case to camelCase?
-        // convertRequestToSnakecase:  true                        // should keys in JSON requests automatically be converted from camelCase to snake_case?
+      app:                        locals.timekit.app,           // app name registered with timekit (get in touch)
+      apiBaseUrl:                 'https://api.timekit.io/',    // API endpoint (do not change)
+      apiVersion:                 'v2',                         // version of API to call (do not change)
+      // inputTimestampFormat:       'Y-m-d h:ia',              // default timestamp format that you supply
+      outputTimestampFormat:      'H:i',                        // default timestamp format that you want the API to return
+      // timezone:                   'Europe/Copenhagen',       // override user's timezone for custom formatted timestamps in another timezone
+      // convertResponseToCamelcase: false,                     // should keys in JSON response automatically be converted from snake_case to camelCase?
+      // convertRequestToSnakecase:  true                       // should keys in JSON requests automatically be converted from camelCase to snake_case?
     });
 
-    timekit.auth({
-      email: locals.timekit.email,
-      password: locals.timekit.password
-    }).then(function(response) {
-      console.log(response);
-      // 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49'
-      // setUser with apiToken from response or api token from DB
-      timekit.setUser(locals.timekit.email, response.data.api_token);
-    }).catch(function(response) {
-      console.log(response);
-      setTimeout(function() {  // try again
-        if (authAttempt > 0) {
-          setUpTimekit();
-          authAttempt--;
-        }
-      }, 3000);
-    });
-  };
-
-  // instantiate submit and go-back buttons
-  $card.find('button#go-back').on('click', function(ev) {
-    flip('front');
-  });
-
-  $card.find('button#submit').on('click', function(ev) {
-    var $inputName = $card.find('input#name');
-        $inputEmail = $card.find('input#email'),
-        nameValue = $inputName.val().trim(),
-        emailValue = $inputEmail.val().trim(),
-        enableSubmit = true;
-
-    if (!nameValue) {          // if input is invalid
-      $inputName.addClass('invalid');
-      enableSubmit = false;
+    if (locals.timekit.apiToken) {  // if apiToken already exists
+      timekit.setUser(locals.timekit.email, locals.timekit.apiToken);
+      !calendarId && getTimekitCalendarId();  // if calendarId doesnt exist
     } else {
-      $inputName.removeClass('invalid');
-    }
-
-    if (!isEmail(emailValue)) {  // if input is invalid
-      $inputEmail.addClass('invalid');
-      enableSubmit = false;
-    } else {
-      $inputEmail.removeClass('invalid');
-    }
-
-    if (enableSubmit) {  // if submit is enabled
-      // TODO: disable submit click | add text indication inside submit button
-      var bookingTime = parseBookingTime();
-
-      timekit.createBooking({
-        "graph": "confirm_decline",
-        "action": "create",
-        "event": {
-          "start": bookingTime.start,
-          "end": bookingTime.end,
-          "what": "Mens haircut",
-          "where": "Sesame St, Middleburg, FL 32068, USA",
-          // "description": "Please arrive 10 minutes before you time begin",
-          "calendar_id": "cc4657b1-fc68-4f05-bc73-7f21ee033464",
-        },
-        "customer": {
-          "name": nameValue,
-          "email": emailValue,
-          // "phone": "1-591-001-5403",
-          // "voip": "McFly",
-          // "timezone": "America/Los_Angeles"
-        }
+      timekit.auth({
+        email: locals.timekit.email,
+        password: locals.timekit.password
       }).then(function(response) {
-        console.log(response);
-
-        // timekit.updateBooking({
-        //   "id": response.data.id,
-        //   "action": "confirm"
-        // }).then(function(response) {
-        //   console.log(response);
-        // }).catch(function(response) {
-        //   console.log('HANDLE UPDATE BOOKING - ', response);  // handle error
-        // });
-
+        // TODO - setUser with apiToken from response or api token from DB | save to DB
+        timekit.setUser(locals.timekit.email, response.data.api_token);
+        !calendarId && getTimekitCalendarId();
       }).catch(function(response) {
-        // TO CHECK - still books the meeting even tho in that time other booking has been scheduled already
-        // if booking already reserved - flip the card back and show unavailable hour (red indicator)
-        var hourElem = $shiftHours.find('a.selected');
-        hourElem.replaceWith('<span class="unavailable">' + hourElem.text() + '</span>');
-        selectedHour = false;
-        updateBookingAction();
-        flip('front');
+        setUpTimekit();
       });
+    }
 
-      function parseBookingTime() {
-        var eventDate = selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T',
-            parseEndHour = function() {
-              var splitTime = selectedHour.split(':'),
-                  hours = parseInt(splitTime[0], 10),
-                  minutes = parseInt(splitTime[1], 10) + bookingInterval;
+    function getTimekitCalendarId() {
+      timekit.getCalendars().then(function(response) {
+        calendarId = response.data[0].id;
+      }).catch(function(response) {
+        getTimekitCalendarId();
+      });
+    }
+  },
 
-              if (minutes >= bookingInterval) {
-                minutes = minutes - bookingInterval;
-                hours++;
+  setUpCreateBookingAction = function() {
+    $priAction.attr('class', 'btn-blue').text('Create').on('click', function(ev) {
+      var $inputName = $card.find('input#name');
+          $inputEmail = $card.find('input#email'),
+          nameValue = $inputName.val().trim(),
+          emailValue = $inputEmail.val().trim(),
+          enableSubmit = true;
 
-                if (minutes < 10) {
-                  minutes = '0' + minutes;
-                }
-              }
-
-              return hours + ':' + minutes;
-            };
-
-        return {
-          start: eventDate + selectedHour + ':00' + timezone,
-          end: eventDate + parseEndHour() + ':00' + timezone
-        };
+      if (!nameValue) {          // if input is invalid
+        $inputName.addClass('invalid');
+        enableSubmit = false;
+      } else {
+        $inputName.removeClass('invalid');
       }
 
-    }
-  });
+      if (!isEmail(emailValue)) {  // if input is invalid
+        $inputEmail.addClass('invalid');
+        enableSubmit = false;
+      } else {
+        $inputEmail.removeClass('invalid');
+      }
 
+      if (enableSubmit) {  // if submit is enabled
+        var bookingTime = parseBookingTime();
+
+        $priAction.text('Creating booking...').addClass('block').off('click');
+        $secAction.addClass('hide').off('click');
+
+        timekit.createBooking({
+          "graph": "confirm_decline",
+          "action": "create",
+          "event": {
+            "start": bookingTime.start,
+            "end": bookingTime.end,
+            "what": "Mens haircut",
+            "where": "Sesame St, Middleburg, FL 32068, USA",
+            "description": "Please arrive 10 minutes before you time begin",
+            "calendar_id": calendarId,
+          },
+          "customer": {
+            "name": nameValue,
+            "email": emailValue
+          }
+        }).then(function(response) {
+          setUpConfirmBookingAction(response.data.id);
+          setUpDeclineBookingAction(response.data.id);
+        }).catch(function(response) {
+          $priAction.attr('class', 'btn-red block').text('Error, click to try again').on('click', function() {
+            setUpCreateBookingAction();
+            setUpGoBackAction();
+          });
+        });
+
+        function parseBookingTime() {
+          var eventDate = selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T',
+              parseEndHour = function() {
+                var splitTime = selectedHour.split(':'),
+                    hours = parseInt(splitTime[0], 10),
+                    minutes = parseInt(splitTime[1], 10) + bookingInterval;
+
+                if (minutes >= bookingInterval) {
+                  minutes = minutes - bookingInterval;
+                  hours++;
+
+                  if (minutes < 10) {
+                    minutes = '0' + minutes;
+                  }
+                }
+
+                return hours + ':' + minutes;
+              };
+
+          return {
+            start: eventDate + selectedHour + ':00' + timezone,
+            end: eventDate + parseEndHour() + ':00' + timezone
+          };
+        }
+      }
+    });
+  },
+
+  setUpGoBackAction = function() {
+    $secAction.attr('class', 'btn-white go-back').text('<').on('click', function(ev) {
+      flip('front');
+    });
+  },
+
+  setUpConfirmBookingAction = function(bookingId) {
+    $priAction.attr('class', 'btn-green').text('Confirm').on('click', function(ev) {
+
+      $priAction.text('Confirming booking...').addClass('block').off('click');
+      $secAction.addClass('hide').off('click');
+
+      timekit.updateBooking({
+        "id": bookingId,
+        "action": "confirm"
+      }).then(function(response) {
+        $priAction.text('Booking confirmed!');
+        // TODO - set up localStorage to prevent another booking
+      }).catch(function(response) {
+        $priAction.attr('class', 'btn-red block').text('Error, please try again').on('click', function() {
+          setUpConfirmBookingAction(bookingId);
+          setUpDeclineBookingAction(bookingId);
+        });
+      });
+
+    });
+  },
+
+  setUpDeclineBookingAction = function(bookingId) {
+    $secAction.attr('class', 'btn-red').text('Decline').on('click', function(ev) {
+
+      $secAction.text('Declining booking...').addClass('block').off('click');
+      $priAction.addClass('hide').off('click');
+
+      timekit.updateBooking({
+        "id": bookingId,
+        "action": "decline"
+      }).then(function(response) {
+        $secAction.attr('class', 'btn-green block').text('Booking declined!').on('click', function() {
+          setUpCreateBookingAction();
+          setUpGoBackAction();
+        });
+      }).catch(function(response) {
+        $secAction.attr('class', 'btn-red block').text('Error, please try again').on('click', function() {
+          setUpConfirmBookingAction(bookingId);
+          setUpDeclineBookingAction(bookingId);
+        });
+      });
+
+    });
+  }
+
+  setUpCreateBookingAction();
+  setUpGoBackAction();
 
   if (typeof Hammer === 'undefined') {
     var disabledAmd = false;
