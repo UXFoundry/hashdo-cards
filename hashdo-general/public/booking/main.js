@@ -1,5 +1,4 @@
 /* global card, locals, $ */
-// apiToken - TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49
 
 card.onReady = function () {
   var $card = $('#' + locals.card.id),
@@ -7,16 +6,7 @@ card.onReady = function () {
       $shiftMonths = $hdcInner.find('.shifting-select.months'),
       $shiftDays = $hdcInner.find('.shifting-select.days'),
       $shiftHours = $hdcInner.find('.shifting-select.hours'),
-      // action buttons
-      $priAction = $card.find('button#pri'),
-      $secAction = $card.find('button#sec'),
-      // booking config
-      timezone = '+2',        // GMT
-      bookingInterval = 60,   // In minutes
-      startTime = 8,          // Client starts working (hours)
-      workingHours = 8,       // Client working hours
-      calendarId = locals.timekit.calendarId || false,
-
+      // selected values
       now = new Date(),
       curMonth = now.getMonth(),
       curDay = now.getDate(),
@@ -25,6 +15,16 @@ card.onReady = function () {
       selectedMonth = false,
       selectedMonthIndex = false,
       selectedYear = false,
+      // action buttons
+      $priAction = $card.find('button#pri'),
+      $secAction = $card.find('button#sec'),
+      // booking config
+      timezone = locals.config.timezone,        // GMT (+2)
+      bookingInterval = locals.config.bookingInterval,   // In minutes
+      startHour = locals.config.startHour,          // Client starts working (hours)
+      workingHours = locals.config.workingHours,       // Client working hours
+      calendarId = locals.timekit.calendarId || false,
+
 
   containM = function (m, m_min) {
     if (m > 0) m = 0;
@@ -88,10 +88,10 @@ card.onReady = function () {
       "emails": [
           locals.timekit.email
       ],
-      "start": selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T' + startTime + ':00:00' + timezone,
+      "start": selectedYear + '-' + (selectedMonthIndex + 1) + '-' + selectedDay + 'T' + startHour + ':00:00' + timezone,
       "filters": {
         "and": [
-          { "specific_time": {"start": startTime, "end": startTime + workingHours}}
+          { "specific_time": {"start": startHour, "end": startHour + workingHours}}
         ]
       },
       "future": workingHours + " hours",
@@ -130,20 +130,22 @@ card.onReady = function () {
 
     if (curMonth === selectedMonthIndex && curDay === selectedDay) { // if selected day is today then check time
       var bookingHours = new Date().getHours() + 2,            // add 2 more hours, no point in booking thats right now
-          indexOfHour = hours.indexOf(bookingHours + ':00');  // TODO - check interval
+          indexOfHour = hours.indexOf(bookingHours + ':00');
 
       if (indexOfHour !== -1) {
         hours = hours.slice(indexOfHour);               // cut of unavailable hours
       } else {
-        html = 'No available hours!';                   // no hours available
-
-        return $shiftHours.find('.inner').html('<span>' + html + '</span>');
+        hours = [];
       }
     }
 
-    hours.forEach(function(hour) {
-      html += '<a href="#">' + hour + '</a>';
-    });
+    if (hours.length > 0) {
+      hours.forEach(function(hour) {
+        html += '<a href="#">' + hour + '</a>';
+      });
+    } else {
+      return $shiftHours.find('.inner').html('<span>No available hours!</span>');
+    }
 
     updateShifting($shiftHours, html, hourClick);
   },
@@ -235,9 +237,7 @@ card.onReady = function () {
       apiVersion:                 'v2',                         // version of API to call (do not change)
       // inputTimestampFormat:       'Y-m-d h:ia',              // default timestamp format that you supply
       outputTimestampFormat:      'H:i',                        // default timestamp format that you want the API to return
-      // timezone:                   'Europe/Copenhagen',       // override user's timezone for custom formatted timestamps in another timezone
-      // convertResponseToCamelcase: false,                     // should keys in JSON response automatically be converted from snake_case to camelCase?
-      // convertRequestToSnakecase:  true                       // should keys in JSON requests automatically be converted from camelCase to snake_case?
+      // timezone:                   timezone,                  // override user's timezone for custom formatted timestamps in another timezone
     });
 
     if (locals.timekit.apiToken) {  // if apiToken already exists
@@ -248,11 +248,14 @@ card.onReady = function () {
         email: locals.timekit.email,
         password: locals.timekit.password
       }).then(function(response) {
-        // TODO - setUser with apiToken from response or api token from DB | save to DB
+        // TODO - maybe setUser with apiToken from response or api token from DB | save to DB
         timekit.setUser(locals.timekit.email, response.data.api_token);
         !calendarId && getTimekitCalendarId();
       }).catch(function(response) {
-        setUpTimekit();
+        // TODO - maybe display error
+        setTimeout(function() {
+          setUpTimekit();
+        }, 3000);
       });
     }
 
@@ -260,7 +263,9 @@ card.onReady = function () {
       timekit.getCalendars().then(function(response) {
         calendarId = response.data[0].id;
       }).catch(function(response) {
-        getTimekitCalendarId();
+        setTimeout(function() {
+          getTimekitCalendarId();
+        }, 3000);
       });
     }
   },
@@ -299,9 +304,9 @@ card.onReady = function () {
           "event": {
             "start": bookingTime.start,
             "end": bookingTime.end,
-            "what": "Mens haircut",
-            "where": "Sesame St, Middleburg, FL 32068, USA",
-            "description": "Please arrive 10 minutes before you time begin",
+            "what": locals.info.what,
+            "where": locals.info.where,
+            "description": locals.info.description,
             "calendar_id": calendarId,
           },
           "customer": {
@@ -309,7 +314,7 @@ card.onReady = function () {
             "email": emailValue
           }
         }).then(function(response) {
-          setUpConfirmBookingAction(response.data.id);
+          setUpConfirmBookingAction(response.data.id, nameValue, emailValue);
           setUpDeclineBookingAction(response.data.id);
         }).catch(function(response) {
           $priAction.attr('class', 'btn-red block').text('Error, click to try again').on('click', function() {
@@ -352,7 +357,7 @@ card.onReady = function () {
     });
   },
 
-  setUpConfirmBookingAction = function(bookingId) {
+  setUpConfirmBookingAction = function(bookingId, name, email) {
     $priAction.attr('class', 'btn-green').text('Confirm').on('click', function(ev) {
 
       $priAction.text('Confirming booking...').addClass('block').off('click');
@@ -363,7 +368,17 @@ card.onReady = function () {
         "action": "confirm"
       }).then(function(response) {
         $priAction.text('Booking confirmed!');
-        // TODO - set up localStorage to prevent another booking
+
+        //add data to localStorage
+        locals.config.useLocalStorage && localStorage.setItem('hashdo-booking-timestamp', JSON.stringify({
+          timestamp: new Date(selectedYear, selectedMonthIndex, selectedDay).getTime(),
+          selectedMonth: selectedMonth,
+          selectedDay: selectedDay,
+          selectedHour: selectedHour,
+          name: name,
+          email: email
+        }));
+
       }).catch(function(response) {
         $priAction.attr('class', 'btn-red block').text('Error, please try again').on('click', function() {
           setUpConfirmBookingAction(bookingId);
@@ -396,39 +411,67 @@ card.onReady = function () {
       });
 
     });
-  }
+  },
 
-  setUpCreateBookingAction();
-  setUpGoBackAction();
-
-  if (typeof Hammer === 'undefined') {
-    var disabledAmd = false;
-
-    if (typeof define == 'function' && define.amd) {
-      disabledAmd = true;
-      define.amd = false;
+  isBookingAllowed = function() {
+    if (!locals.config.useLocalStorage) {
+      return true;
     }
 
-    card.require('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js', function () {
-      if (disabledAmd) {
-        define.amd = true;
+    var lsItem = JSON.parse(localStorage.getItem('hashdo-booking-timestamp'));
+    if (lsItem && new Date().getTime() - lsItem.timestamp < 0) { // if the scheduled booking has passed
+      // set values
+      selectedHour = lsItem.selectedHour;
+      selectedDay = lsItem.selectedDay;
+      selectedMonth = lsItem.selectedMonth;
+      $card.find('input#name').val(lsItem.name);
+      $card.find('input#email').val(lsItem.email);
+      // disable button
+      $priAction.text('Booking confirmed!').attr('class', 'btn-green block').off('click');
+      $secAction.addClass('hide').off('click');
+      // render and flip
+      renderBookingSummary();
+      flip('back');
+      return false;
+    }
+
+    localStorage.removeItem('hashdo-booking-timestamp');
+    return true;
+  };
+
+  // check localStorage if booking has already been made
+  if (isBookingAllowed()) {
+    setUpCreateBookingAction();
+    setUpGoBackAction();
+    if (typeof Hammer === 'undefined') {
+      var disabledAmd = false;
+
+      if (typeof define == 'function' && define.amd) {
+        disabledAmd = true;
+        define.amd = false;
       }
 
+      card.require('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js', function () {
+        if (disabledAmd) {
+          define.amd = true;
+        }
+
+        setUpHammer($shiftMonths, monthClick);
+        setUpHammer($shiftDays, dayClick);
+        setUpHammer($shiftHours, hourClick);
+      });
+    } else {
       setUpHammer($shiftMonths, monthClick);
       setUpHammer($shiftDays, dayClick);
       setUpHammer($shiftHours, hourClick);
-    });
-  } else {
-    setUpHammer($shiftMonths, monthClick);
-    setUpHammer($shiftDays, dayClick);
-    setUpHammer($shiftHours, hourClick);
-  }
+    }
 
-  if (typeof timekit === 'undefined') {
-    card.require('https://cdnjs.cloudflare.com/ajax/libs/timekit-js-sdk/1.5.0/timekit-sdk.min.js', function () {
-      setUpTimekit();
-    });
-  } else {
-      setUpTimekit();
+    if (typeof timekit === 'undefined') {
+      card.require('https://cdnjs.cloudflare.com/ajax/libs/timekit-js-sdk/1.5.0/timekit-sdk.min.js', function () {
+        setUpTimekit();
+      });
+    } else {
+        setUpTimekit();
+    }
   }
 };

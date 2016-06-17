@@ -7,6 +7,7 @@ module.exports = {
   clientStateSupport: true,
 
   inputs: {
+    // Booking card config
     img: {
       example: 'http://interim.uxfoundry.co.za/img/intro/booking.jpg',
       description: 'main image URL',
@@ -17,12 +18,68 @@ module.exports = {
       description: 'Title of the booking company',
       required: true
     },
-    timekitApp: {
+    // timezone: {
+    //   example: +2,
+    //   description: 'Timezone of the booking company',
+    //   required: false
+    // },
+    startHour: {
+      example: 8,
+      description: 'Starting working hour',
+      required: false
+    },
+    workingHours: {
+      example: 8,
+      description: 'Number of working hours per day',
+      required: false
+    },
+    bookingInterval: {
+      example: 60,
+      description: 'Booking session length in minutes',
+      required: false
+    },
+    // will prevent another booking for a week for the same user
+    useLocalStorage: {
+      example: 'no',
+      description: 'Use localstorage to prevent bookings',
+      required: false
+    },
+    what: {
+      example: "Mens haircut",
+      description: 'Type of booking service',
+      required: false
+    },
+    where: {
+      example: "Sesame St, Middleburg, FL 32068, USA",
+      description: 'Booking company location',
+      required: false
+    },
+    description: {
+      example: "Please arrive 10 minutes before you time begin",
+      description: 'Booking session description',
+      required: false
+    },
+    // User data (will get from X&GO or user will manually input)
+    userName: {
+      example: 'Ivan Rogic',
+      description: 'Name of the user performing the booking action',
+      required: false,
+      secure: true
+    },
+    userEmail: {
+      example: 'rogic89@gmail.com',
+      description: 'Email of the user performing the booking action',
+      required: false,
+      secure: true
+    },
+    // Client timekit data
+    timekitAppName: {
       example: 'hashdo-booking',
       description: 'Name of the timekit app',
       required: true,
       secure: true
     },
+    // TODO ERROR -  if provided with value '', all secured inputs are replaced by random IDs
     timekitApiToken: {
       example: 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49',
       description: 'User timekit API token',
@@ -46,16 +103,6 @@ module.exports = {
       description: 'Password of timekit user account',
       required: true,
       secure: true
-    },
-    userName: {  // will be suplied
-      example: 'Ivan Rogic',
-      description: 'Name of the user performing the booking action',
-      secure: true
-    },
-    userEmail: {
-      example: 'rogic89@gmail.com',
-      description: 'Email of the user performing the booking action',
-      secure: true
     }
   },
 
@@ -64,7 +111,8 @@ module.exports = {
         month = now.getMonth(),
         year = now.getFullYear(),
         months = parseMonths(month, year),
-        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00' ];  // TODO - generate from inputs
+        timezone = '+2',  //parseInt(inputs.timezone, 10) || now.getTimezoneOffset() / 60,
+        hours = [ '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00' ];
 
     // locals sent to server-side jade
     viewModel = {
@@ -78,8 +126,20 @@ module.exports = {
 
     // locals sent to client-side javascript
     clientLocals = {
+      config: {
+        timezone: timezone,  // will use default value of +2 for now
+        bookingInterval: parseInt(inputs.bookingInterval, 10),
+        startHour: parseInt(inputs.startHour, 10),
+        workingHours: parseInt(inputs.workingHours, 10),
+        useLocalStorage: inputs.useLocalStorage === 'yes'
+      },
+      info: {
+        what: inputs.what || false,
+        where: inputs.where || false,
+        description: inputs.description || false,
+      },
       timekit: {
-        app: inputs.timekitApp,
+        app: inputs.timekitAppName,
         email: inputs.timekitEmail,
         password: inputs.timekitPassword,
         apiToken: inputs.timekitApiToken,
