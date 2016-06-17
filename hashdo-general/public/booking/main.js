@@ -23,7 +23,7 @@ card.onReady = function () {
       bookingInterval = locals.config.bookingInterval,   // In minutes
       startHour = locals.config.startHour,          // Client starts working (hours)
       workingHours = locals.config.workingHours,       // Client working hours
-      calendarId = locals.timekit.calendarId || false,
+      calendarId = false,
 
 
   containM = function (m, m_min) {
@@ -240,24 +240,17 @@ card.onReady = function () {
       // timezone:                   timezone,                  // override user's timezone for custom formatted timestamps in another timezone
     });
 
-    if (locals.timekit.apiToken) {  // if apiToken already exists
-      timekit.setUser(locals.timekit.email, locals.timekit.apiToken);
-      !calendarId && getTimekitCalendarId();  // if calendarId doesnt exist
-    } else {
-      timekit.auth({
-        email: locals.timekit.email,
-        password: locals.timekit.password
-      }).then(function(response) {
-        // TODO - maybe setUser with apiToken from response or api token from DB | save to DB
-        timekit.setUser(locals.timekit.email, response.data.api_token);
-        !calendarId && getTimekitCalendarId();
-      }).catch(function(response) {
-        // TODO - maybe display error
-        setTimeout(function() {
-          setUpTimekit();
-        }, 3000);
-      });
-    }
+    timekit.auth({
+      email: locals.timekit.email,
+      password: locals.timekit.password
+    }).then(function(response) {
+      timekit.setUser(locals.timekit.email, response.data.api_token);
+      getTimekitCalendarId();
+    }).catch(function(response) {
+      setTimeout(function() {
+        setUpTimekit();
+      }, 3000);
+    });
 
     function getTimekitCalendarId() {
       timekit.getCalendars().then(function(response) {

@@ -64,32 +64,19 @@ module.exports = {
       example: 'Ivan Rogic',
       description: 'Name of the user performing the booking action',
       required: false,
-      secure: true
+      secure: false
     },
     userEmail: {
       example: 'rogic89@gmail.com',
       description: 'Email of the user performing the booking action',
       required: false,
-      secure: true
+      secure: false
     },
     // Client timekit data
     timekitAppName: {
       example: 'hashdo-booking',
       description: 'Name of the timekit app',
       required: true,
-      secure: true
-    },
-    // TODO ERROR -  if provided with value '', all secured inputs are replaced by random IDs
-    timekitApiToken: {
-      example: 'TJDQsKBOM2uSVxLorOXIRD9kbTEuGL49',
-      description: 'User timekit API token',
-      required: false,
-      secure: true
-    },
-    timekitCalendarId: {
-      example: 'cc4657b1-fc68-4f05-bc73-7f21ee033464',
-      description: 'User timekit CalendarID',
-      required: false,
       secure: true
     },
     timekitEmail: {
@@ -141,9 +128,7 @@ module.exports = {
       timekit: {
         app: inputs.timekitAppName,
         email: inputs.timekitEmail,
-        password: inputs.timekitPassword,
-        apiToken: inputs.timekitApiToken,
-        calendarId: inputs.timekitCalendarId
+        password: inputs.timekitPassword
       }
     };
 
