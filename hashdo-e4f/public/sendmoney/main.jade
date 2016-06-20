@@ -2,8 +2,9 @@ extends /card
 
 block content
 	link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
-	.payInCountryBlock
-		h1 Pay In
+	h1 Send Money
+	.payInCountryBlock.hidden
+		h1 Pay In Details
 		div
 			select(id='payIn',name='payInCountries').payInCountrySelect
 				option(value='Default') Select Pay In Country
@@ -16,7 +17,7 @@ block content
 		.paymethodIn
 			select(id='paymethodIn',name='paymethodIn').paymethodInSelect
 	.payOutCountryBlock.hidden
-		h1 Pay Out
+		h1 Pay Out Details
 		select(id='payOut',name='payOutCountries').payOutCountrySelect
 			option(value='Default') Select Pay Out Country
 			each payOutCountry in payOutCountries
@@ -42,17 +43,17 @@ block content
 			tr
 				td TransferFee
 			tr
-				td
+				td 
 					input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
 			tr
 				td Rate
 			tr
-				td
+				td 
 					input(type="text", name="Rate", readonly="readonly").exchangeRateValue
 			tr
 				td Amount
 			tr
-				td
+				td 
 					input(type="text", name="Amount", readonly="readonly").AmountValue
 	.acceptQuote.hidden
 		a.btn.button.acceptQuoteButton Accept Quote
@@ -65,22 +66,22 @@ block content
 			tr
 				td Bank Name
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankName", readonly="readonly").beneficiaryBankName
 			tr
 				td Account Number
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryAccountNumber", readonly="readonly").beneficiaryAccountNumber
 			tr
 				td Branch Code
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBranchCode", readonly="readonly").beneficiaryBranchCode
 			tr
 				td Bank Country
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").beneficiaryBankCountry
 	.beneficiaryAccept.hidden
 		a.btn.button.acceptBeneficiary Accept Beneficary
@@ -143,47 +144,47 @@ block content
 			tr
 				td Enter Reference to Appear
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryReference").pdReferenceToAppear
 			tr
 				td Beneficiary Name
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryName", readonly="readonly").pdBeneficiaryName
 			tr
 				td Phone Number
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryPhoneNumber", readonly="readonly").pdPhoneNumber
 			tr
 				td Amount to Transfer
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdAmounttoTransfer
 			tr
 				td Currency you are Sending
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdCurrencySending
 			tr
 				td Currency Paid Out
 			tr
-				td
+				td 
 					input(type="text", name="pdCurrencyPaidOut", readonly="readonly").pdCurrencyPaidOut
 			tr
 				td Exchange Rate
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdExchangeRate
 			tr
 				td Transfer Fee
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTransferFee
 			tr
 				td Total Paid Out
 			tr
-				td
+				td 
 					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
 		a.btn.button.confirmFinal Confirm Payment
 	.cardExpired.hidden
@@ -193,14 +194,64 @@ block content
 	.cardCompleted.hidden
 		table
 			tr
-				td Your transaction is completed. Details as follows:
-			tr
-				td Transaction ID
-			tr
-				td
-					input(type="transactionID", name="transactionID", readonly="readonly").transactionID
-			tr
-				td Transaction ID
+				td Your transaction is completed. Please ensure you use the deposit reference to ensure we can track your funds in a timely manner and note that we do not accept cash deposits.
+			tr 
+				td Deposit Reference to Use			
 			tr
 				td
-					input(type="transactionID", name="transactionID", readonly="readonly").transactionID
+					input(type="DRreference", name="DRreference", readonly="readonly").DRreference
+			tr 
+				td Amount to Deposit			
+			tr
+				td
+					input(type="DRdepositAmount", name="DRdepositAmount", readonly="readonly").DRdepositAmount
+			tr
+				td Account Name
+			tr
+				td
+					input(type="DRaccountName", name="DRaccountName", readonly="readonly").DRaccountName
+			tr
+				td Currency
+			tr
+				td
+					input(type="DRcurrency", name="DRcurrency", readonly="readonly").DRcurrency
+			tr
+				td Bank
+			tr
+				td
+					input(type="DRbank", name="DRbank", readonly="readonly").DRbank
+			tr
+				td Account Number
+			tr
+				td
+					input(type="DRaccountNumber", name="DRaccountNumber", readonly="readonly").DRaccountNumber
+			tr
+				td Bank Country
+			tr
+				td
+					input(type="DRbankCountry", name="DRbankCountry", readonly="readonly").DRbankCountry
+			tr
+				td Branch Name
+			tr
+				td
+					input(type="DRbranchName", name="DRbranchName", readonly="readonly").DRbranchName
+			tr
+				td Swift Code
+			tr
+				td
+					input(type="DRswiftCode", name="DRswiftCode", readonly="readonly").DRswiftCode
+			tr
+				td Bank Code
+			tr
+				td
+					input(type="DRbankCode", name="DRbankCode", readonly="readonly").DRbankCode
+			tr
+				td Branch Code
+			tr
+				td
+					input(type="DRbranchCode", name="DRbranchCode", readonly="readonly").DRbranchCode
+			tr
+				td Bank Address
+			tr
+				td
+					input(type="DRbankAddress", name="DRbankAddress", readonly="readonly").DRbankAddress
