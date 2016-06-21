@@ -7,6 +7,7 @@
     "hashdo",
     "card",
     "poll",
+    "booking",
     "html",
     "info",
     "slider"
@@ -15,13 +16,15 @@
     "cuid": "1.3.8",
     "lodash": "4.6.1",
     "moment": "2.12.0",
-    "request": "2.69.0"
+    "request": "2.69.0",
+    "timekit-sdk": "^1.5.0"
   },
   "pack": {
     "friendlyName": "General",
     "cards": [
       "poll",
       "html",
+      "booking",
       "slider"
     ]
   }
