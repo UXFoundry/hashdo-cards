@@ -14,15 +14,12 @@
     border: none;
     z-index: 2;
     overflow: visible;
-    box-shadow: none;
 
     .hdc-content .hdc-inner {
       padding: 0;
       color: @card-text-color;
       transition: box-shadow .5s, transform .5s, -webkit-transform .5s;
       transform-style: preserve-3d;
-      border: 2px solid rgb(222, 222, 222);
-      border-radius: @card-border-radius;
       height: 320px;
 
       &.scale,
@@ -89,7 +86,7 @@
           padding: 2px (@card-padding - @inner-side-padding);
           text-transform: uppercase;
           text-align: center;
-          text-decoration: none;
+          text-decoration: none !important;
           color: @card-text-color;
           border-radius: 3px;
           vertical-align: middle;
@@ -116,13 +113,14 @@
         }
 
         a {
+          color: @card-text-color !important;
           &:hover {
-            color: @card-blue-color;
+            color: @card-blue-color !important;
           }
 
           &.selected {
             background-color: @card-blue-color;
-            color: white;
+            color: white !important;
           }
         }
 
@@ -200,6 +198,7 @@
         font-size: 13px;
         font-weight: 300;
         width: 100%;
+        box-sizing: border-box;
 
         &:active,
         &:focus {
