@@ -434,37 +434,43 @@ card.onReady = function () {
 
   // check localStorage if booking has already been made
   if (isBookingAllowed()) {
+
     setUpCreateBookingAction();
     setUpGoBackAction();
-    if (typeof Hammer === 'undefined') {
-      var disabledAmd = false;
 
-      if (typeof define == 'function' && define.amd) {
-        disabledAmd = true;
-        define.amd = false;
+    requireHammer();
+    requireTimekit();
+
+    function requireTimekit() {
+      if (typeof timekit === 'undefined') {
+        card.require('https://cdnjs.cloudflare.com/ajax/libs/timekit-js-sdk/1.5.0/timekit-sdk.min.js', function (success) {
+          requireTimekit();
+        });
+      } else {
+          setUpTimekit();
       }
+    }
 
-      card.require('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js', function () {
-        if (disabledAmd) {
-          define.amd = true;
+    function requireHammer() {
+      if (typeof Hammer === 'undefined') {
+        var disabledAmd = false;
+
+        if (typeof define == 'function' && define.amd) {
+          disabledAmd = true;
+          define.amd = false;
         }
 
+        card.require('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js', function () {
+          if (disabledAmd) {
+            define.amd = true;
+          }
+          requireHammer();
+        });
+      } else {
         setUpHammer($shiftMonths, monthClick);
         setUpHammer($shiftDays, dayClick);
         setUpHammer($shiftHours, hourClick);
-      });
-    } else {
-      setUpHammer($shiftMonths, monthClick);
-      setUpHammer($shiftDays, dayClick);
-      setUpHammer($shiftHours, hourClick);
-    }
-
-    if (typeof timekit === 'undefined') {
-      card.require('https://cdnjs.cloudflare.com/ajax/libs/timekit-js-sdk/1.5.0/timekit-sdk.min.js', function () {
-        setUpTimekit();
-      });
-    } else {
-        setUpTimekit();
+      }
     }
   }
 };
