@@ -37,7 +37,7 @@ card.onReady = function () {
         $inner = $shiftModule.find('.inner'),
         m_current = 0,                                  // current active margin-left
         m_last = 0,                                     // last recorded margin-left
-        m_min = $card.width() - $inner.width() - 4;     // minimum possible margin-left (4 is border width)
+        m_min = $card.width() - $inner.width() - 2;     // minimum possible margin-left
 
     $inner.css('margin-left', 0);                       // reset to default
 
