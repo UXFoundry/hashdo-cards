@@ -7,7 +7,6 @@ module.exports = {
   clientStateSupport: true,
 
   inputs: {
-    // Booking card config
     img: {
       example: 'http://interim.uxfoundry.co.za/img/intro/booking.jpg',
       description: 'main image URL',
@@ -18,11 +17,6 @@ module.exports = {
       description: 'Title of the booking company',
       required: true
     },
-    // timezone: {
-    //   example: +2,
-    //   description: 'Timezone of the booking company',
-    //   required: false
-    // },
     startHour: {
       example: 8,
       description: 'Starting working hour',
@@ -45,17 +39,17 @@ module.exports = {
       required: false
     },
     what: {
-      example: "Mens haircut",
+      example: 'Mens haircut',
       description: 'Type of booking service',
       required: false
     },
     where: {
-      example: "Sesame St, Middleburg, FL 32068, USA",
+      example: 'Sesame St, Middleburg, FL 32068, USA',
       description: 'Booking company location',
       required: false
     },
     description: {
-      example: "Please arrive 10 minutes before you time begin",
+      example: 'Please arrive 10 minutes before you time begin',
       description: 'Booking session description',
       required: false
     },
@@ -67,20 +61,20 @@ module.exports = {
       secure: false
     },
     userEmail: {
-      example: 'rogic89@gmail.com',
+      example: 'email@gmail.com',
       description: 'Email of the user performing the booking action',
       required: false,
       secure: false
     },
     // Client timekit data
     timekitAppName: {
-      example: 'hashdo-booking',
+      example: 'booking-app',
       description: 'Name of the timekit app',
       required: true,
       secure: true
     },
     timekitEmail: {
-      example: 'ivan.rogic@toptal.com',
+      example: 'email@gmail.com',
       description: 'Email of timekit user account',
       required: true,
       secure: true
