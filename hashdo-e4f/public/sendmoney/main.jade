@@ -191,7 +191,7 @@ block content
 		table
 			tr
 				td Your transaction session has expired. Please note that due to security restrictions, the time from commencing the transaction to completion must be within a 10 minute window. Please re-create your transaction.
-	.cardCompleted.hidden
+	.cardCompletedEFT.hidden
 		table
 			tr
 				td Your transaction is completed. Please ensure you use the deposit reference to ensure we can track your funds in a timely manner and note that we do not accept cash deposits.
@@ -255,3 +255,12 @@ block content
 			tr
 				td
 					input(type="DRbankAddress", name="DRbankAddress", readonly="readonly").DRbankAddress
+	.cardCompletedCC.hidden
+		table
+			tr
+				td Your transaction is completed and has been processed via Credit Card.
+			tr 
+				td Transaction Reference			
+			tr
+				td
+					input(type="CCReference", name="CCReference", readonly="readonly").CCReference

@@ -55,7 +55,7 @@ module.exports = {
         };
 
         var clientLocals = {
-          userID: inputs.LoggedInUserID,
+          userID: inputs.E4FUserId,
           stateData: state.localData
         };
 
@@ -92,7 +92,7 @@ module.exports = {
         payOutCountries: dataIn.e4f_getPayOutCountries
       };
       var clientLocals = {
-        userID: inputs.LoggedInUserID
+        userID: inputs.E4FUserId
       };
       callback(null, viewModel, clientLocals);
 
