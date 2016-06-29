@@ -879,6 +879,8 @@ card.onReady = function () {
 
   function processConditions(questionIndex) {
     var question = getQuestion(questionIndex),
+      ands = false,
+      ors = false,
       skip = false;
 
     if (question && _lodash_survey.isArray(question.conditions)) {
@@ -892,16 +894,20 @@ card.onReady = function () {
       // ands
       if (_lodash_survey.isArray(results.and)) {
         if (results.and.indexOf(false) > -1) {
-          skip = true;
+          ands = true;
         }
       }
 
       // ors
       if (!skip && _lodash_survey.isArray(results.or)) {
         if (results.or.indexOf(true) === -1) {
-          skip = true;
+          ors = true;
         }
       }
+    }
+
+    if (ands && ors) {
+      skip = true;
     }
 
     return skip;
