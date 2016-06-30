@@ -48,11 +48,11 @@
   font-size: 18px;
   font-weight: normal;
 }
-.hdc.e4f.sendmoney h1.title{
-	font-weight: bold;
-	margin-top: 0;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #E6E6E6;
+.hdc.e4f.sendmoney h1.title {
+  font-weight: bold;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E6E6E6;
 }
 .hdc.e4f.sendmoney select {
   background-color: #fff;
@@ -77,11 +77,10 @@
   width: 100%;
   box-sizing: border-box;
 }
-.hdc.e4f.sendmoney input[type="checkbox"]{
-	width: auto;
-	margin: 5px 6px 0 0;
+.hdc.e4f.sendmoney input[type="checkbox"] {
+  width: auto;
+  margin: 5px 6px 0 0;
 }
-
 .hdc.e4f.sendmoney .btn {
   background: #f8bc44;
   border: none;
@@ -112,15 +111,13 @@
   font-family: arial, helvetica;
   font-size: 16px;
 }
-
-.hdc table{
-	margin-top: 5px;
-	width: 100%;
+.hdc table {
+  margin-top: 5px;
+  width: 100%;
 }
-
 .hdc table tr td {
   padding: 0 0 4px;
 }
-.hdc .termsandConditions table{
-	margin-top: -10px;
+.hdc .termsandConditions table {
+  margin-top: -10px;
 }
