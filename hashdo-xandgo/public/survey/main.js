@@ -879,8 +879,8 @@ card.onReady = function () {
 
   function processConditions(questionIndex) {
     var question = getQuestion(questionIndex),
-      skipAnds = false,
-      skipOrs = false,
+      ands = true,
+      ors = true,
       skip = false;
 
     if (question && _lodash_survey.isArray(question.conditions)) {
@@ -896,25 +896,25 @@ card.onReady = function () {
 
       // ands
       if (results.and.indexOf(false) > -1) {
-        skipAnds = true;
+        ands = false;
       }
 
       // ors
-      if (results.or.indexOf(true) === -1) {
-        skipOrs = true;
-      }
+      if (results.or.length > 0) {
+        var falseCount = 0;
 
-      if (results.and.length > 0 && results.or.length > 0) {
-        if (skipAnds && skipOrs) {
-          skip = true;
+        for (var i = 0; i < results.or.length; i++) {
+          if (!results.or[i]) {
+            falseCount++;
+          }
+        }
+
+        if (falseCount === results.or.length) {
+          ors = false;
         }
       }
-      else if (results.and.length > 0) {
-        skip = skipAnds;
-      }
-      else if (results.or.length > 0) {
-        skip = skipOrs;
-      }
+
+      skip = !(ands && ors);
     }
 
     return skip;
