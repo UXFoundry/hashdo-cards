@@ -1,8 +1,8 @@
 extends /card
 
 block content
-	link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
-	h1 Send Money
+	//link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
+	h1.title Send Money
 	.payInCountryBlock.hidden
 		h1 Pay In Details
 		div
@@ -93,9 +93,12 @@ block content
 		table
 			tr
 				td
-					input(type='checkbox', checked=false, name='term1Accept').term1
+					
 			tr
-				td I confirm that the source of funds provided above is correct, commit to the exchange rate which is fixed and can't be changed and have read and agree to the Terms and Conditions of Exchange4free"
+				td
+					label
+						input(type='checkbox', checked=false, name='term1Accept').term1
+						| I confirm that the source of funds provided above is correct, commit to the exchange rate which is fixed and can't be changed and have read and agree to the Terms and Conditions of Exchange4free"
 		select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
 			option(value='default') Are you the Beneficiary Funds Owner?
 			option(value='yes') Yes
