@@ -8,8 +8,9 @@ block content
 		div
 			select(id='payIn',name='payInCountries').payInCountrySelect
 				option(value='Default') Select Pay In Country
-				each payInCountry in payInCountries
-					option(value=payInCountry.sourceCountryCode) #{payInCountry.sourceCountryName}
+				if payInCountries
+					each payInCountry in payInCountries
+						option(value=payInCountry.sourceCountryCode) #{payInCountry.sourceCountryName}
 	.payInCurrencyBlock.hidden
 		.currencyIn
 			select(id='payInCurrencies',name='payInCurrencies').payInCurrencySelect
@@ -20,8 +21,9 @@ block content
 		h1 Pay Out Details
 		select(id='payOut',name='payOutCountries').payOutCountrySelect
 			option(value='Default') Select Pay Out Country
-			each payOutCountry in payOutCountries
-				option(value=payOutCountry.destinationCountryCode) #{payOutCountry.destinationCountryName}
+      if payOutCountries
+        each payOutCountry in payOutCountries
+          option(value=payOutCountry.destinationCountryCode) #{payOutCountry.destinationCountryName}
 	.payOutCurrencyBlock.hidden
 		.currencyOut
 			select(id='payOutCurrencies',name='payOutCurrencies').payOutCurrencySelect
