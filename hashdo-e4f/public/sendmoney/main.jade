@@ -1,266 +1,271 @@
 extends /card
 
 block content
-	link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
-	h1 Send Money
-	.payInCountryBlock.hidden
-		h1 Pay In Details
-		div
-			select(id='payIn',name='payInCountries').payInCountrySelect
-				option(value='Default') Select Pay In Country
-				each payInCountry in payInCountries
-					option(value=payInCountry.sourceCountryCode) #{payInCountry.sourceCountryName}
-	.payInCurrencyBlock.hidden
-		.currencyIn
-			select(id='payInCurrencies',name='payInCurrencies').payInCurrencySelect
-	.payInMethodBlock.hidden
-		.paymethodIn
-			select(id='paymethodIn',name='paymethodIn').paymethodInSelect
-	.payOutCountryBlock.hidden
-		h1 Pay Out Details
-		select(id='payOut',name='payOutCountries').payOutCountrySelect
-			option(value='Default') Select Pay Out Country
-			each payOutCountry in payOutCountries
-				option(value=payOutCountry.destinationCountryCode) #{payOutCountry.destinationCountryName}
-	.payOutCurrencyBlock.hidden
-		.currencyOut
-			select(id='payOutCurrencies',name='payOutCurrencies').payOutCurrencySelect
-	.payOutMethodBlock.hidden
-		.paymethodOut
-			select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
-	.payOptionBlock.hidden
-		h1 Amount Options
-		select(id='payOption',name='payOption').payOption
-			option(value='default') Select Rate Option
-			option(value='0') Sending Amount
-			option(value='1') Receiving Amount
-		br
-	.getQuoteBlock.hidden
-		input(type="text", name="payValue").payValue
-		a.btn.button.getQuote Get Quote
-	.quoteResults.hidden
-		table
-			tr
-				td TransferFee
-			tr
-				td 
-					input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
-			tr
-				td Rate
-			tr
-				td 
-					input(type="text", name="Rate", readonly="readonly").exchangeRateValue
-			tr
-				td Amount
-			tr
-				td 
-					input(type="text", name="Amount", readonly="readonly").AmountValue
-	.acceptQuote.hidden
-		a.btn.button.acceptQuoteButton Accept Quote
-	.beneficiary.hidden
-		h1 Beneficiary Information
-		select(id='beneficiaryOption',name='beneficiaryOption').beneficiaryOption
-	.beneficiaryConfirmation.hidden
-		h2 Confirm Beneficiary Information
-		table
-			tr
-				td Bank Name
-			tr
-				td 
-					input(type="text", name="beneficiaryBankName", readonly="readonly").beneficiaryBankName
-			tr
-				td Account Number
-			tr
-				td 
-					input(type="text", name="beneficiaryAccountNumber", readonly="readonly").beneficiaryAccountNumber
-			tr
-				td Branch Code
-			tr
-				td 
-					input(type="text", name="beneficiaryBranchCode", readonly="readonly").beneficiaryBranchCode
-			tr
-				td Bank Country
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").beneficiaryBankCountry
-	.beneficiaryAccept.hidden
-		a.btn.button.acceptBeneficiary Accept Beneficary
-	.finalTransferReason.hidden
-		select(id='finalTransferReason',name='finalTransferReason').finalTransferReasonSelect
-	.finalSourceofFunds.hidden
-		select(id='finalSourceofFunds',name='finalSourceofFunds').finalSourceofFundsSelect
-	.termsandConditions.hidden
-		table
-			tr
-				td
-					input(type='checkbox', checked=false, name='term1Accept').term1
-			tr
-				td I confirm that the source of funds provided above is correct, commit to the exchange rate which is fixed and can't be changed and have read and agree to the Terms and Conditions of Exchange4free"
-		select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
-			option(value='default') Are you the Beneficiary Funds Owner?
-			option(value='yes') Yes
-			option(value='no') No
-		.beneficiaryFundsOwnerInformation.hidden
-			select(id='entityType', name='entityType').entityType
-				option(value='default') Entity Type?
-				option(value='1') Person
-				option(value='2') Entity
-			select(id='beneficiaryFundsOwnerInformationCountry', name='beneficiaryFundsOwnerInformationCountry').beneficiaryFundsOwnerInformationCountry
-			table
-				tr
-					td Address
-					td
-						input(type="beneficiaryFundsOwnerInformationAddress", name="beneficiaryFundsOwnerInformationAddress").beneficiaryFundsOwnerInformationAddress
-				tr
-					td Firstname
-					td
-						input(type="beneficiaryFundsOwnerInformationNames", name="beneficiaryFundsOwnerInformationName").beneficiaryFundsOwnerInformationName
-				tr
-					td Surname
-					td
-						input(type="beneficiaryFundsOwnerInformationSurname", name="beneficiaryFundsOwnerInformationSurname").beneficiaryFundsOwnerInformationSurname
-				tr
-					td Date of Birth/Incorporation
-					td
-						input(type="beneficiaryFundsOwnerInformationdob", name="beneficiaryFundsOwnerInformationdob").beneficiaryFundsOwnerInformationdob
-				tr
-					td Email
-					td
-						input(type="beneficiaryFundsOwnerInformationemail", name="beneficiaryFundsOwnerInformationemail").beneficiaryFundsOwnerInformationemail
-			.benCompany.hidden
-				table
-					tr
-						td Registration Number
-						td
-							input(type="beneficiaryFundsOwnerInformationregNo", name="beneficiaryFundsOwnerInformationregNo").beneficiaryFundsOwnerInformationregNo
-					tr
-						td Contact Person
-						td
-							input(type="beneficiaryFundsOwnerInformationcantact", name="beneficiaryFundsOwnerInformationcantact").beneficiaryFundsOwnerInformationcantact
-			a.btn.button.beneficiaryOwnerConfirm Confirm Beneficary Owner
-	.paymentDetails.hidden
-		h1 Payment Details
-		table
-			tr
-				td Enter Reference to Appear
-			tr
-				td 
-					input(type="text", name="beneficiaryReference").pdReferenceToAppear
-			tr
-				td Beneficiary Name
-			tr
-				td 
-					input(type="text", name="beneficiaryName", readonly="readonly").pdBeneficiaryName
-			tr
-				td Phone Number
-			tr
-				td 
-					input(type="text", name="beneficiaryPhoneNumber", readonly="readonly").pdPhoneNumber
-			tr
-				td Amount to Transfer
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdAmounttoTransfer
-			tr
-				td Currency you are Sending
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdCurrencySending
-			tr
-				td Currency Paid Out
-			tr
-				td 
-					input(type="text", name="pdCurrencyPaidOut", readonly="readonly").pdCurrencyPaidOut
-			tr
-				td Exchange Rate
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdExchangeRate
-			tr
-				td Transfer Fee
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTransferFee
-			tr
-				td Total Paid Out
-			tr
-				td 
-					input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
-		a.btn.button.confirmFinal Confirm Payment
-	.cardExpired.hidden
-		table
-			tr
-				td Your transaction session has expired. Please note that due to security restrictions, the time from commencing the transaction to completion must be within a 10 minute window. Please re-create your transaction.
-	.cardCompletedEFT.hidden
-		table
-			tr
-				td Your transaction is completed. Please ensure you use the deposit reference to ensure we can track your funds in a timely manner and note that we do not accept cash deposits.
-			tr 
-				td Deposit Reference to Use			
-			tr
-				td
-					input(type="DRreference", name="DRreference", readonly="readonly").DRreference
-			tr 
-				td Amount to Deposit			
-			tr
-				td
-					input(type="DRdepositAmount", name="DRdepositAmount", readonly="readonly").DRdepositAmount
-			tr
-				td Account Name
-			tr
-				td
-					input(type="DRaccountName", name="DRaccountName", readonly="readonly").DRaccountName
-			tr
-				td Currency
-			tr
-				td
-					input(type="DRcurrency", name="DRcurrency", readonly="readonly").DRcurrency
-			tr
-				td Bank
-			tr
-				td
-					input(type="DRbank", name="DRbank", readonly="readonly").DRbank
-			tr
-				td Account Number
-			tr
-				td
-					input(type="DRaccountNumber", name="DRaccountNumber", readonly="readonly").DRaccountNumber
-			tr
-				td Bank Country
-			tr
-				td
-					input(type="DRbankCountry", name="DRbankCountry", readonly="readonly").DRbankCountry
-			tr
-				td Branch Name
-			tr
-				td
-					input(type="DRbranchName", name="DRbranchName", readonly="readonly").DRbranchName
-			tr
-				td Swift Code
-			tr
-				td
-					input(type="DRswiftCode", name="DRswiftCode", readonly="readonly").DRswiftCode
-			tr
-				td Bank Code
-			tr
-				td
-					input(type="DRbankCode", name="DRbankCode", readonly="readonly").DRbankCode
-			tr
-				td Branch Code
-			tr
-				td
-					input(type="DRbranchCode", name="DRbranchCode", readonly="readonly").DRbranchCode
-			tr
-				td Bank Address
-			tr
-				td
-					input(type="DRbankAddress", name="DRbankAddress", readonly="readonly").DRbankAddress
-	.cardCompletedCC.hidden
-		table
-			tr
-				td Your transaction is completed and has been processed via Credit Card.
-			tr 
-				td Transaction Reference			
-			tr
-				td
-					input(type="CCReference", name="CCReference", readonly="readonly").CCReference
+  link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
+  h1.title Send Money
+  .payInCountryBlock.hidden
+    h1 Pay In Details
+    div
+      select(id='payIn',name='payInCountries').payInCountrySelect
+        option(value='Default') Select Pay In Country
+        if payInCountries
+          each payInCountry in payInCountries
+            option(value=payInCountry.sourceCountryCode) #{payInCountry.sourceCountryName}
+  .payInCurrencyBlock.hidden
+    .currencyIn
+      select(id='payInCurrencies',name='payInCurrencies').payInCurrencySelect
+  .payInMethodBlock.hidden
+    .paymethodIn
+      select(id='paymethodIn',name='paymethodIn').paymethodInSelect
+  .payOutCountryBlock.hidden
+    h1 Pay Out Details
+    select(id='payOut',name='payOutCountries').payOutCountrySelect
+      option(value='Default') Select Pay Out Country
+      if payOutCountries
+        each payOutCountry in payOutCountries
+          option(value=payOutCountry.destinationCountryCode) #{payOutCountry.destinationCountryName}
+  .payOutCurrencyBlock.hidden
+    .currencyOut
+      select(id='payOutCurrencies',name='payOutCurrencies').payOutCurrencySelect
+  .payOutMethodBlock.hidden
+    .paymethodOut
+      select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
+  .payOptionBlock.hidden
+    h1 Amount Options
+    select(id='payOption',name='payOption').payOption
+      option(value='default') Select Rate Option
+      option(value='0') Sending Amount
+      option(value='1') Receiving Amount
+    br
+  .getQuoteBlock.hidden
+    input(type="text", name="payValue").payValue
+    a.btn.button.getQuote Get Quote
+  .quoteResults.hidden
+    table
+      tr
+        td TransferFee
+      tr
+        td
+          input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
+      tr
+        td Rate
+      tr
+        td
+          input(type="text", name="Rate", readonly="readonly").exchangeRateValue
+      tr
+        td Amount
+      tr
+        td
+          input(type="text", name="Amount", readonly="readonly").AmountValue
+  .acceptQuote.hidden
+    a.btn.button.acceptQuoteButton Accept Quote
+  .beneficiary.hidden
+    h1 Beneficiary Information
+    select(id='beneficiaryOption',name='beneficiaryOption').beneficiaryOption
+  .beneficiaryConfirmation.hidden
+    h2 Confirm Beneficiary Information
+    table
+      tr
+        td Bank Name
+      tr
+        td
+          input(type="text", name="beneficiaryBankName", readonly="readonly").beneficiaryBankName
+      tr
+        td Account Number
+      tr
+        td
+          input(type="text", name="beneficiaryAccountNumber", readonly="readonly").beneficiaryAccountNumber
+      tr
+        td Branch Code
+      tr
+        td
+          input(type="text", name="beneficiaryBranchCode", readonly="readonly").beneficiaryBranchCode
+      tr
+        td Bank Country
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").beneficiaryBankCountry
+  .beneficiaryAccept.hidden
+    a.btn.button.acceptBeneficiary Accept Beneficary
+  .finalTransferReason.hidden
+    select(id='finalTransferReason',name='finalTransferReason').finalTransferReasonSelect
+  .finalSourceofFunds.hidden
+    select(id='finalSourceofFunds',name='finalSourceofFunds').finalSourceofFundsSelect
+  .termsandConditions.hidden
+    table
+      tr
+        td
+
+      tr
+        td
+          label
+            input(type='checkbox', checked=false, name='term1Accept').term1
+            | I confirm that the source of funds provided above is correct, commit to the exchange rate which is fixed and can't be changed and have read and agree to the Terms and Conditions of Exchange4free"
+    select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
+      option(value='default') Are you the Beneficiary Funds Owner?
+      option(value='yes') Yes
+      option(value='no') No
+    .beneficiaryFundsOwnerInformation.hidden
+      select(id='entityType', name='entityType').entityType
+        option(value='default') Entity Type?
+        option(value='1') Person
+        option(value='2') Entity
+      select(id='beneficiaryFundsOwnerInformationCountry', name='beneficiaryFundsOwnerInformationCountry').beneficiaryFundsOwnerInformationCountry
+      table
+        tr
+          td Address
+          td
+            input(type="beneficiaryFundsOwnerInformationAddress", name="beneficiaryFundsOwnerInformationAddress").beneficiaryFundsOwnerInformationAddress
+        tr
+          td Firstname
+          td
+            input(type="beneficiaryFundsOwnerInformationNames", name="beneficiaryFundsOwnerInformationName").beneficiaryFundsOwnerInformationName
+        tr
+          td Surname
+          td
+            input(type="beneficiaryFundsOwnerInformationSurname", name="beneficiaryFundsOwnerInformationSurname").beneficiaryFundsOwnerInformationSurname
+        tr
+          td Date of Birth/Incorporation
+          td
+            input(type="beneficiaryFundsOwnerInformationdob", name="beneficiaryFundsOwnerInformationdob").beneficiaryFundsOwnerInformationdob
+        tr
+          td Email
+          td
+            input(type="beneficiaryFundsOwnerInformationemail", name="beneficiaryFundsOwnerInformationemail").beneficiaryFundsOwnerInformationemail
+      .benCompany.hidden
+        table
+          tr
+            td Registration Number
+            td
+              input(type="beneficiaryFundsOwnerInformationregNo", name="beneficiaryFundsOwnerInformationregNo").beneficiaryFundsOwnerInformationregNo
+          tr
+            td Contact Person
+            td
+              input(type="beneficiaryFundsOwnerInformationcantact", name="beneficiaryFundsOwnerInformationcantact").beneficiaryFundsOwnerInformationcantact
+      a.btn.button.beneficiaryOwnerConfirm Confirm Beneficary Owner
+  .paymentDetails.hidden
+    h1 Payment Details
+    table
+      tr
+        td Enter Reference to Appear
+      tr
+        td
+          input(type="text", name="beneficiaryReference").pdReferenceToAppear
+      tr
+        td Beneficiary Name
+      tr
+        td
+          input(type="text", name="beneficiaryName", readonly="readonly").pdBeneficiaryName
+      tr
+        td Phone Number
+      tr
+        td
+          input(type="text", name="beneficiaryPhoneNumber", readonly="readonly").pdPhoneNumber
+      tr
+        td Amount to Transfer
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdAmounttoTransfer
+      tr
+        td Currency you are Sending
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdCurrencySending
+      tr
+        td Currency Paid Out
+      tr
+        td
+          input(type="text", name="pdCurrencyPaidOut", readonly="readonly").pdCurrencyPaidOut
+      tr
+        td Exchange Rate
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdExchangeRate
+      tr
+        td Transfer Fee
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTransferFee
+      tr
+        td Total Paid Out
+      tr
+        td
+          input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
+    a.btn.button.confirmFinal Confirm Payment
+  .cardExpired.hidden
+    table
+      tr
+        td Your transaction session has expired. Please note that due to security restrictions, the time from commencing the transaction to completion must be within a 10 minute window. Please re-create your transaction.
+  .cardCompletedEFT.hidden
+    table
+      tr
+        td Your transaction is completed. Please ensure you use the deposit reference to ensure we can track your funds in a timely manner and note that we do not accept cash deposits.
+      tr
+        td Deposit Reference to Use
+      tr
+        td
+          input(type="DRreference", name="DRreference", readonly="readonly").DRreference
+      tr
+        td Amount to Deposit
+      tr
+        td
+          input(type="DRdepositAmount", name="DRdepositAmount", readonly="readonly").DRdepositAmount
+      tr
+        td Account Name
+      tr
+        td
+          input(type="DRaccountName", name="DRaccountName", readonly="readonly").DRaccountName
+      tr
+        td Currency
+      tr
+        td
+          input(type="DRcurrency", name="DRcurrency", readonly="readonly").DRcurrency
+      tr
+        td Bank
+      tr
+        td
+          input(type="DRbank", name="DRbank", readonly="readonly").DRbank
+      tr
+        td Account Number
+      tr
+        td
+          input(type="DRaccountNumber", name="DRaccountNumber", readonly="readonly").DRaccountNumber
+      tr
+        td Bank Country
+      tr
+        td
+          input(type="DRbankCountry", name="DRbankCountry", readonly="readonly").DRbankCountry
+      tr
+        td Branch Name
+      tr
+        td
+          input(type="DRbranchName", name="DRbranchName", readonly="readonly").DRbranchName
+      tr
+        td Swift Code
+      tr
+        td
+          input(type="DRswiftCode", name="DRswiftCode", readonly="readonly").DRswiftCode
+      tr
+        td Bank Code
+      tr
+        td
+          input(type="DRbankCode", name="DRbankCode", readonly="readonly").DRbankCode
+      tr
+        td Branch Code
+      tr
+        td
+          input(type="DRbranchCode", name="DRbranchCode", readonly="readonly").DRbranchCode
+      tr
+        td Bank Address
+      tr
+        td
+          input(type="DRbankAddress", name="DRbankAddress", readonly="readonly").DRbankAddress
+  .cardCompletedCC.hidden
+    table
+      tr
+        td Your transaction is completed and has been processed via Credit Card.
+      tr
+        td Transaction Reference
+      tr
+        td
+          input(type="CCReference", name="CCReference", readonly="readonly").CCReference

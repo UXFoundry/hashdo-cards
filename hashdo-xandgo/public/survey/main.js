@@ -879,6 +879,8 @@ card.onReady = function () {
 
   function processConditions(questionIndex) {
     var question = getQuestion(questionIndex),
+      ands = true,
+      ors = true,
       skip = false;
 
     if (question && _lodash_survey.isArray(question.conditions)) {
@@ -889,19 +891,30 @@ card.onReady = function () {
         results[question.conditions[i].operator].push(validateCondition(question.conditions[i]));
       }
 
+      results.and = results.and || [];
+      results.or = results.or || [];
+
       // ands
-      if (_lodash_survey.isArray(results.and)) {
-        if (results.and.indexOf(false) > -1) {
-          skip = true;
-        }
+      if (results.and.indexOf(false) > -1) {
+        ands = false;
       }
 
       // ors
-      if (!skip && _lodash_survey.isArray(results.or)) {
-        if (results.or.indexOf(true) === -1) {
-          skip = true;
+      if (results.or.length > 0) {
+        var falseCount = 0;
+
+        for (var i = 0; i < results.or.length; i++) {
+          if (!results.or[i]) {
+            falseCount++;
+          }
+        }
+
+        if (falseCount === results.or.length) {
+          ors = false;
         }
       }
+
+      skip = !(ands && ors);
     }
 
     return skip;

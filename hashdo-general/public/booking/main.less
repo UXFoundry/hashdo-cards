@@ -1,0 +1,309 @@
+@card-padding: 10px;
+@card-text-color: rgb(77, 77, 77);
+@card-light-gray-color: rgb(204, 204, 204);
+@card-gray-color: rgb(153, 153, 153);
+@card-red-color: rgb(226, 34, 34);
+@card-blue-color: rgb(0, 124, 255);
+@card-medium-blue-color: rgb(55, 153, 255);
+@card-light-blue-color: rgb(201, 228, 255);
+@card-border-radius: 4px;
+@card-image-height: 132px;
+
+.hdc {
+  &.general.booking {
+    border: none;
+    z-index: 2;
+    overflow: visible;
+
+    .hdc-content .hdc-inner {
+      padding: 0;
+      color: @card-text-color;
+      transition: box-shadow .5s, transform .5s, -webkit-transform .5s;
+      transform-style: preserve-3d;
+      height: 320px;
+
+      &.scale,
+      &.flip.scale {
+        box-shadow: 0 0 15px rgba(0,0,0,.2);
+      }
+
+      &.flip,
+      & > .back {
+        transform: rotateY(180deg);
+      }
+
+      & > div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+        overflow: hidden;
+        border-radius: @card-border-radius - 2;
+      }
+    }
+
+    .heading-img {
+      background-size: cover !important;
+      height: @card-image-height;
+      width: 100%;
+    }
+
+    .card-heading {
+      padding: @card-padding;
+    }
+
+    .shifting-select {
+      box-sizing: border-box;
+      border-top: 1px dashed @card-light-gray-color;
+      height: 32px;
+      position: relative;
+      width: 1000%;
+      transition: background-color .4s ease-in-out;
+
+      & + .block {
+        border-top: 1px dashed @card-light-gray-color;
+      }
+
+      &.changed {
+        background-color: @card-light-blue-color;
+      }
+
+      .inner {
+        @inner-side-padding: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 30px;
+        padding: 5px @inner-side-padding 0;
+
+        a, div, span {
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: 300;
+          padding: 2px (@card-padding - @inner-side-padding);
+          text-transform: uppercase;
+          text-align: center;
+          text-decoration: none !important;
+          color: @card-text-color;
+          border-radius: 3px;
+          vertical-align: middle;
+          user-drag: none;
+          -webkit-user-drag: none;
+          user-select: none;
+          transition: color .2s ease-in-out,
+                      background .2s ease-in-out;
+
+          /* need 1px separation because of unavailable hour */
+          margin-left: 1px;
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+
+        span {
+          text-transform: initial;
+          &.unavailable {
+            background-color: @card-red-color;
+            cursor: not-allowed;
+            color: white;
+          }
+        }
+
+        a {
+          color: @card-text-color !important;
+          &:hover {
+            color: @card-blue-color !important;
+          }
+
+          &.selected {
+            background-color: @card-blue-color;
+            color: white !important;
+          }
+        }
+
+        div {
+          color: @card-gray-color;
+          font-size: 11px;
+        }
+      }
+    }
+
+    .make-booking {
+      box-sizing: border-box;
+      display: table;
+      cursor: pointer;
+      width: 100%;
+      padding: @card-padding;
+      border-top: 1px dashed @card-light-gray-color;
+      transition: opacity .2s ease-in-out;
+
+      span {
+        font-weight: 300;
+        display: table-cell;
+
+        & + span {
+          text-align: right;
+        }
+      }
+
+      &:hover {
+        color: @card-blue-color;
+      }
+
+      &.disabled {
+        opacity: .5;
+        color: inherit;
+        cursor: default;
+      }
+    }
+
+    h2, h3, h4, h5 {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    h4, h5 {
+      font-weight: 300;
+    }
+
+    h2.booking-summary {
+      padding: @card-padding;
+      .date {
+        font-weight: 400;
+      }
+      .time {
+        color: @card-blue-color;
+      }
+    }
+
+    form {
+      display: block;
+      padding: @card-padding;
+      margin-bottom: 0;
+      border-bottom: 1px dashed @card-light-gray-color;
+
+      input {
+        border-radius: 3px;
+        border: 1px solid rgb(220, 220, 220);
+        padding: 4.5px 6px;
+        outline: none;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s linear;
+        display: block;
+        font-size: 13px;
+        font-weight: 300;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:active,
+        &:focus {
+          border-color: @card-medium-blue-color;
+          box-shadow: 0 1px 2px rgba(107, 165, 213, 0.15);
+        }
+
+        &.invalid {
+          border-color: rgb(247, 129, 129);
+        }
+
+        & + input {
+          margin-top: .5em;
+        }
+      }
+    }
+
+    button {
+      border-radius: 3px;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+      padding: 6px 10px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+      outline: none;
+
+      &.btn-white {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom-color: rgba(0, 0, 0, 0.15);
+        border-top-color: rgba(0, 0, 0, 0.02);
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.07);
+        background: rgb(250, 250, 250);
+        background: linear-gradient(top, rgb(255, 255, 255), rgb(240, 240, 240));
+      }
+
+      &.btn-blue {
+        color: white;
+        border: 1px solid rgb(43, 121, 239);
+        border-top-color: rgb(24, 136, 255);
+        border-bottom-color: rgb(53, 111, 199);
+        background: @card-blue-color;
+        background: linear-gradient(top, rgb(44, 147, 255), rgb(0, 103, 212));
+      }
+
+      &.btn-green {
+        color: white;
+        border: 1px solid rgb(85, 195, 49);
+        border-top-color: rgb(82, 207, 82);
+        border-bottom-color: rgb(57, 186, 57);
+        background: rgb(51, 199, 42);
+        background: linear-gradient(top, rgb(109, 218, 63), rgb(41, 190, 48));
+      }
+
+      &.btn-red {
+        color: white;
+        border: 1px solid rgb(195, 49, 49);
+        border-top-color: rgb(207, 82, 82);
+        border-bottom-color: rgb(186, 57, 57);
+        background: rgb(197, 46, 46);
+        background: linear-gradient(top, rgb(218, 63, 63), rgb(190, 41, 41));
+      }
+
+      &:hover {
+        opacity: .9;
+      }
+
+      &.disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+    }
+
+    .back-block {
+      margin-top: @card-padding / 2;
+      text-align: center;
+      padding: @card-padding;
+      padding-top: 0;
+
+      button {
+        display: inline-block;
+        vertical-align: middle;
+
+        &.block {
+          width: 100% !important;
+        }
+
+        &.hide {
+          display: none;
+        }
+
+        &.btn-white {
+          width: 15%;
+        }
+
+        &.btn-blue {
+          width: 80%;
+        }
+
+        &.btn-red,
+        &.btn-green {
+          width: 47.5%;
+        }
+
+        &.btn-red,
+        &.btn-white {
+          margin-right: 5%;
+        }
+      }
+    }
+
+  }
+}

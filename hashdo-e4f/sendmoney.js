@@ -118,7 +118,9 @@ module.exports = {
             request.post(url, {json: true, body: args}, function (err, res, body) {
               if (!err && res.statusCode === 200) {
                 var sourceCountries = res.body.returnData;
-                sourceCountries.sort(sortPayInCountriesbyName);
+                if (sourceCountries) {
+                  sourceCountries.sort(sortPayInCountriesbyName);
+                }
                 callback(null, sourceCountries);
               }
             });
@@ -133,7 +135,9 @@ module.exports = {
             request.post(url, {json: true, body: args}, function (err, res, body) {
               if (!err && res.statusCode === 200) {
                 var destinationCountries = res.body.returnData;
-                destinationCountries.sort(sortPayOutCountriesbyName);
+                if (destinationCountries) {
+                  destinationCountries.sort(sortPayOutCountriesbyName);
+                }
                 callback(null, destinationCountries);
               }
             });

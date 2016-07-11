@@ -1,0 +1,54 @@
+extends /card
+
+block content
+
+  //- front of the card
+  div.front
+    .heading-img(style='background: no-repeat url(' + locals.img + ') center center;')
+
+    .card-heading
+      h3= locals.title
+      h5= 'Make a booking enquiry'
+
+    .shifting-select.months
+      .inner
+        each month in locals.months
+          if month.name
+            a(data-index=month.index data-date=month.date href="#")= month.name
+          else
+            div=month
+
+    .shifting-select.days
+      .inner
+        - for (var i=1; i<=30; i++) {
+            a(href="#")= i
+        - }
+
+    .shifting-select.hours
+      .inner
+        each hour in locals.hours
+          a(href="#")= hour
+
+
+    div.make-booking.disabled
+      span= 'Make booking'
+      span= '>'
+
+  //- back of the card
+  div.back
+    .heading-img(style='background: no-repeat url(' + locals.img + ') center center;')
+    form
+      input(type='text', id='name' placeholder='Name' value=locals.userName)
+      input(type='email', id='email' placeholder='Email' value=locals.userEmail)
+
+    .back-block
+      h4.light="You've requested a booking on"
+      h2.booking-summary
+        span.date=""
+        span=" "
+        span.time=""
+
+      div
+        button.btn-white.go-back#sec= '<'
+        button.btn-blue#pri= 'Create'
+
