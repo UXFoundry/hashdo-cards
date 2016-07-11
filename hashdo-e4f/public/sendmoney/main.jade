@@ -38,7 +38,7 @@ block content
       option(value='1') Receiving Amount
     br
   .getQuoteBlock.hidden
-    input(type="text", name="payValue").payValue
+    input(type="text", name="payValue" placeholder="Amount").payValue
     a.btn.button.getQuote Get Quote
   .quoteResults.hidden
     table
@@ -91,6 +91,12 @@ block content
     select(id='finalTransferReason',name='finalTransferReason').finalTransferReasonSelect
   .finalSourceofFunds.hidden
     select(id='finalSourceofFunds',name='finalSourceofFunds').finalSourceofFundsSelect
+    table
+			tr
+				td Enter Reference to Appear
+			tr
+				td 
+					input(type="text", name="beneficiaryReference").pdReferenceToAppear
   .termsandConditions.hidden
     table
       tr
@@ -144,13 +150,8 @@ block content
               input(type="beneficiaryFundsOwnerInformationcantact", name="beneficiaryFundsOwnerInformationcantact").beneficiaryFundsOwnerInformationcantact
       a.btn.button.beneficiaryOwnerConfirm Confirm Beneficary Owner
   .paymentDetails.hidden
-    h1 Payment Details
+    h1 Trade Confirmation
     table
-      tr
-        td Enter Reference to Appear
-      tr
-        td
-          input(type="text", name="beneficiaryReference").pdReferenceToAppear
       tr
         td Beneficiary Name
       tr
