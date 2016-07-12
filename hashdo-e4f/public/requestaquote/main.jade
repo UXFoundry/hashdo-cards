@@ -1,0 +1,44 @@
+extends /card
+
+block content
+  link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/requestaquote.css')
+  h1.title Request a Quote
+  .quoteDetails
+    .currencyCountrySelectionIN
+        div
+        select(id='payIn',name='payInCountryCurrencySelect').payInCountryCurrencySelect
+            option(value='Default') Select Pay In Country
+            if payInCountries
+            each payInCountry in payInCountries
+                option(value=payInCountry.Code selected=payInCountry.Selected) #{payInCountry.Country}
+    .currencyCountrySelectionOUT  
+        div
+        select(id='payOut',name='payOutCountryCurrencySelect').payOutCountryCurrencySelect
+            option(value='Default') Select Pay In Country
+            if payOutCountries
+            each payOutCountry in payOutCountries
+                option(value=payOutCountry.Code selected=payOutCountry.Selected) #{payOutCountry.Country}
+    .payOutMethodBlock
+        .paymethodOut
+        select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
+    .getQuoteBlock
+        input(type="text", name="payValue" placeholder="Amount").payValue
+        a.btn.button.getQuote Get Quote
+  .quoteResults.hidden
+    table
+      tr
+        td TransferFee
+      tr
+        td
+          input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
+      tr
+        td Rate
+      tr
+        td
+          input(type="text", name="Rate", readonly="readonly").exchangeRateValue
+      tr
+        td Amount
+      tr
+        td
+          input(type="text", name="Amount", readonly="readonly").AmountValue
+    a.btn.button.reQuote ReQuote
