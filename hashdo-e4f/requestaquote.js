@@ -85,8 +85,7 @@ module.exports = {
 
                     var request = require('request');
                     request.post(url, { json: true, body: args }, function (err, res, body) {
-                        console.log(res);
-                        if (!err && res.statusCode === 200) {                            
+                        if (!err && res.statusCode === 200) {
                             var sourceCountries = res.body.returnData;
                             callback(null, sourceCountries);
                         }
