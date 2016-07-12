@@ -3,8 +3,8 @@ card.onReady = function () {
 		isActive = true,
 		now = new Date(),
 		renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()).valueOf();
-	if (typeof __e4f == 'undefined') {		
-		card.require('https://www.exchange4free.com/xandgo/lib/requestaquote.js?v=1.1.1', function () {			
+	if (typeof __e4fraq == 'undefined') {		
+		card.require('http://www.exchange4free.com/xandgo/lib/requestaquote.js?v=1.1.1', function () {			
 			init();
 		});
 	}
@@ -12,7 +12,7 @@ card.onReady = function () {
 		init();
 	}
 	function init() {
-		__e4f.requestaquote.onReady(card, $card, locals);
+		__e4fraq.requestaquote.onReady(card, $card, locals);
 	}
 
 }
