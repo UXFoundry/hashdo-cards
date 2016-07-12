@@ -14,7 +14,7 @@ block content
     .currencyCountrySelectionOUT  
         div
         select(id='payOut',name='payOutCountryCurrencySelect').payOutCountryCurrencySelect
-            option(value='Default') Select Pay In Country
+            option(value='Default') Select Pay Out Country
             if payOutCountries
             each payOutCountry in payOutCountries
                 option(value=payOutCountry.Code selected=payOutCountry.Selected) #{payOutCountry.Country}
