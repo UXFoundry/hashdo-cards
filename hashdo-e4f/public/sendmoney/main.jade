@@ -4,7 +4,7 @@ block content
   link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
   h1.title Send Money
   .payInCountryBlock.hidden
-    h1 Pay In Details
+    h1 Sending Country
     div
       select(id='payIn',name='payInCountries').payInCountrySelect
         option(value='Default') Select Pay In Country
@@ -18,7 +18,7 @@ block content
     .paymethodIn
       select(id='paymethodIn',name='paymethodIn').paymethodInSelect
   .payOutCountryBlock.hidden
-    h1 Pay Out Details
+    h1 Destination Country
     select(id='payOut',name='payOutCountries').payOutCountrySelect
       option(value='Default') Select Pay Out Country
       if payOutCountries
@@ -43,7 +43,7 @@ block content
   .quoteResults.hidden
     table
       tr
-        td TransferFee
+        td Transfer Fee
       tr
         td
           input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
@@ -90,10 +90,9 @@ block content
   .finalTransferReason.hidden
     select(id='finalTransferReason',name='finalTransferReason').finalTransferReasonSelect
   .finalSourceofFunds.hidden
-    select(id='finalSourceofFunds',name='finalSourceofFunds').finalSourceofFundsSelect
     table
       tr
-        td Enter Reference to Appear
+        td Enter Your Deposit Reference
       tr
         td
           input(type="text", name="beneficiaryReference").pdReferenceToAppear
@@ -101,12 +100,11 @@ block content
     table
       tr
         td
-
       tr
         td
           label.termsLabel
             input(type='checkbox', checked=false, name='term1Accept').term1
-            | I confirm that the source of funds provided above is correct, commit to the exchange rate which is fixed and can't be changed and have read and agree to the Terms and Conditions of Exchange4free"
+            | I confirm that I commit to the exchange rate which is fixed and can’t be changed and that I have read and agree to the Terms and Conditions of Exchange4free.
     select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
       option(value='default') Are you the Beneficiary Funds Owner?
       option(value='yes') Yes
@@ -135,7 +133,8 @@ block content
             input(type="beneficiaryFundsOwnerInformationemail", name="beneficiaryFundsOwnerInformationemail" placeholder="Email Address").beneficiaryFundsOwnerInformationemail
       .benCompany.hidden
         table
-          tr            
+          tr
+            
             td
               input(type="beneficiaryFundsOwnerInformationregNo", name="beneficiaryFundsOwnerInformationregNo" placeholder="Registration Number").beneficiaryFundsOwnerInformationregNo
           tr
@@ -186,7 +185,7 @@ block content
       tr
         td
           input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
-    a.btn.button.confirmFinal Confirm Payment
+    a.btn.button.confirmFinal Confirm Transfer
   .cardExpired.hidden
     table
       tr
@@ -194,7 +193,7 @@ block content
   .cardCompletedEFT.hidden
     table
       tr
-        td Your transaction is completed. Please ensure you use the deposit reference to ensure we can track your funds in a timely manner and note that we do not accept cash deposits.
+        td Your transaction booking is completed. Please ensure you use the correct Deposit Reference. Please note that we do not accept cash deposits.
       tr
         td Deposit Reference to Use
       tr
