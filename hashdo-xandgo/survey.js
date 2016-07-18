@@ -201,10 +201,15 @@ module.exports = {
     }
 
     function translateSurvey(translations, languageCode, survey) {
-      survey.name = lookupTranslation(translations, languageCode, null, 'name', survey.name);
-      survey.description = lookupTranslation(translations, languageCode, null, 'description', survey.description);
+      if (languageCode && languageCode === 'en') {
+        return survey;
+      }
+      else {
+        survey.name = lookupTranslation(translations, languageCode, null, 'name', survey.name);
+        survey.description = lookupTranslation(translations, languageCode, null, 'description', survey.description);
 
-      return survey;
+        return survey;
+      }
     }
 
     function translateLabels(translations, languageCode, defaults, values) {
@@ -225,98 +230,118 @@ module.exports = {
     }
 
     function translateQuestions(translations, languageCode, questions) {
-      if (translations && questions && _.isArray(questions)) {
-        _.forEach(questions, function (question) {
-          question.message = lookupQuestionTranslation(translations, languageCode, question);
+      if (languageCode && languageCode === 'en') {
+        return questions;
+      }
+      else {
+        if (translations && questions && _.isArray(questions)) {
+          _.forEach(questions, function (question) {
+            question.message = lookupQuestionTranslation(translations, languageCode, question);
 
-          // translate multiple choice options
-          if (question.replyType === 'multipleChoice') {
-            if (question.reply && _.isArray(question.reply)) {
-              _.forEach(question.reply, function (reply) {
-                reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply.choice);
-              });
+            // translate multiple choice options
+            if (question.replyType === 'multipleChoice') {
+              if (question.reply && _.isArray(question.reply)) {
+                _.forEach(question.reply, function (reply) {
+                  reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply.choice);
+                });
+              }
             }
-          }
 
-          // translate conditions to facilitate option matches
-          if (question.conditions && _.isArray(question.conditions)) {
-            _.forEach(question.conditions, function (condition) {
-              if (condition.questionId) {
-                _.forEach(questions, function (previousQuestion) {
-                  if (previousQuestion.id === condition.questionId) {
-                    if (translations[languageCode]) {
-                      if (translations[languageCode].questions) {
-                        if (translations[languageCode].questions[previousQuestion.id]) {
-                          if (translations[languageCode].questions[previousQuestion.id].choices) {
-                            if (translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)]) {
-                              condition.response = translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)];
+            // translate conditions to facilitate option matches
+            if (question.conditions && _.isArray(question.conditions)) {
+              _.forEach(question.conditions, function (condition) {
+                if (condition.questionId) {
+                  _.forEach(questions, function (previousQuestion) {
+                    if (previousQuestion.id === condition.questionId) {
+                      if (translations[languageCode]) {
+                        if (translations[languageCode].questions) {
+                          if (translations[languageCode].questions[previousQuestion.id]) {
+                            if (translations[languageCode].questions[previousQuestion.id].choices) {
+                              if (translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)]) {
+                                condition.response = translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)];
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
+                  });
+                }
+              });
+            }
+          });
+        }
 
-      return questions;
+        return questions;
+      }
     }
 
     function lookupTranslation(translations, languageCode, section, key, defaultValue) {
-      if (translations) {
-        if (translations[languageCode]) {
-          if (section) {
-            if (translations[languageCode][section]) {
-              if (translations[languageCode][section][key]) {
-                return translations[languageCode][section][key];
+      if (languageCode && languageCode === 'en') {
+        return defaultValue;
+      }
+      else {
+        if (translations) {
+          if (translations[languageCode]) {
+            if (section) {
+              if (translations[languageCode][section]) {
+                if (translations[languageCode][section][key]) {
+                  return translations[languageCode][section][key];
+                }
+              }
+            }
+            else {
+              if (translations[languageCode][key]) {
+                return translations[languageCode][key];
               }
             }
           }
-          else {
-            if (translations[languageCode][key]) {
-              return translations[languageCode][key];
-            }
-          }
         }
-      }
 
-      return defaultValue;
+        return defaultValue;
+      }
     }
 
     function lookupQuestionTranslation(translations, languageCode, question) {
-      if (translations) {
-        if (translations[languageCode]) {
-          if (translations[languageCode].questions) {
-            if (translations[languageCode].questions[question.id]) {
-              return translations[languageCode].questions[question.id].question;
+      if (languageCode && languageCode === 'en') {
+        return question.message;
+      }
+      else {
+        if (translations) {
+          if (translations[languageCode]) {
+            if (translations[languageCode].questions) {
+              if (translations[languageCode].questions[question.id]) {
+                return translations[languageCode].questions[question.id].question;
+              }
             }
           }
         }
-      }
 
-      return question.message;
+        return question.message;
+      }
     }
 
     function lookupQuestionChoiceTranslation(translations, languageCode, questionId, choice) {
-      if (translations) {
-        if (translations[languageCode]) {
-          if (translations[languageCode].questions) {
-            if (translations[languageCode].questions[questionId]) {
-              if (translations[languageCode].questions[questionId].choices) {
-                if (translations[languageCode].questions[questionId].choices[encodeKey(choice)]) {
-                  return translations[languageCode].questions[questionId].choices[encodeKey(choice)];
+      if (languageCode && languageCode === 'en') {
+        return choice;
+      }
+      else {
+        if (translations) {
+          if (translations[languageCode]) {
+            if (translations[languageCode].questions) {
+              if (translations[languageCode].questions[questionId]) {
+                if (translations[languageCode].questions[questionId].choices) {
+                  if (translations[languageCode].questions[questionId].choices[encodeKey(choice)]) {
+                    return translations[languageCode].questions[questionId].choices[encodeKey(choice)];
+                  }
                 }
               }
             }
           }
         }
-      }
 
-      return choice;
+        return choice;
+      }
     }
 
     // encode mongodb key
