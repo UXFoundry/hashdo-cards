@@ -57,6 +57,8 @@ block content
       tr
         td
           input(type="text", name="Amount", readonly="readonly").AmountValue
+      tr
+        td On acceptance of the quote, I confirm that I commit to the exchange rate which is fixed and can’t be changed and that I have read and agree to the Terms and Conditions of Exchange4free.
   .acceptQuote.hidden
     a.btn.button.acceptQuoteButton Accept Quote
   .beneficiary.hidden
@@ -97,14 +99,6 @@ block content
         td
           input(type="text", name="beneficiaryReference").pdReferenceToAppear
   .termsandConditions.hidden
-    table
-      tr
-        td
-      tr
-        td
-          label.termsLabel
-            input(type='checkbox', checked=false, name='term1Accept').term1
-            | I confirm that I commit to the exchange rate which is fixed and can’t be changed and that I have read and agree to the Terms and Conditions of Exchange4free.
     select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
       option(value='default') Are you the Beneficiary Funds Owner?
       option(value='yes') Yes
@@ -133,8 +127,7 @@ block content
             input(type="beneficiaryFundsOwnerInformationemail", name="beneficiaryFundsOwnerInformationemail" placeholder="Email Address").beneficiaryFundsOwnerInformationemail
       .benCompany.hidden
         table
-          tr
-            
+          tr            
             td
               input(type="beneficiaryFundsOwnerInformationregNo", name="beneficiaryFundsOwnerInformationregNo" placeholder="Registration Number").beneficiaryFundsOwnerInformationregNo
           tr
@@ -228,27 +221,22 @@ block content
         td Bank Country
       tr
         td
-          input(type="DRbankCountry", name="DRbankCountry", readonly="readonly").DRbankCountry
-      tr
-        td Branch Name
-      tr
-        td
-          input(type="DRbranchName", name="DRbranchName", readonly="readonly").DRbranchName
+          input(type="DRbankCountry", name="DRbankCountry", readonly="readonly").DRbankCountry     
       tr
         td Swift Code
       tr
         td
           input(type="DRswiftCode", name="DRswiftCode", readonly="readonly").DRswiftCode
       tr
-        td Bank Code
-      tr
-        td
-          input(type="DRbankCode", name="DRbankCode", readonly="readonly").DRbankCode
-      tr
         td Branch Code
       tr
         td
-          input(type="DRbranchCode", name="DRbranchCode", readonly="readonly").DRbranchCode
+          input(type="DRBranchCode", name="DRBranchCode", readonly="readonly").DRBranchCode     
+      tr
+        td IBAN
+      tr
+        td
+          input(type="DRbankCode", name="DRbankCode", readonly="readonly").DRbankCode
       tr
         td Bank Address
       tr
