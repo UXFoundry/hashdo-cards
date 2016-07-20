@@ -1,5 +1,6 @@
 var Cloudinary = require('cloudinary'),
   Moment = require('moment'),
+  Perfy = require('perfy'),
   Request = require('request'),
   _ = require('lodash');
 
@@ -126,6 +127,8 @@ exports.getProduct = function(apiKey, apiSecret, productId, callback) {
 };
 
 exports.getSurvey = function(apiKey, apiSecret, surveyId, currentVersion, callback) {
+  Perfy.start('getSurvey');
+
   isUpdateAvailable(apiKey, apiSecret, currentVersion, 'surveys', function(updateAvailable, newVersion) {
     if (updateAvailable) {
       Request.post(
@@ -145,19 +148,39 @@ exports.getSurvey = function(apiKey, apiSecret, surveyId, currentVersion, callba
 
               survey.photos = parsePhotos(survey);
 
+              if (Perfy.exists('getSurvey')) {
+                var result = Perfy.end('getSurvey');
+
+                if (result.time > 1) {
+                  console.log('Slow survey get: ' + result.time + ', Survey: ' + surveyId);
+                }
+              }
+
               callback(survey, newVersion);
             }
             else {
+              if (Perfy.exists('getSurvey')) {
+                Perfy.end('getSurvey');
+              }
+
               callback();
             }
           }
           else {
+            if (Perfy.exists('getSurvey')) {
+              Perfy.end('getSurvey');
+            }
+
             callback();
           }
         }
       );
     }
     else {
+      if (Perfy.exists('getSurvey')) {
+        Perfy.end('getSurvey');
+      }
+
       callback && callback();
     }
   });
