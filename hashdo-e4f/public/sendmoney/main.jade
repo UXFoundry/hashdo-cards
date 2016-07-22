@@ -98,43 +98,7 @@ block content
       tr
         td
           input(type="text", name="beneficiaryReference").pdReferenceToAppear
-  .termsandConditions.hidden
-    select(id='beneficiaryFundsOwner', name='beneficiaryFundsOwner').beneficiaryFundsOwner
-      option(value='default') Are you the Beneficiary Funds Owner?
-      option(value='yes') Yes
-      option(value='no') No
-    .beneficiaryFundsOwnerInformation.hidden
-      select(id='entityType', name='entityType').entityType
-        option(value='default') Entity Type?
-        option(value='1') Person
-        option(value='2') Entity
-      select(id='beneficiaryFundsOwnerInformationCountry', name='beneficiaryFundsOwnerInformationCountry').beneficiaryFundsOwnerInformationCountry
-      table
-        tr
-          td
-            input(type="beneficiaryFundsOwnerInformationAddress", name="beneficiaryFundsOwnerInformationAddress" placeholder="Address").beneficiaryFundsOwnerInformationAddress
-        tr
-          td
-            input(type="beneficiaryFundsOwnerInformationNames", name="beneficiaryFundsOwnerInformationName" placeholder="First Name").beneficiaryFundsOwnerInformationName
-        tr
-          td
-            input(type="beneficiaryFundsOwnerInformationSurname", name="beneficiaryFundsOwnerInformationSurname" placeholder="Surname").beneficiaryFundsOwnerInformationSurname
-        tr
-          td
-            input(type="beneficiaryFundsOwnerInformationdob", name="beneficiaryFundsOwnerInformationdob" placeholder="Date of Birth (yyyy-mm-dd)").beneficiaryFundsOwnerInformationdob
-        tr
-          td
-            input(type="beneficiaryFundsOwnerInformationemail", name="beneficiaryFundsOwnerInformationemail" placeholder="Email Address").beneficiaryFundsOwnerInformationemail
-      .benCompany.hidden
-        table
-          tr            
-            td
-              input(type="beneficiaryFundsOwnerInformationregNo", name="beneficiaryFundsOwnerInformationregNo" placeholder="Registration Number").beneficiaryFundsOwnerInformationregNo
-          tr
-            
-            td
-              input(type="beneficiaryFundsOwnerInformationcantact", name="beneficiaryFundsOwnerInformationcantact" placeholder="Contact Person").beneficiaryFundsOwnerInformationcantact
-      a.btn.button.beneficiaryOwnerConfirm Confirm Beneficary Owner
+  .termsandConditions.hidden   
   .paymentDetails.hidden
     h1 Trade Confirmation
     table
