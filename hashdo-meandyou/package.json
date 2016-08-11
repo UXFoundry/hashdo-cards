@@ -1,6 +1,6 @@
 {
   "name": "hashdo-meandyou",
-  "version": "0.3.4",
+  "version": "0.3.8",
   "description": "me&you card pack.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "moment": "2.14.1",
-    "request": "2.73.0"
+    "request": "2.74.0"
   },
   "pack": {
     "friendlyName": "Me&You",

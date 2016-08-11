@@ -146,10 +146,13 @@ module.exports = {
           var available = parseFloat(bundleData.Available) / 1048576.0,
             allocated = parseFloat(bundleData.Allocation) / 1048576.0,
             progress = 100 - ((available / allocated) * 100),
-            totalUsed = (allocated - available).toFixed() + 'MB used';
+            totalUsed = (allocated - available).toFixed() + 'MB used',
+            bundleExpiryDate = bundleData.ExpiryDate,
+            formattedBundleExpiryDate = Moment(bundleExpiryDate).format('DD MMMM YYYY');
 
           return '<div class="_jsDataBundleContainer">' +
             '<h3>' + bundleData.Name + ' <b class="pull-right _jsNextData"></b></h3>' +
+            '<p class="miniNotice">Expiry Date: ' + formattedBundleExpiryDate + '</p>' +
             '<p class="miniNotice _jsDataRemaining">' + available.toFixed() + 'MB remaining</p>' +
             '<p class="miniUsed">' + totalUsed + '</p>' +
             '<div class="progress">' +
