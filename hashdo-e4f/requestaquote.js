@@ -4,7 +4,7 @@ var Async = require('async'),
 module.exports = {
   name: 'RequestAQuote',
   description: 'E4F Request a Quote',
-  icon: 'http://cdn.hashdo.com/icons/html.png',
+  icon: 'http://cdn.hashdo.com/icons/e4f.png',
   clientStateSupport: true,
   clientProxySupport: true,
 

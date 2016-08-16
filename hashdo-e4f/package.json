@@ -1,6 +1,6 @@
 {
   "name": "hashdo-e4f",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Exchange4Free card pack.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -9,13 +9,14 @@
     "exchange"
   ],
   "dependencies": {
-    "async": "2.0.0",
-    "request": "2.73.0"
+    "async": "2.0.1",
+    "request": "2.74.0"
   },
   "pack": {
     "friendlyName": "Exchange4Free",
     "hidden": false,
     "cards": [
+      "createbeneficiary",
       "sendmoney",
       "requestaquote"
     ]
