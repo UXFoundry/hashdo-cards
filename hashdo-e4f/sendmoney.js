@@ -3,7 +3,7 @@ var async = require('async');
 module.exports = {
   name: 'SendMoney',
   description: 'E4F Send Money Online',
-  icon: 'http://cdn.hashdo.com/icons/html.png',
+  icon: 'http://cdn.hashdo.com/icons/e4f.png',
   clientStateSupport: true,
   clientProxySupport: true,
 
