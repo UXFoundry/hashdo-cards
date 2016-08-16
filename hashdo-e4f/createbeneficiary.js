@@ -3,7 +3,7 @@ var async = require('async');
 module.exports = {
     name: 'CreateBeneficiary',
     description: 'E4F Create a Beneficiary',
-    icon: 'http://cdn.hashdo.com/icons/html.png',
+    icon: 'http://cdn.hashdo.com/icons/e4f.png',
     clientStateSupport: true,
     clientProxySupport: true,
 
