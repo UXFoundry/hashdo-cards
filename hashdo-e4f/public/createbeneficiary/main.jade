@@ -7,9 +7,9 @@ block content
     label Beneficiary Country
     br
     select(id='beneficiarycountrySelect',name='beneficiarycountrySelect').beneficiarycountrySelect
-  .beneficiaryCountryLabel.hidden
+  .beneficiaryCurrencyLabel.hidden
     label Currency
-  .beneficiarycurrency.hiden
+  .beneficiarycurrency.hidden
     select(id='beneficiarycurrencySelect',name='beneficiarycurrencySelect').beneficiarycurrencySelect
   .reasonfortransfer.hidden
     label Reason for Transfer
@@ -33,6 +33,7 @@ block content
   .beneficiaryIDType.hidden
     label Type of Identification
     select(id='idtypeSelect',name='idtypeSelect').idtypeSelect
+      option(value='Default' ) ID Type
       option(value='SAIDNumber' ) SA ID Number
       option(value='ForeignIDNumber' ) Foreign ID Number
       option(value='TemporaryResidentNumber' ) Temporary Resident Number
@@ -44,8 +45,8 @@ block content
     input(type="text", name="dateofbirth", placeholder="Date of Birth (yyyy-mm-dd)").dateofbirth
   .beneficiaryforeignid.hidden
     input(type="text", name="foreignid", placeholder="Foreign ID Number").foreignid
-  .beneficiaryforeignidcountry.hiden
-    label Foreign Country ID
+  .beneficiaryforeignidcountry.hidden
+    label Country of Issue
     select(id='beneficiaryforeignidcountrySelect',name='beneficiaryforeignidcountrySelect').beneficiaryforeignidcountrySelect
   .beneficiarygender.hidden
     label Gender
@@ -63,12 +64,11 @@ block content
     input(type="text", name="email", placeholder="Email").email
   .beneficiarytelephone.hidden
     input(type="text", name="telephone", placeholder="Telephone Number").telephone
+  h1.benefeciaryAddress.hidden Beneficiary Address
   .beneficiarystreetNumber.hidden
     input(type="text", name="streetnumber", placeholder="Street Number").streetnumber
   .beneficiarystreetName.hidden
     input(type="text", name="streetname", placeholder="Street Name").streetname
-  .beneficiaryZARSpecific.hidden
-    label South African Beneficiary Information
   .beneficiaryprovinceZAR.hidden
     label Province
     br
@@ -89,8 +89,6 @@ block content
     input(type="text", name="beneficiarycity", placeholder="City").beneficiarycity
   .beneficiarypostCode.hidden
     input(type="text", name="beneficiarypostCode", placeholder="Postal Code").beneficiarypostCode
-  .beneficiaryTelephone.hidden
-    input(type="text", name="beneficiaryTelephone", placeholder="Telephone Number").beneficiaryTelephone
   h1.bankingdetails.hidden Banking Details
   .beneficiaryBankName.hidden
     input(type="text", name="beneficiaryBankName", placeholder="Bank Name").beneficiaryBankName
