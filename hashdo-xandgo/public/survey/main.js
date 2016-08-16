@@ -22,7 +22,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.v18.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/survey.v7.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.v8.js', function () {
       // start or continue
       attachStartOrContinueHandler();
 
@@ -565,7 +565,7 @@ card.onReady = function () {
           return selections.join(String.fromCharCode(30));
         }
         else {
-          return $input.find('input[type=radio]:checked').attr('data-choice');
+          return $input.find('input[type="radio"]:checked').attr('data-choice');
         }
 
       case 'image':
@@ -1011,7 +1011,11 @@ card.onReady = function () {
     if (_lodash_survey.isArray(responseQuestionIds)) {
       for (var i = 0; i < responseQuestionIds.length; i++) {
         var question = getQuestionById(responseQuestionIds[i]);
-        responseToSave[question.message] = responses[responseQuestionIds[i]].response;
+
+        responseToSave[responseQuestionIds[i]] = {
+          question: question.message,
+          response: responses[responseQuestionIds[i]].response
+        };
       }
     }
 
