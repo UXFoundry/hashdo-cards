@@ -19,17 +19,76 @@ block content
     label Pay Out Method
     br
     select(id='beneficiarypayoutmethodSelect',name='beneficiarypayoutmethodSelect').beneficiarypayoutmethodSelect
-  h1.beneficiaryDetails.hidden Beneficiary Details
   .beneficiarytype.hidden
     label Beneficiary Type
     br
     select(id='beneficiarytypeSelect',name='beneficiarytypeSelect').beneficiarytypeSelect
+  h1.bankingdetails.hidden Banking Details
+  .beneficiaryBankName.hidden
+    input(type="text", name="beneficiaryBankName", placeholder="Bank Name").beneficiaryBankNametxt
+  .beneficiaryBankBranchName.hidden
+    input(type="text", name="beneficiaryBankBranchName", placeholder="Bank Branch Name").beneficiaryBankBranchNametxt
+  .beneficiaryBankCity.hidden
+    input(type="text", name="beneficiaryBankCity", placeholder="Bank City").beneficiaryBankCitytxt
+  .beneficiaryBankAccountHolderName.hidden
+    input(type="text", name="beneficiaryBankAccountHolderName", placeholder="Account Holder Name").beneficiaryBankAccountHolderNametxt
+  .beneficiaryBankAccountType.hidden
+    label Account Type
+    br
+    select(id='beneficiaryBankAccountTypeSelect',name='beneficiaryBankAccountTypeSelect').beneficiaryBankAccountTypeSelect
+  .beneficiaryBankAccountNumber.hidden
+    input(type="text", name="beneficiaryBankAccountNumber", placeholder="Bank Account Number").beneficiaryBankAccountNumbertxt
+  .beneficiaryBankCPF.hidden
+    input(type="text", name="beneficiaryBankCPF", placeholder="Bank CPF").beneficiaryBankCPFtxt
+  .beneficiaryBankReferencetoAppear.hidden
+    input(type="text", name="beneficiaryBankReferencetoAppear", placeholder="Reference to Appear").beneficiaryBankReferencetoAppeartxt
+  .beneficiaryBankEarthVanPort.hidden
+    input(type="text", name="beneficiaryBankEarthVanPort", placeholder="Earthport VAN Number").beneficiaryBankEarthVanPorttxt
+  .beneficiaryBankSwiftCode.hidden
+    input(type="text", name="beneficiaryBankSwiftCode", placeholder="Swift Code").beneficiaryBankSwiftCodetxt
+  .beneficiaryBankBSBCode.hidden
+    input(type="text", name="beneficiaryBankSwiftCode", placeholder="BSB Code").beneficiaryBankBSBCodetxt
+  .beneficiaryBankSortCode.hidden
+    input(type="text", name="beneficiaryBankSortCode", placeholder="Sort Name").beneficiaryBankSortCodetxt
+  .beneficiaryBankBranchCode.hidden
+    input(type="text", name="beneficiaryBankBranchCode", placeholder="Branch Code").beneficiaryBankBranchCodetxt
+  .beneficiaryBankAddress.hidden
+    input(type="text", name="beneficiaryBankAddress", placeholder="Bank Address").beneficiaryBankAddresstxt
+  .beneficiaryBankIBAN.hidden
+    input(type="text", name="beneficiaryBankIBAN", placeholder="Bank IBAN").beneficiaryBankIBANtxt
+  .beneficiaryBankBIC.hidden
+    input(type="text", name="beneficiaryBankBIC", placeholder="Bank BIC").beneficiaryBankBICtxt
+  .beneficiaryBankABA.hidden
+    input(type="text", name="beneficiaryBankABA", placeholder="Bank ABA").beneficiaryBankABAtxt
+  .beneficiaryBankCode.hidden
+    input(type="text", name="beneficiaryBankCode", placeholder="Bank Code").beneficiaryBankCodetxt
+  .beneficiaryBankPrefix.hidden
+    input(type="text", name="beneficiaryBankPrefix", placeholder="Bank Prefix").beneficiaryBankPrefixtxt
+  .beneficiaryBankAgencyNumber.hidden
+    input(type="text", name="beneficiaryBankAgencyNumber", placeholder="Bank Agency Number").beneficiaryBankAgencyNumbertxt
+  .beneficiaryBankClabeNumber.hidden
+    input(type="text", name="beneficiaryBankClabeNumber", placeholder="Bank CLABE Number").beneficmberiaryBankClabeNumbertxt
+  .beneficiaryBankClearingCode.hidden
+    input(type="text", name="beneficiaryBankClearingCode", placeholder="Bank Clearing Code").beneficiaryBankClearingCodetxt
+  .beneficiaryBankCPFCNPINumber.hidden
+    input(type="text", name="beneficiaryBankCPFCNPINumber", placeholder="Bank CPF or CNPJ Number").beneficiaryBankCPFCNPINumbertxt
+  .beneficiaryBankHoldingBranch.hidden
+    input(type="text", name="beneficiaryBankHoldingBranch", placeholder="Holding Branch").beneficiaryBankHoldingBranchtxt
+  .beneficiaryBankIFSCCode.hidden
+    input(type="text", name="beneficiaryBankIFSCCode", placeholder="IFSC Code").beneficiaryBankIFSCCodetxt
+  .beneficiaryBankSuffix.hidden
+    input(type="text", name="beneficiaryBankSuffix", placeholder="Bank Suffix").beneficiaryBankSuffixtxt
+  .beneficiaryBankTransitNumber.hidden
+    input(type="text", name="beneficiaryBankTransitNumber", placeholder="Bank Transit Number").beneficiaryBankTransitNumbertxt
+  .beneficiaryBankNibNumber.hidden
+    input(type="text", name="beneficiaryBankNibNumber", placeholder="Bank NIB Number").beneficiaryBambernkNibNumbertxt
+  h1.beneficiaryDetails.hidden Beneficiary Details 
   .beneficiarypersonaldetails.hidden
     label Beneficiary Information
   .beneficiaryFirstName.hidden
-    input(type="text", name="firstName", placeholder="First Name").firstName
+    input(type="text", name="firstName", placeholder="First Name").firstNametxt
   .beneficiaryLastName.hidden
-    input(type="text", name="lastName", placeholder="Last Name").lastName
+    input(type="text", name="lastName", placeholder="Last Name").lastNametxt
   .beneficiaryIDType.hidden
     label Type of Identification
     select(id='idtypeSelect',name='idtypeSelect').idtypeSelect
@@ -38,37 +97,45 @@ block content
       option(value='ForeignIDNumber' ) Foreign ID Number
       option(value='TemporaryResidentNumber' ) Temporary Resident Number
   .beneficiaryid.hidden
-    input(type="text", name="idnumber", placeholder="ID Number").id
+    input(type="text", name="idnumber", placeholder="ID Number").idtxt
+  .beneficiaryBankCashCollectionPassport.hidden
+    input(type="text", name="beneficiaryBankCashCollectionPassport", placeholder="Passport Number").beneficiaryBankCashCollectionPassporttxt
   .beneficiarytemporaryresidentid.hidden
-    input(type="text", name="temporaryresidentid", placeholder="Temporary Resident Permit Number").temporaryresidentid
+    input(type="text", name="temporaryresidentid", placeholder="Temporary Resident Permit Number").temporaryresidentidtxt
   .beneficiarydateofbirth.hidden
-    input(type="text", name="dateofbirth", placeholder="Date of Birth (yyyy-mm-dd)").dateofbirth
+    input(type="text", name="dateofbirth", placeholder="Date of Birth (yyyy-mm-dd)").dateofbirthtxt
   .beneficiaryforeignid.hidden
-    input(type="text", name="foreignid", placeholder="Foreign ID Number").foreignid
+    input(type="text", name="foreignid", placeholder="Foreign ID Number").foreignidtxt
   .beneficiaryforeignidcountry.hidden
     label Country of Issue
     select(id='beneficiaryforeignidcountrySelect',name='beneficiaryforeignidcountrySelect').beneficiaryforeignidcountrySelect
   .beneficiarygender.hidden
     label Gender
-    select(id='beneficiarygenderSelect',name='beneficiarygenderSelect').beneficiarygenderSelect
+    select(id='beneficiarygenderSelect',name='beneficiarygenderSelect').beneficiarygenderSelecttxt
+      option(value='DEF') Select Gender
       option(value='0') Male
       option(value='1') Female
   .beneficiaryBankContactFirstName.hidden
-    input(type="text", name="beneficiaryBankContactFirstName", placeholder="Contact Name").beneficiaryBankContactFirstName
+    input(type="text", name="beneficiaryBankContactFirstName", placeholder="Contact Name").beneficiaryBankContactFirstNametxt
   .beneficiaryBankContactLastName.hidden
-    input(type="text", name="beneficiaryBankContactLastName", placeholder="Contact Last Name").beneficiaryBankContactLastName
+    input(type="text", name="beneficiaryBankContactLastName", placeholder="Contact Last Name").beneficiaryBankContactLastNametxt
   .beneficiaryBankCompanyType.hidden
     label Company Type
-    select(id='beneficiaryBankCompanyTypeSelect',name='beneficiaryBankCompanyTypeSelect').beneficiaryBankCompanyTypeSelect    
+    select(id='beneficiaryBankCompanyTypeSelect',name='beneficiaryBankCompanyTypeSelect').beneficiaryBankCompanyTypeSelect
+  .beneficiaryBankRegistrationNumber.hidden
+    input(type="text", name="beneficiaryBankRegistrationNumber", placeholder="Company Registration Number").beneficiaryBankRegistrationNumbertxt
+  .beneficiaryBankCompanyName.hidden
+    input(type="text", name="beneficiaryBankCompanyName", placeholder="Company Name").beneficiaryBankCompanyNametxt   
   .beneficiaryemail.hidden
-    input(type="text", name="email", placeholder="Email").email
+    input(type="text", name="email", placeholder="Email").emailtxt
   .beneficiarytelephone.hidden
-    input(type="text", name="telephone", placeholder="Telephone Number").telephone
+    input(type="text", name="telephoneintl", readonly="readonly").telephoneintltxt
+    input(type="text", name="telephone", placeholder="Mobile Number").telephonetxt
   h1.benefeciaryAddress.hidden Beneficiary Address
   .beneficiarystreetNumber.hidden
-    input(type="text", name="streetnumber", placeholder="Street Number").streetnumber
+    input(type="text", name="streetnumber", placeholder="Street Number").streetnumbertxt
   .beneficiarystreetName.hidden
-    input(type="text", name="streetname", placeholder="Street Name").streetname
+    input(type="text", name="streetname", placeholder="Street Name").streetnametxt
   .beneficiaryprovinceZAR.hidden
     label Province
     br
@@ -86,70 +153,9 @@ block content
     br
     select(id='beneficiarypostCodeZARSelect',name='beneficiarypostCodeZARSelect').beneficiarypostCodeZARSelect
   .beneficiarycity.hidden
-    input(type="text", name="beneficiarycity", placeholder="City").beneficiarycity
+    input(type="text", name="beneficiarycity", placeholder="City").beneficiarycitytxt
   .beneficiarypostCode.hidden
-    input(type="text", name="beneficiarypostCode", placeholder="Postal Code").beneficiarypostCode
-  h1.bankingdetails.hidden Banking Details
-  .beneficiaryBankName.hidden
-    input(type="text", name="beneficiaryBankName", placeholder="Bank Name").beneficiaryBankName
-  .beneficiaryBankBranchName.hidden
-    input(type="text", name="beneficiaryBankBranchName", placeholder="Bank Branch Name").beneficiaryBankBranchName
-  .beneficiaryBankCity.hidden
-    input(type="text", name="beneficiaryBankCity", placeholder="Bank City").beneficiaryBankCity
-  .beneficiaryBankAccountHolderName.hidden
-    input(type="text", name="beneficiaryBankAccountHolderName", placeholder="Account Holder Name").beneficiaryBankAccountHolderName
-  .beneficiaryBankAccountType.hidden
-    input(type="text", name="beneficiaryBankAccountType", placeholder="Bank Account Type").beneficiaryBankAccountType
-  .beneficiaryBankAccountNumber.hidden
-    input(type="text", name="beneficiaryBankAccountNumber", placeholder="Bank Account Number").beneficiaryBankAccountNumber
-  .beneficiaryBankCPF.hidden
-    input(type="text", name="beneficiaryBankCPF", placeholder="Bank CPF").beneficiaryBankCPF
-  .beneficiaryBankRegistrationNumber.hidden
-    input(type="text", name="beneficiaryBankRegistrationNumber", placeholder="Company Registration Number").beneficiaryBankRegistrationNumber
-  .beneficiaryBankCompanyName.hidden
-    input(type="text", name="beneficiaryBankCompanyName", placeholder="Company Name").beneficiaryBankCompanyName
-  .beneficiaryBankReferencetoAppear.hidden
-    input(type="text", name="beneficiaryBankReferencetoAppear", placeholder="Reference to Appear").beneficiaryBankReferencetoAppear
-  .beneficiaryBankEarthVanPort.hidden
-    input(type="text", name="beneficiaryBankEarthVanPort", placeholder="Earthport VAN Number").beneficiaryBankEarthVanPort
-  .beneficiaryBankSwiftCode.hidden
-    input(type="text", name="beneficiaryBankSwiftCode", placeholder="Swift Code").beneficiaryBankSwiftCode
-  .beneficiaryBankSortCode.hidden
-    input(type="text", name="beneficiaryBankSortCode", placeholder="Sort Name").beneficiaryBankSortCode
-  .beneficiaryBankBranchCode.hidden
-    input(type="text", name="beneficiaryBankBranchCode", placeholder="Branch Code").beneficiaryBankBranchCode
-  .beneficiaryBankAddress.hidden
-    input(type="text", name="beneficiaryBankAddress", placeholder="Bank Address").beneficiaryBankAddress
-  .beneficiaryBankIBAN.hidden
-    input(type="text", name="beneficiaryBankIBAN", placeholder="Bank IBAN").beneficiaryBankIBAN
-  .beneficiaryBankBIC.hidden
-    input(type="text", name="beneficiaryBankBIC", placeholder="Bank BIC").beneficiaryBankBIC
-  .beneficiaryBankABA.hidden
-    input(type="text", name="beneficiaryBankABA", placeholder="Bank ABA").beneficiaryBankABA
-  .beneficiaryBankCode.hidden
-    input(type="text", name="beneficiaryBankCode", placeholder="Bank Code").beneficiaryBankCode
-  .beneficiaryBankPrefix.hidden
-    input(type="text", name="beneficiaryBankPrefix", placeholder="Bank Prefix").beneficiaryBankPrefix
-  .beneficiaryBankAgencyNumber.hidden
-    input(type="text", name="beneficiaryBankAgencyNumber", placeholder="Bank Agency Number").beneficiaryBankAgencyNumber
-  .beneficiaryBankClabeNumber.hidden
-    input(type="text", name="beneficiaryBankClabeNumber", placeholder="Bank CLABE Number").beneficmberiaryBankClabeNumber
-  .beneficiaryBankClearingCode.hidden
-    input(type="text", name="beneficiaryBankClearingCode", placeholder="Bank Clearing Code").beneficiaryBankClearingCode
-  .beneficiaryBankCPFCNPINumber.hidden
-    input(type="text", name="beneficiaryBankCPFCNPINumber", placeholder="Bank CPF or CNPJ Number").beneficiaryBankCPFCNPINumber
-  .beneficiaryBankHoldingBranch.hidden
-    input(type="text", name="beneficiaryBankHoldingBranch", placeholder="Holding Branch").beneficiaryBankHoldingBranch
-  .beneficiaryBankIFSCCode.hidden
-    input(type="text", name="beneficiaryBankIFSCCode", placeholder="IFSC Code").beneficiaryBankIFSCCode
-  .beneficiaryBankSuffix.hidden
-    input(type="text", name="beneficiaryBankSuffix", placeholder="Bank Suffix").beneficiaryBankSuffix
-  .beneficiaryBankTransitNumber.hidden
-    input(type="text", name="beneficiaryBankTransitNumber", placeholder="Bank Transit Number").beneficiaryBankTransitNumber
-  .beneficiaryBankNibNumber.hidden
-    input(type="text", name="beneficiaryBankNibNumber", placeholder="Bank NIB Nu").beneficiaryBambernkNibNumber
-  .beneficiaryBankCashCollectionPassport.hidden
-    input(type="text", name="beneficiaryBankCashCollectionPassport", placeholder="Bank Name").beneficiaryBankCashCollectionPassport
+    input(type="text", name="beneficiarypostCode", placeholder="Postal Code").beneficiarypostCodetxt
   .benefeciaryControls.hidden
     a.btn.button.confirmFinal Create Beneficiary
   h1.beneficiaryComplete.hidden Beneficiary created
@@ -160,8 +166,8 @@ block content
     br
     label Beneficiary Name/Entity
     br
-    input(type="text", name="beneficiaryCompleteName" readonly="readonly").beneficiaryCompleteName
+    input(type="text", name="beneficiaryCompleteName" readonly="readonly").beneficiaryCompleteNametxt
     br
     label Beneficiary Country
     br
-    input(type="text", name="beneficiaryCompleteCountry" readonly="readonly").beneficiaryCompleteCountry
+    input(type="text", name="beneficiaryCompleteCountry" readonly="readonly").beneficiaryCompleteCountrytxt
