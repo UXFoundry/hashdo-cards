@@ -4,24 +4,15 @@ block content
   link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/createbeneficiary.css')
   h1.title Create a Beneficiary
   .beneficiarycountry.hiden
-    label Beneficiary Country
-    br
     select(id='beneficiarycountrySelect',name='beneficiarycountrySelect').beneficiarycountrySelect
   .beneficiaryCurrencyLabel.hidden
-    label Currency
   .beneficiarycurrency.hidden
     select(id='beneficiarycurrencySelect',name='beneficiarycurrencySelect').beneficiarycurrencySelect
   .reasonfortransfer.hidden
-    label Reason for Transfer
-    br
     select(id='reasonfortransferSelect',name='reasonfortransferSelect').reasonfortransferSelect
   .beneficiarypayoutmethod.hidden
-    label Pay Out Method
-    br
     select(id='beneficiarypayoutmethodSelect',name='beneficiarypayoutmethodSelect').beneficiarypayoutmethodSelect
   .beneficiarytype.hidden
-    label Beneficiary Type
-    br
     select(id='beneficiarytypeSelect',name='beneficiarytypeSelect').beneficiarytypeSelect
   h1.bankingdetails.hidden Banking Details
   .beneficiaryBankName.hidden
@@ -90,7 +81,6 @@ block content
   .beneficiaryLastName.hidden
     input(type="text", name="lastName", placeholder="Last Name").lastNametxt
   .beneficiaryIDType.hidden
-    label Type of Identification
     select(id='idtypeSelect',name='idtypeSelect').idtypeSelect
       option(value='Default' ) ID Type
       option(value='SAIDNumber' ) SA ID Number
@@ -120,7 +110,6 @@ block content
   .beneficiaryBankContactLastName.hidden
     input(type="text", name="beneficiaryBankContactLastName", placeholder="Contact Last Name").beneficiaryBankContactLastNametxt
   .beneficiaryBankCompanyType.hidden
-    label Company Type
     select(id='beneficiaryBankCompanyTypeSelect',name='beneficiaryBankCompanyTypeSelect').beneficiaryBankCompanyTypeSelect
   .beneficiaryBankRegistrationNumber.hidden
     input(type="text", name="beneficiaryBankRegistrationNumber", placeholder="Company Registration Number").beneficiaryBankRegistrationNumbertxt
@@ -158,7 +147,7 @@ block content
     input(type="text", name="beneficiarypostCode", placeholder="Postal Code").beneficiarypostCodetxt
   .benefeciaryControls.hidden
     a.btn.button.confirmFinal Create Beneficiary
-  h1.beneficiaryComplete.hidden Beneficiary created
+  h1.beneficiaryComplete.hidden Beneficiary Created
   .beneficiaryCompleteDetails.hidden
     br
     label You have successfully created the following Beneficiary:
@@ -171,3 +160,6 @@ block content
     label Beneficiary Country
     br
     input(type="text", name="beneficiaryCompleteCountry" readonly="readonly").beneficiaryCompleteCountrytxt
+    label Account Number
+    br
+    input(type="text", name="beneficiaryCompleteAccountNumber" readonly="readonly").beneficiaryCompleteAccountNumbertxt
