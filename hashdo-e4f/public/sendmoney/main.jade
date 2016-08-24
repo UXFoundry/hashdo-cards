@@ -2,7 +2,8 @@ extends /card
 
 block content
   link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
-  h1.title Send Money
+  h1.title.sendMoneyMainTitle Send Money
+  h1.title.sendMoneyConfirmed.hidden Payment Details
   .payInCountryBlock.hidden
     h1 Sending Country
     div
@@ -61,8 +62,30 @@ block content
         td.quoteAcceptanceTerms On acceptance of the quote, I confirm that I commit to the exchange rate which is fixed and can’t be changed and that I have read and agree to the Terms and Conditions of Exchange4free.
   .acceptQuote.hidden
     a.btn.button.acceptQuoteButton Accept Quote
-  .beneficiary.hidden
+  .beneficiaryPayOutOptions.hidden
     h1 Beneficiary Information
+    input(type="text", name="firstName", placeholder="First Name").firstNametxt
+    input(type="text", name="lastName", placeholder="Last Name").lastNametxt
+    input(type="text", name="idnumber", placeholder="ID Number").idNumbertxt
+    select(id='idtypeSelect',name='idtypeSelect').idtypeSelect      
+    input(type="text", name="telephoneintl", readonly="readonly").telephoneintltxt
+    input(type="text", name="telephone", placeholder="Mobile Number").telephonetxt
+    input(type="text", name="address", placeholder="Address").addresstxt
+    input(type="text", name="city", placeholder="City").citytxt
+  .beneficiaryPayOutOptionsBank.hidden
+    h1 Bank Information
+    .beneficiaryPayOutOptionsBankName.hidden
+       select(id='bankNameSelect',name='bankNameSelect').bankNameSelect
+     .beneficiaryPayOutOptionsBranch.hidden
+       input(type="text", name="bankbranch", placeholder="Branch").branchtxt
+     .beneficiaryPayOutOptionsBankCity.hidden
+       input(type="text", name="bankcity", placeholder="Bank City").bankcitytxt
+     .beneficiaryPayOutOptionsBankCBU.hidden
+       input(type="text", name="bankCBU", placeholder="CBU Number").bankcbutxt
+     .beneficiaryPayOutOptionsBankCUIT.hidden
+       input(type="text", name="bankcuit", placeholder="CUIT/CUIL").bankcuittxt
+  .beneficiary.hidden
+    h1 Beneficiary
     select(id='beneficiaryOption',name='beneficiaryOption').beneficiaryOption
   .beneficiaryConfirmation.hidden
     h2 Confirm Beneficiary Information
@@ -211,8 +234,12 @@ block content
         td
           input(type="CCReference", name="CCReference", readonly="readonly").CCReference
   .cardCompletedKYC.hidden
-    p Please note that in order to SEND MONEY we require you to please upload the following
-    | documents via our Chat App:
+    p Please note that in order to 
+    b ACTIVATE YOUR ACCOUNT 
+    | and 
+    b COMPLETE 
+    | your transaction we require you to please take a quick photo and upload
+    |  the following documents via our Chat App:
     br
     br 
     b Upload ID: 
