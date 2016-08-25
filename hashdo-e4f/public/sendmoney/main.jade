@@ -87,6 +87,19 @@ block content
   .beneficiary.hidden
     h1 Beneficiary
     select(id='beneficiaryOption',name='beneficiaryOption').beneficiaryOption
+  .noBeneficiariesAvailable.hidden
+    p No Beneficiaries are currently available for your selected Destination Country,
+    | Currency and Pay Out Method. Please 
+    b Create a Beneficary 
+    | via our Chat App and try again.  
+  .beneficiaryPayOutOptionsCash.hidden
+    h1 Payout Options
+    .beneficiaryPayOutOptionsCashState.hidden
+       select(id='beneficiaryPayOutOptionsCashStateSelect',name='beneficiaryPayOutOptionsCashStateSelect').beneficiaryPayOutOptionsCashStateSelect
+    .beneficiaryPayOutOptionsCashCity.hidden
+       select(id='beneficiaryPayOutOptionsCashCitySelect',name='beneficiaryPayOutOptionsCashCitySelect').beneficiaryPayOutOptionsCashCitySelect
+    .beneficiaryPayOutOptionsCashAddress.hidden
+       select(id='beneficiaryPayOutOptionsCashAddressSelect',name='beneficiaryPayOutOptionsCashAddressSelect').beneficiaryPayOutOptionsCashAddressSelect
   .beneficiaryConfirmation.hidden
     h2 Confirm Beneficiary Information
     table
@@ -234,12 +247,10 @@ block content
         td
           input(type="CCReference", name="CCReference", readonly="readonly").CCReference
   .cardCompletedKYC.hidden
-    p Please note that in order to 
-    b ACTIVATE YOUR ACCOUNT 
-    | and 
-    b COMPLETE 
-    | your transaction we require you to please take a quick photo and upload
-    |  the following documents via our Chat App:
+    p We have noted that you have not yet completed a transaction or this is your 
+    | first transaction with us. In order to COMPLETE YOUR TRANSACTION BOOKING 
+    | please can you take a quick photo and upload the following documents 
+    | via our app (use menu in bottom left corner):
     br
     br 
     b Upload ID: 
@@ -247,4 +258,5 @@ block content
     br
     br
     b Upload Address: 
-    | Take a clear photo of your proof of residential address dated within the previous 3 months (Bank Statement or Utility Bill) and upload.
+    | Take a clear photo of your proof of residential address dated 
+    | within the previous 3 months (Bank Statement or Utility Bill) and upload.
