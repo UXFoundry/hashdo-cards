@@ -3,7 +3,7 @@ card.onReady = function () {
 		isActive = true,
 		now = new Date(),
 		renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()).valueOf();
-	if (typeof __e4f == 'undefined') {		
+	if (typeof __e4fsendAirtime == 'undefined') {		
 		card.require('http://www.exchange4free.com/xandgo/lib/sendairtime.js?v=' + Math.round(new Date().getTime() / 1000), function () {			
 			init();
 		});
@@ -12,7 +12,7 @@ card.onReady = function () {
 		init();
 	}
 	function init() {
-		__e4f.sendAirtime.onReady(card, $card, locals);
+		__e4fsendAirtime.sendAirtime.onReady(card, $card, locals);
 	}
 
 }
