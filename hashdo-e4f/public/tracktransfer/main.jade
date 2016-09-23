@@ -1,0 +1,45 @@
+extends /card
+
+block content
+  link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/tracktransfer.css')
+  h1.title Track Transfer
+  .queryTransactionForm
+    input(type="text", name="transactionid" placeholder="Transaction ID").transactionid
+    a.btn.button.queryTransactionbtn Track
+  .transactiondetails.hidden
+    label Transaction Reference
+    input(type="text", name="transactionreference" readonly="readonly").transactionreference
+    label Transaction Type
+    input(type="text", name="transactiontype" readonly="readonly").transactiontype
+    label Transaction Date
+    input(type="text", name="transactiondate" readonly="readonly").transactiondate
+    label Pay In Currency
+    input(type="text", name="payincurrency" readonly="readonly").payincurrency
+    label Pay In Amount
+    input(type="text", name="payinamount" readonly="readonly").payinamount
+    label Beneficiary Name
+    input(type="text", name="beneficiaryName" readonly="readonly").beneficiaryName
+    label Beneficiary Country
+    input(type="text", name="beneficiaryCountry" readonly="readonly").beneficiaryCountry
+    label Beneficiary Currency
+    input(type="text", name="beneficiaryCurrency" readonly="readonly").beneficiaryCurrency
+    label Amount to be paid out
+    input(type="text", name="amountPaidOut" readonly="readonly").amountPaidOut
+    label Exchange Rate
+    input(type="text", name="exchangerate" readonly="readonly").exchangerate
+    label Transaction Fee
+    input(type="text", name="transactionFee" readonly="readonly").transactionFee
+    label Transaction Status
+      .transactionPending.hidden
+        label.pending Pending
+        p We are awaiting to receive and assign the funds to this transaction
+      .transactionReceived.hidden
+        label.received Received
+        p The payout to your beneficary is Pending
+      .transactionCancelled.hidden
+        label.cancelled Cancelled
+        p The transaction has been cancelled. Please contact Exchange4free.
+      .transactionComplete.hidden
+        label.complete Complete
+        p The transaction has been completed and your beneficiary has been paid.
+    a.btn.button.refreshTransaction Refresh Information
