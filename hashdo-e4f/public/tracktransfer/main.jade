@@ -4,8 +4,8 @@ block content
   link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/tracktransfer.css')
   h1.title Track Transfer
   .queryTransactionForm
-    input(type="text", name="transactionid" placeholder="Transaction ID").transactionid
-    a.btn.button.queryTransactionbtn Track
+    input(type="text", name="transactionid" placeholder="Transaction ID (6 Digit No.)").transactionid
+    a.btn.button.queryTransactionbtn Check
   .transactiondetails.hidden
     label Transaction Reference
     input(type="text", name="transactionreference" readonly="readonly").transactionreference
@@ -30,16 +30,16 @@ block content
     label Transaction Fee
     input(type="text", name="transactionFee" readonly="readonly").transactionFee
     label Transaction Status
-      .transactionPending.hidden
-        label.pending Pending
-        p We are awaiting to receive and assign the funds to this transaction
-      .transactionReceived.hidden
-        label.received Received
-        p The payout to your beneficary is Pending
-      .transactionCancelled.hidden
-        label.cancelled Cancelled
-        p The transaction has been cancelled. Please contact Exchange4free.
-      .transactionComplete.hidden
-        label.complete Complete
-        p The transaction has been completed and your beneficiary has been paid.
-    a.btn.button.refreshTransaction Refresh Information
+    .transactionPending.hidden
+      label.pending PENDING
+      p We are awaiting to receive and assign the funds to this transaction
+    .transactionReceived.hidden
+      label.received RECEIVED
+      p The payout to your beneficary is Pending
+    .transactionCancelled.hidden
+      label.cancelled CANCELLED
+      p The transaction has been cancelled. Please contact Exchange4free.
+    .transactionComplete.hidden
+      label.complete COMPLETE
+      p The transaction has been completed and your beneficiary has been paid.
+    a.btn.button.refreshTransaction Refresh
