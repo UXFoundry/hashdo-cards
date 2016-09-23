@@ -4,8 +4,8 @@ block content
   link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/tracktransfer.css')
   h1.title Track Transfer
   .queryTransactionForm
-    input(type="text", name="transactionid" placeholder="Transaction ID").transactionid
-    a.btn.button.queryTransactionbtn Track
+    input(type="text", name="transactionid" placeholder="Transaction ID (6 Digit No.)").transactionid
+    a.btn.button.queryTransactionbtn Check
   .transactiondetails.hidden
     label Transaction Reference
     input(type="text", name="transactionreference" readonly="readonly").transactionreference
@@ -42,4 +42,4 @@ block content
     .transactionComplete.hidden
       label.complete COMPLETE
       p The transaction has been completed and your beneficiary has been paid.
-    a.btn.button.refreshTransaction Refresh Information
+    a.btn.button.refreshTransaction Refresh
