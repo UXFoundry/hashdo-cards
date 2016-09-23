@@ -3,7 +3,7 @@ var async = require('async');
 module.exports = {
     name: 'TrackTransaction',
     description: 'E4F Track Transaction',
-    icon: 'http://cdn.hashdo.com/icons/html.png',
+    icon: 'http://cdn.hashdo.com/icons/e4f.png',
     clientStateSupport: true,
     clientProxySupport: true,
 
