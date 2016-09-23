@@ -30,16 +30,16 @@ block content
     label Transaction Fee
     input(type="text", name="transactionFee" readonly="readonly").transactionFee
     label Transaction Status
-      .transactionPending.hidden
-        label.pending Pending
-        p We are awaiting to receive and assign the funds to this transaction
-      .transactionReceived.hidden
-        label.received Received
-        p The payout to your beneficary is Pending
-      .transactionCancelled.hidden
-        label.cancelled Cancelled
-        p The transaction has been cancelled. Please contact Exchange4free.
-      .transactionComplete.hidden
-        label.complete Complete
-        p The transaction has been completed and your beneficiary has been paid.
+    .transactionPending.hidden
+      label.pending PENDING
+      p We are awaiting to receive and assign the funds to this transaction
+    .transactionReceived.hidden
+      label.received RECEIVED
+      p The payout to your beneficary is Pending
+    .transactionCancelled.hidden
+      label.cancelled CANCELLED
+      p The transaction has been cancelled. Please contact Exchange4free.
+    .transactionComplete.hidden
+      label.complete COMPLETE
+      p The transaction has been completed and your beneficiary has been paid.
     a.btn.button.refreshTransaction Refresh Information
