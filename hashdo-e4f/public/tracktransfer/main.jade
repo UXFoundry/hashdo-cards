@@ -9,8 +9,6 @@ block content
   .transactiondetails.hidden
     label Transaction Reference
     input(type="text", name="transactionreference" readonly="readonly").transactionreference
-    label Transaction Type
-    input(type="text", name="transactiontype" readonly="readonly").transactiontype
     label Transaction Date
     input(type="text", name="transactiondate" readonly="readonly").transactiondate
     label Pay In Currency
@@ -19,16 +17,14 @@ block content
     input(type="text", name="payinamount" readonly="readonly").payinamount
     label Beneficiary Name
     input(type="text", name="beneficiaryName" readonly="readonly").beneficiaryName
-    label Beneficiary Country
-    input(type="text", name="beneficiaryCountry" readonly="readonly").beneficiaryCountry
-    label Beneficiary Currency
+    label Pay Out Currency
     input(type="text", name="beneficiaryCurrency" readonly="readonly").beneficiaryCurrency
-    label Amount to be paid out
-    input(type="text", name="amountPaidOut" readonly="readonly").amountPaidOut
     label Exchange Rate
     input(type="text", name="exchangerate" readonly="readonly").exchangerate
     label Transaction Fee
     input(type="text", name="transactionFee" readonly="readonly").transactionFee
+    label Amount To Be Paid Out
+    input(type="text", name="amountPaidOut" readonly="readonly").amountPaidOut
     label Transaction Status
     .transactionPending.hidden
       label.pending PENDING
