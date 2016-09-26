@@ -1,7 +1,7 @@
 extends /card
 
 block content
-  link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/sendmoney.css')
+  link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/sendmoney.css')
   h1.title.sendMoneyMainTitle Send Money
   h1.title.sendMoneyConfirmed.hidden Payment Details
   .payInCountryBlock.hidden
@@ -53,6 +53,13 @@ block content
       tr
         td
           input(type="text", name="Rate", readonly="readonly").exchangeRateValue
+      tr.cashrewardsheader.hidden
+        td Cash Rewards
+      tr.cashrewardsvaluerow.hidden
+        td.cashrewardsvaluedata
+          span
+            .cashrewardsvalue
+    table
       tr
         td Amount
       tr
