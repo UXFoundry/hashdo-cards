@@ -63,6 +63,7 @@ module.exports = {
         name: state.name,
         number: state.number,
         html: state.html,
+        billDateInfo: state.billDateInfo,
         date: state.date
       };
 
@@ -253,12 +254,14 @@ module.exports = {
           name: inputs.SIMName.length > 20 ? inputs.SIMName.substr(0, 20) + '...' : inputs.SIMName,
           number: inputs.MSISDN,
           html: myBillSoFarHtml,
+          billDateInfo: data.billdate_info,
           date: Moment.utc().format('Do MMMM YYYY')
         };
 
         state.name = viewModel.name;
         state.number = viewModel.number;
         state.html = viewModel.html;
+        state.billDateInfo = viewModel.billDateInfo;
         state.date = viewModel.date;
 
         callback(null, viewModel);

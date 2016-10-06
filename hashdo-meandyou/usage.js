@@ -66,7 +66,8 @@ module.exports = {
         number: state.number,
         valueBundles: state.valueBundles,
         dataBundles: state.dataBundles,
-        date: state.date
+        date: state.date,
+        billDateInfo: state.billDateInfo
       };
 
       callback(null, viewModel);
@@ -168,7 +169,8 @@ module.exports = {
           valueBundles: valueBundles,
           dataBundles: dataBundles,
           date: Moment.utc().format('Do MMMM YYYY'),
-          cdrMode: cdrMode
+          cdrMode: cdrMode,
+          billDateInfo: data.billdate_info
         };
 
         state.name = viewModel.name;
@@ -176,6 +178,7 @@ module.exports = {
         state.valueBundles = viewModel.valueBundles;
         state.dataBundles = viewModel.dataBundles;
         state.date = viewModel.date;
+        state.billDateInfo = viewModel.billDateInfo;
 
         callback(null, viewModel);
       });
