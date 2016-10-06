@@ -115,7 +115,7 @@ module.exports = {
             var request = require('request');
             request.post(url, { json: true, body: args }, function (err, res, body) {
               if (!err && res.statusCode === 200) {
-                var sourceCountries = res.body.returnData;
+                var sourceCountries = res.body.returnData || [];
                 sourceCountries.sort(sortPayInCountriesbyName);
                 callback(null, sourceCountries);
               }
@@ -130,7 +130,7 @@ module.exports = {
             var request = require('request');
             request.post(url, { json: true, body: args }, function (err, res, body) {
               if (!err && res.statusCode === 200) {
-                var destinationCountries = res.body.returnData;
+                var destinationCountries = res.body.returnData || [];
                 destinationCountries.sort(sortPayOutCountriesbyName);
                 callback(null, destinationCountries);
               }
