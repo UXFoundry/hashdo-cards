@@ -89,6 +89,7 @@ module.exports = {
           ServiceName: ''
         };
 
+        var billDateInfo
         var myBillSoFarHtml = '<table><thead><tr><th>Service</th><th style="text-align:right;">Amount</th></tr></thead><tbody>';
         var myBillSoFarTotal = 0;
 
@@ -96,46 +97,54 @@ module.exports = {
           for (var i = 0; i < data.Services.length; i++) {
             var service = data.Services[i];
 
-            if (service.ServiceCode.toLowerCase() == 'itemizedbill') {
-              serviceData.itemizedBilling = parseFloat(service.ServiceCharge);
-            }
-
-            if (service.ServiceCode.toLowerCase() == 'baoccr') {
-              serviceData.softLock = true;
-            }
-
-            if (service.ServiceCode.toLowerCase() == 'ssiro') {
-              serviceData.roaming = true;
-            }
-
-            if (service.ServiceCode.toLowerCase() == 'recbi') {
-              serviceData.dialing = true;
-            }
-
-            if (service.ServiceName.toLowerCase().indexOf('data') != -1 && service.ServiceName.toLowerCase().indexOf('monthly') != -1) {
-              serviceData.baseData = service.ServiceCode.replace('MAY', '').replace('-BASE', '').replace('PR', '');
-            }
-
-            if (service.ServiceName.toLowerCase().indexOf('bundle') != -1 || service.ServiceName.toLowerCase().indexOf('talk') != -1) {
-              serviceData.ServiceName = service.ServiceName;
-              serviceData.baseValue = service.ServiceCharge;
-            }
-
-            if (service.ServiceCharge != null && service.ServiceCode != 'ItemizedBill') {
-              if (service.ServiceName == 'R50 Free Bundle') {
-                service.ServiceCharge = '0.00';
+            if (service.ServiceCode) {
+              if (service.ServiceCode.toLowerCase() == 'itemizedbill') {
+                serviceData.itemizedBilling = parseFloat(service.ServiceCharge);
               }
 
-              if (service.ServiceName.toLowerCase().indexOf('once off') == -1) {
-                myBillSoFarTotal = myBillSoFarTotal + parseInt(service.ServiceCharge);
-                myBillSoFarHtml += '<tr><td>' + service.ServiceName + '</td><td align="right"><span>R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
+              if (service.ServiceCode.toLowerCase() == 'baoccr') {
+                serviceData.softLock = true;
               }
-              else {
-                myBillSoFarHtml += '<tr><td>' + service.ServiceName + '</td><td align="right"><span>R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
-                myBillSoFarHtml += '<tr><td>' + service.ServiceName + ' (payment)</td><td align="right"><span>-R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
+
+              if (service.ServiceCode.toLowerCase() == 'ssiro') {
+                serviceData.roaming = true;
+              }
+
+              if (service.ServiceCode.toLowerCase() == 'recbi') {
+                serviceData.dialing = true;
+              }
+
+              if (service.ServiceName) {
+                if (service.ServiceName.toLowerCase().indexOf('data') != -1 && service.ServiceName.toLowerCase().indexOf('monthly') != -1) {
+                  serviceData.baseData = service.ServiceCode.replace('MAY', '').replace('-BASE', '').replace('PR', '');
+                }
+
+                if (service.ServiceName.toLowerCase().indexOf('bundle') != -1 || service.ServiceName.toLowerCase().indexOf('talk') != -1) {
+                  serviceData.ServiceName = service.ServiceName;
+                  serviceData.baseValue = service.ServiceCharge;
+                }
+
+                if (service.ServiceCharge != null && service.ServiceCode != 'ItemizedBill') {
+                  if (service.ServiceName == 'R50 Free Bundle') {
+                    service.ServiceCharge = '0.00';
+                  }
+
+                  if (service.ServiceName.toLowerCase().indexOf('once off') == -1) {
+                    myBillSoFarTotal = myBillSoFarTotal + parseInt(service.ServiceCharge);
+                    myBillSoFarHtml += '<tr><td>' + service.ServiceName + '</td><td align="right"><span>R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
+                  }
+                  else {
+                    myBillSoFarHtml += '<tr><td>' + service.ServiceName + '</td><td align="right"><span>R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
+                    myBillSoFarHtml += '<tr><td>' + service.ServiceName + ' (payment)</td><td align="right"><span>-R</span> ' + parseInt(service.ServiceCharge).toFixed(2) + '</td></tr>';
+                  }
+                }
               }
             }
           }
+        }
+
+        if (data) {
+          billDateInfo = data.billdate_info
         }
 
         var smsTOTAL = 0.00,
@@ -254,14 +263,21 @@ module.exports = {
           name: inputs.SIMName.length > 20 ? inputs.SIMName.substr(0, 20) + '...' : inputs.SIMName,
           number: inputs.MSISDN,
           html: myBillSoFarHtml,
-          billDateInfo: data.billdate_info,
           date: Moment.utc().format('Do MMMM YYYY')
         };
+
+        if (billDateInfo) {
+          viewModel.billDateInfo = billDateInfo
+        }
 
         state.name = viewModel.name;
         state.number = viewModel.number;
         state.html = viewModel.html;
-        state.billDateInfo = viewModel.billDateInfo;
+
+        if (billDateInfo) {
+          state.billDateInfo = viewModel.billDateInfo;
+        }
+
         state.date = viewModel.date;
 
         callback(null, viewModel);
