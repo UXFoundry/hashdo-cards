@@ -97,7 +97,7 @@ module.exports = {
           for (var i = 0; i < data.Services.length; i++) {
             var service = data.Services[i];
 
-            if (service.ServiceCode) {
+            if (service && service.ServiceCode) {
               if (service.ServiceCode.toLowerCase() == 'itemizedbill') {
                 serviceData.itemizedBilling = parseFloat(service.ServiceCharge);
               }
