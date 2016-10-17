@@ -1,6 +1,6 @@
 {
   "name": "hashdo-general",
-  "version": "0.2.78",
+  "version": "0.2.80",
   "description": "General HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": [
@@ -9,14 +9,15 @@
     "poll",
     "booking",
     "html",
+    "iframe",
     "info",
     "slider"
   ],
   "dependencies": {
     "cuid": "1.3.8",
-    "lodash": "4.13.1",
-    "moment": "2.13.0",
-    "request": "2.72.0",
+    "lodash": "4.15.0",
+    "moment": "2.14.1",
+    "request": "2.74.0",
     "timekit-sdk": "1.5.0"
   },
   "pack": {
@@ -24,6 +25,7 @@
     "cards": [
       "poll",
       "html",
+      "iframe",
       "booking",
       "slider"
     ]

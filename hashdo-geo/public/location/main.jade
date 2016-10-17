@@ -1,7 +1,7 @@
 extends /card
 
 block header
-  .hdc-hdr(style='background: url(http://maps.googleapis.com/maps/api/staticmap?&markers=color:black%7C' + locals.lat + ',' + locals.lng + '&center=' + locals.lat + ',' + locals.lng + '&size=250x250&zoom=15&sensor=false) no-repeat 50% 0%; width: 225px; height: 225px;', valign='bottom')
+  .hdc-hdr(style='background: url(http://maps.googleapis.com/maps/api/staticmap?&markers=color:black%7C' + locals.lat + ',' + locals.lng + '&center=' + locals.lat + ',' + locals.lng + '&size=250x250&zoom=15&sensor=false&key=' + locals.key + ') no-repeat 50% 0%; width: 225px; height: 225px;', valign='bottom')
 
 block content
   p= locals.address

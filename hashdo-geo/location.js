@@ -109,7 +109,8 @@ module.exports = {
       lng: state.lng,
       address: state.address,
       link: 'http://maps.google.com/maps?q=loc:' + state.lat + ',' + state.lng,
-      title: state.address || this.name
+      title: state.address || this.name,
+      key: inputs.googleAPIKey
     };
 
     // If there is already a lat/long just re-use it.
@@ -121,6 +122,7 @@ module.exports = {
         if (latLng) {
           state.lat = latLng.lat;
           state.lng = latLng.lng;
+
           // save lat, lng as address in case address lookup fails
           state.address = parseFloat(latLng.lat).toFixed(5) + ',' + latLng.lng.toFixed(5);
 
@@ -136,7 +138,7 @@ module.exports = {
           });
         }
         else {
-          callback(new Error('Failed to get latitude and longitude from IP address: ' + (inputs.ipAddress || '?')));
+          callback('Failed to get latitude and longitude from IP address: ' + (inputs.ipAddress || '?'));
         }
       });
     }

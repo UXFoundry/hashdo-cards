@@ -66,7 +66,8 @@ module.exports = {
         number: state.number,
         valueBundles: state.valueBundles,
         dataBundles: state.dataBundles,
-        date: state.date
+        date: state.date,
+        billDateInfo: state.billDateInfo
       };
 
       callback(null, viewModel);
@@ -88,7 +89,8 @@ module.exports = {
 
       MeAndYou.getSimBalance(inputs.apiUrl, inputs.customerId, inputs.merchantId, inputs.session, inputs.apiKey, inputs.MSISDN, function (err, data) {
         var valueBundles = '',
-          dataBundles = '';
+          dataBundles = '',
+          billDateInfo;
 
         if (data && data.Bundles) {
           var billLimit = data.OutOfBundle.BillLimit;
@@ -109,6 +111,10 @@ module.exports = {
               dataBundles += getDataBundleTemplate(data.Bundles.DataBundles[j]);
             }
           }
+        }
+
+        if (data) {
+          billDateInfo = data.billdate_info;
         }
 
         function getValueBundleTemplate(bundleValue, billLimit, totalOutOfBundle) {
@@ -171,11 +177,19 @@ module.exports = {
           cdrMode: cdrMode
         };
 
+        if (billDateInfo) {
+          viewModel.billDateInfo = billDateInfo;
+        }
+
         state.name = viewModel.name;
         state.number = viewModel.number;
         state.valueBundles = viewModel.valueBundles;
         state.dataBundles = viewModel.dataBundles;
         state.date = viewModel.date;
+
+        if (billDateInfo) {
+          state.billDateInfo = viewModel.billDateInfo;
+        }
 
         callback(null, viewModel);
       });

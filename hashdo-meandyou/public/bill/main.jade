@@ -14,6 +14,11 @@ block header
 
 block content
   if !locals.maintenance
+    if locals.billDateInfo
+      div.dont-forget
+        img(src='http://cdn.hashdo.com/img/meandyou/dontforget.png', width='80')
+        div Your #{locals.billDateInfo.thismonthname} usage is payable at the end of next month – on #{locals.billDateInfo.nextmonthlastday} #{locals.billDateInfo.nextmonthname}.
+
     div!= locals.html
     p This is your bill to date. Any recharges, account payments or outstanding amounts owing will not be reflected here. Once off data purchases are included. Please note that this serves as a guide. Total usage may differ due to system delays.
 
