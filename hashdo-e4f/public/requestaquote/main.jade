@@ -9,15 +9,15 @@ block content
         select(id='payIn',name='payInCountryCurrencySelect').payInCountryCurrencySelect
             option(value='Default') Select Pay In Country
             if payInCountries
-            each payInCountry in payInCountries
-                option(value=payInCountry.Code selected=payInCountry.Selected) #{payInCountry.Country}
+              each payInCountry in payInCountries
+                  option(value=payInCountry.Code selected=payInCountry.Selected) #{payInCountry.Country}
     .currencyCountrySelectionOUT  
         div
         select(id='payOut',name='payOutCountryCurrencySelect').payOutCountryCurrencySelect
             option(value='Default') Select Pay Out Country
             if payOutCountries
-            each payOutCountry in payOutCountries
-                option(value=payOutCountry.Code selected=payOutCountry.Selected) #{payOutCountry.Country}
+              each payOutCountry in payOutCountries
+                  option(value=payOutCountry.Code selected=payOutCountry.Selected) #{payOutCountry.Country}
     .payOutMethodBlock
         .paymethodOut
         select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
