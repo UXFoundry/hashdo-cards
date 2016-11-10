@@ -106,7 +106,7 @@ module.exports = {
 
     function prePopulate_e4fData (callback) {
       async.parallel({
-          e4f_getPayInCountries: function (callback) {
+          e4f_getPayInCountries: function (cb) {
             var url = 'http://guinness.exchange4free.com:3000/e4f/getPayInCountryList';
             var args = {
               E4FUserId: inputs.E4FUserId
@@ -117,11 +117,13 @@ module.exports = {
               if (!err && res.statusCode === 200) {
                 var sourceCountries = res.body.returnData || [];
                 sourceCountries.sort(sortPayInCountriesbyName);
-                callback(null, sourceCountries);
+                cb(null, sourceCountries);
+              } else {
+                cb()
               }
             });
           },
-          e4f_getPayOutCountries: function (callback) {
+          e4f_getPayOutCountries: function (cb) {
             var url = 'http://guinness.exchange4free.com:3000/e4f/getPayOutCountryList';
             var args = {
               E4FUserId: inputs.E4FUserId
@@ -132,7 +134,9 @@ module.exports = {
               if (!err && res.statusCode === 200) {
                 var destinationCountries = res.body.returnData || [];
                 destinationCountries.sort(sortPayOutCountriesbyName);
-                callback(null, destinationCountries);
+                cb(null, destinationCountries);
+              } else {
+                cb()
               }
             });
           }
