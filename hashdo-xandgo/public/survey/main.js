@@ -22,7 +22,7 @@ card.onReady = function () {
     card.requireCSS('https://cdn.hashdo.com/css/survey.v18.css');
 
     // load js dependencies
-    card.require('https://cdn.hashdo.com/js/survey.v8.js', function () {
+    card.require('https://cdn.hashdo.com/js/survey.v9.js', function () {
       // start or continue
       attachStartOrContinueHandler();
 
@@ -1002,6 +1002,10 @@ card.onReady = function () {
       complete: true,
       currentInstanceId: currentInstanceId,
       completeDateTimeStamp: new Date().getTime()
+    });
+
+    $card.trigger('hdc:survey:complete', {
+      surveyId: locals.surveyId
     });
 
     // save responses
