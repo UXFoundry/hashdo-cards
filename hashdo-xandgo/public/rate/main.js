@@ -12,7 +12,7 @@ card.onReady = function () {
     var rating = Number($(this).val()),
       title = $card.find('.hdc-title').text();
 
-    card.proxy.post('http://xandgo.com/api/request/rate', {rating: rating}, function (err, response) {
+    card.proxy.post('https://xandgo.com/api/request/rate', {rating: rating}, function (err, response) {
       if (response && response.success) {
         setRating(rating);
 
