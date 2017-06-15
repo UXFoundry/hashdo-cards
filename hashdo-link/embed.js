@@ -90,7 +90,7 @@ module.exports = {
               }
 
               if (meta && meta.general && meta.general.title) {
-                if (meta.thumbnail && meta.thumbnail.width > 150) {
+                if (meta.thumbnail) {
                   state.title = meta.general.title;
                   state.link = meta.general.canonical;
 
@@ -111,8 +111,8 @@ module.exports = {
                   }
 
                   var width = '225px',
-                    ratio = 225 / meta.thumbnail.width,
-                    height = Math.round(meta.thumbnail.height * ratio) + 'px';
+                    ratio = 225 / (meta.thumbnail.width || 320),
+                    height = Math.round((meta.thumbnail.height || 180) * ratio) + 'px';
 
                   state.thumbnail = {
                     url: meta.thumbnail.href,
