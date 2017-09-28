@@ -1,8 +1,9 @@
 extends /card
 
 block content
-  link(rel='stylesheet', href='http://www.exchange4free.com/xandgo/css/createbeneficiary.css')
-  h1.title Create a Beneficiary
+  //- link(rel='stylesheet', href='style.css')
+  .logo
+  h1 Create a Beneficiary
   .beneficiarycountry.hiden
     select(id='beneficiarycountrySelect',name='beneficiarycountrySelect').beneficiarycountrySelect
   .beneficiaryCurrencyLabel.hidden
@@ -21,7 +22,7 @@ block content
     | process. You can now go to 
     b SEND MONEY 
     | and make your required payment. 
-  h1.bankingdetails.hidden Banking Details
+  h2.bankingdetails.hidden Banking Details
   .beneficiaryBankName.hidden
     input(type="text", name="beneficiaryBankName", placeholder="Bank Name").beneficiaryBankNametxt
     select(id='beneficiaryBankNameSelect',name='beneficiaryBankNameSelect').beneficiaryBankNameSelect
@@ -33,7 +34,6 @@ block content
     input(type="text", name="beneficiaryBankAccountHolderName", placeholder="Account Holder Name").beneficiaryBankAccountHolderNametxt
   .beneficiaryBankAccountType.hidden
     label Account Type
-    br
     select(id='beneficiaryBankAccountTypeSelect',name='beneficiaryBankAccountTypeSelect').beneficiaryBankAccountTypeSelect
   .beneficiaryBankAccountNumber.hidden
     input(type="text", name="beneficiaryBankAccountNumber", placeholder="Bank Account Number").beneficiaryBankAccountNumbertxt
@@ -81,7 +81,7 @@ block content
     input(type="text", name="beneficiaryBankTransitNumber", placeholder="Bank Transit Number").beneficiaryBankTransitNumbertxt
   .beneficiaryBankNibNumber.hidden
     input(type="text", name="beneficiaryBankNibNumber", placeholder="Bank NIB Number").beneficiaryBambernkNibNumbertxt
-  h1.beneficiaryDetails.hidden Beneficiary Details 
+  h2.beneficiaryDetails.hidden Beneficiary Details 
   .beneficiarypersonaldetails.hidden
     label Beneficiary Information
   .beneficiaryFirstName.hidden
@@ -130,48 +130,37 @@ block content
   .beneficiarytelephone.hidden
     input(type="text", name="telephoneintl", readonly="readonly").telephoneintltxt
     input(type="text", name="telephone", placeholder="Mobile Number").telephonetxt
-  h1.benefeciaryAddress.hidden Beneficiary Address
+  h2.benefeciaryAddress.hidden Beneficiary Address
   .beneficiarystreetNumber.hidden
     input(type="text", name="streetnumber", placeholder="Street Number").streetnumbertxt
   .beneficiarystreetName.hidden
     input(type="text", name="streetname", placeholder="Street Name").streetnametxt
   .beneficiaryprovinceZAR.hidden
     label Province
-    br
     select(id='beneficiaryprovinceZARSelect',name='beneficiaryprovinceZARSelect').beneficiaryprovinceZARSelect
   .beneficiarycityZAR.hidden
     label City
-    br
     select(id='beneficiarycityZARSelect',name='beneficiarycityZARSelect').beneficiarycityZARSelect
   .beneficiarysuburbZAR.hidden
     label Suburb
-    br
     select(id='beneficiarysuburbZARSelect',name='beneficiarysuburbZARSelect').beneficiarysuburbZARSelect
   .beneficiarypostCodeZAR.hidden
     label Postal Code
-    br
     select(id='beneficiarypostCodeZARSelect',name='beneficiarypostCodeZARSelect').beneficiarypostCodeZARSelect
   .beneficiarycity.hidden
     input(type="text", name="beneficiarycity", placeholder="City").beneficiarycitytxt
   .beneficiarypostCode.hidden
     input(type="text", name="beneficiarypostCode", placeholder="Postal Code").beneficiarypostCodetxt
   .benefeciaryControls.hidden
-    a.btn.button.confirmFinal Create Beneficiary
-  h1.beneficiaryComplete.hidden Beneficiary Created
+    a.btn.confirmFinal Create Beneficiary
+  h2.beneficiaryComplete.hidden Beneficiary Created
   .beneficiaryCompleteDetails.hidden
-    br
     label You have successfully created the following Beneficiary:
-    br
-    br
     label Beneficiary Name/Entity
-    br
     input(type="text", name="beneficiaryCompleteName" readonly="readonly").beneficiaryCompleteNametxt
-    br
     label Beneficiary Country
-    br
     input(type="text", name="beneficiaryCompleteCountry" readonly="readonly").beneficiaryCompleteCountrytxt
     label Account Number
-    br
     input(type="text", name="beneficiaryCompleteAccountNumber" readonly="readonly").beneficiaryCompleteAccountNumbertxt
     p You can now go to 
     b SEND MONEY 

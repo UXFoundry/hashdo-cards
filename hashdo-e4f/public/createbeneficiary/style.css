@@ -1,0 +1,331 @@
+/*.hdc.e4f.createbeneficiary div.hidden {
+  display: none;
+}
+.hdc.e4f.createbeneficiary .hidden {
+  display: none;
+}*/
+.hdc.e4f.createbeneficiary .hot-container {
+  margin-top: 100px;
+  min-height: 100px;
+  text-align: center;
+  width: 100%;
+}
+.hdc.e4f.createbeneficiary .hot-container p {
+  margin-top: 10px;
+}
+.hdc.e4f.createbeneficiary a {
+  text-decoration: none;
+}
+.hdc.e4f.createbeneficiary #overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.hdc.e4f.createbeneficiary #loading {
+  width: 50px;
+  height: 57px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -25px;
+}
+.hdc.e4f.createbeneficiary .hdc-error-text {
+  border-color: transparent !important;
+  border: none !important;
+  color: #ff0000;
+}
+.hdc.e4f.createbeneficiary .hdc-errormodal-done {
+  text-align: right;
+}
+
+.hdc.e4f.createbeneficiary h1 {
+    background: #f9aa08;
+    background-image: -webkit-linear-gradient(#f9c862, #f9aa08);
+    background-image: -o-linear-gradient(#f9c862, #f9aa08);
+    background-image: linear-gradient(#f9c862, #f9aa08);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 15px;
+    padding: 7px 5px;
+    border-radius: 5px;
+}
+
+.hdc.e4f.createbeneficiary h2 {
+    font-family: Arial, Helvetica;
+    font-size: 14px;
+    text-align: right;
+    border-bottom: 1px solid #f9aa08;
+    color: #f9aa08;
+    padding: 0 0 4px 0;
+}
+
+.hdc.e4f.createbeneficiary select {
+  background-color: #fff;
+  color: #000;
+  height: 30px;
+  left: 0px;
+  margin: 0 0 8px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hdc.e4f.createbeneficiary td {
+  color: #f8bc44;
+}
+
+.hdc.e4f.createbeneficiary input {
+  background: white;
+  font-family: Arial, Helvetica;
+  font-size: 14px;
+  font-weight: normal;
+  height: 30px;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #999;
+  color: #2b2b2b;
+  text-indent: 8px;
+  -webkit-appearance: none;
+  text-align: right;
+}
+
+input[readonly="readonly"] {
+  border: none;
+  background-color: white;
+  color: black;
+  border-bottom: 1px solid #bdbdbd;
+}
+
+.hdc.e4f.createbeneficiary input[type="text"],
+.hdc.e4f.createbeneficiary input[type="password"]{
+  -webkit-appearance: none;
+  text-indent: 8px;
+}
+.hdc.e4f.createbeneficiary input[type="checkbox"] {
+  width: auto;
+  margin: 5px 6px 0 0;
+}
+
+.hdc.e4f.createbeneficiary .btn {
+    background: #72b13b;
+    border: 1px solid #277227;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+    font-family: Arial, Helvetica;
+    font-size: 14px;
+    font-weight: normal;
+    height: 30px;
+    line-height: 30px;
+    margin: 15px 9px 20px;
+    text-align: center;
+    width: 90%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+}
+
+.acceptQuoteButton{
+    background-color: #000;
+    border: 1px #000000 solid;
+    color: #f8bc44 !important;
+}
+
+
+
+.hdc.e4f.createbeneficiary td {
+  color: #f8bc44;
+  font-family: Arial, Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+.hdc.e4f.createbeneficiary label {
+  color: #f9aa08;
+  font-family: Arial, Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+  display: block;
+  margin-bottom: 4px;
+}
+
+
+.hdc table {
+  margin-top: 5px;
+  width: 100%;
+}
+.hdc table tr td {
+  padding: 0 0 4px;
+}
+.hdc .termsandConditions table {
+  margin-top: -10px;
+}
+
+#messages-page .page-content .messages .message .message-text.card-container .hdc {
+    margin: 0;
+    box-shadow: none;
+    border: 1px solid #b3b3b3;
+    border-radius: 8px;
+    background: rgb(255, 255, 255); /*sets the card background*/
+}
+
+/* input[name="term1Accept"]{
+    margin-left: -18px !important;
+    display: block;
+}
+input[name="term1Accept"] + label {
+    margin-left: 18px !important;;
+    width: 90% !important;;
+    display: block !important;;
+    margin-bottom: 10px !important;;
+} */
+
+
+.cardExpired, .cardExpired td{
+    background-color: #2b2b2b !important;
+    color: #bdbdbd !important;
+    margin-left: -16px;
+    padding: 16px;  
+    margin-right: -14px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, Helvetica;
+}
+
+.createbeneficiary:before {
+
+    position: relative;
+    /*z-index: 100000;*/
+    left: 0px;
+    top: 0px;
+
+    display: inline-block;
+    width: 100%;
+    height: 220px;
+    margin-right: 5px;
+    content: "";
+    background: url("https://www.exchange4free.com/xandgo/images/beneficiaryS.png") no-repeat 0 0;
+    background-size: 100%; 
+}
+
+
+
+.cardCompletedEFT:after {
+    position: relative;
+    /*z-index: 100000;*/
+    left: 20px;
+    top: 0px;
+    display: inline-block;
+    /*width: 150px;
+    height: 180px;*/
+    width: 100%;
+    height: 220px;
+    margin-right: 0px;
+    content: "";
+    background: url(https://www.exchange4free.com/xandgo/images/thank-youS.png) no-repeat;
+    background-size: 100%;
+}
+
+.cardCompletedEFT tr td {
+    color: #f8bc44 !important;
+}
+
+.cardCompletedEFT tr:first-child td:first-child{
+    background-color: #f8bc44;
+    color: white !important;
+    margin-left: -15px;
+    display: block;
+    padding: 15px;
+    margin-right: -15px;
+    margin-top: -13px;
+    margin-bottom: 10px;
+}
+.cardCompletedEFT tr:last-child td:first-child{
+    margin-bottom: 20px;
+    display: block;
+}
+
+
+.termsLabel {
+    display: block !important;
+    color: white !important;
+    background-color: #2b2b2b !important;
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+    font-size: 14px !important;
+}
+.term1 {
+    display: block !important;
+    left: 25px !important;
+    position: relative !important;
+    width: 15px !important;
+    height: 15px !important;
+    font-size: 15px !important;
+    padding: 10px !important;
+    -ms-transform: scale(1.5) !important;
+    -moz-transform: scale(1.5) !important;
+    -webkit-transform: scale(1.5) !important;
+    -o-transform: scale(1.5) !important;
+    margin-bottom: 5px !important;
+}
+
+
+.quoteAcceptanceTerms{
+  color:red;
+}
+/* OVERRIDES UNTILL FIXED IN THE CODE */
+
+
+#beneficiaryFundsOwnerInformationCountry {
+    margin-bottom: 20px;
+}
+
+/* small overrides for unique fields*/
+
+.telephoneintltxt{
+	/*color: #f8bc44 !important;
+	font-weight: bold;*/
+}
+
+.hdc.e4f.createbeneficiary input[name="telephoneintl"] {
+  /*color: #f8bc44 !important;
+  font-weight: bold;*/
+}
+
+input.transferFeeValue{
+    border: none !important;
+    color: red !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+}
+input.exchangeRateValue{
+    border: none !important;
+    color: #2b2b2b !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+}
+input.AmountValue{
+    border: none !important;
+    background-color: #f8bc44 !important;
+    color: black !important;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
+}
