@@ -12,18 +12,18 @@ module.exports = {
     },
     secret: {
       example: 'abcdefghijklmnopqrstuvwxyz',
-      description: 'API Key\'s Secret.',
+      description: "API Key's Secret.",
       secure: true,
       required: true
     },
     requestId: {
       example: '552fa62425186c6012edcf18',
-      description: 'The current request\'s ID.',
+      description: "The current request's ID.",
       required: true
     },
     userId: {
       example: '552fa62425186c6012edcf18',
-      description: 'The current user\'s X&Go ID.',
+      description: "The current user's X&Go ID.",
       required: true,
       secure: true
     },
@@ -34,305 +34,295 @@ module.exports = {
     }
   },
 
-  getCardData: function (inputs, state, callback) {
+  getCardData: function(inputs, state, callback) {
     var XandGo = require('./lib/xandgo'),
       card = this,
       CUID = require('cuid'),
       Moment = require('moment'),
-      _ = require('lodash');
+      _ = require('lodash')
 
     // enable client side state and proxy support
-    card.clientStateSupport = true;
-    card.clientProxySupport = true;
+    card.clientStateSupport = true
+    card.clientProxySupport = true
 
     // previously cached?
     if (state.survey) {
-
       // legacy state support
-      state.instances = state.instances || [];
+      state.instances = state.instances || []
 
       // render readonly card if already completed
       if (state.complete || (state.survey.limit !== 0 && state.instances.length > state.survey.limit)) {
-
         // disable client side state & proxy support
-        card.clientStateSupport = false;
-        card.clientProxySupport = false;
+        card.clientStateSupport = false
+        card.clientProxySupport = false
 
         callback(null, {
           survey: state.survey,
           percentageComplete: 100,
           complete: true,
           completeDate: formatDate(state.completeDateTimeStamp, state.survey.timezoneOffset),
-          labels: translateLabels(state.survey.translations, state.language || 'en',
+          labels: translateLabels(
+            state.survey.translations,
+            state.language || 'en',
             {
-              'questionCount': '{{COUNT}} question survey',
-              'response': 'response',
-              'responses': 'responses',
-              'completed': 'Completed',
-              'continue': 'Continue',
-              'start': 'Start'
+              questionCount: '{{COUNT}} question survey',
+              response: 'response',
+              responses: 'responses',
+              completed: 'Completed',
+              continue: 'Continue',
+              start: 'Start'
             },
             {
               count: state.survey.questions.length
             }
           )
-        });
-      }
-      else {
+        })
+      } else {
         // try for a newer version if no responses
         if (_.keys(state.responses).length === 0) {
-          var version = state.version;
+          var version = state.version
 
           // reopened survey's responses will be set to null. Force API fetch
           if (state.responses === null) {
-            version = 0;
+            version = 0
           }
 
-          XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, version, function (newSurvey, newVersion) {
+          XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, version, function(newSurvey, newVersion) {
             if (newSurvey) {
-              state.version = newVersion;
-              state.survey = newSurvey;
+              state.version = newVersion
+              state.survey = newSurvey
 
-              execCardDataCallback(newSurvey, {}, state.instances, callback);
+              execCardDataCallback(newSurvey, {}, state.instances, callback)
+            } else {
+              execCardDataCallback(state.survey, {}, state.instances, callback)
             }
-            else {
-              execCardDataCallback(state.survey, {}, state.instances, callback);
-            }
-          });
-        }
-        else {
-          execCardDataCallback(state.survey, state.responses, state.instances, callback);
+          })
+        } else {
+          execCardDataCallback(state.survey, state.responses, state.instances, callback)
         }
       }
-    }
-    else {
-      XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, null, function (survey, version) {
+    } else {
+      XandGo.getSurvey(inputs.apiKey, inputs.secret, inputs.surveyId, null, function(survey, version) {
         if (survey) {
-          state.version = version;
-          state.survey = survey;
-          state.responses = {};
-          state.instances = [CUID()];
+          state.version = version
+          state.survey = survey
+          state.responses = {}
+          state.instances = [CUID()]
 
-          execCardDataCallback(survey, state.responses, state.instances, callback);
+          execCardDataCallback(survey, state.responses, state.instances, callback)
+        } else {
+          callback('Could not find survey with ID ' + (inputs.surveyId || '?'))
         }
-        else {
-          callback('Could not find survey with ID ' + (inputs.surveyId || '?'));
-        }
-      });
+      })
     }
 
     function execCardDataCallback(survey, responses, instances, callback) {
-      XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function (user) {
+      XandGo.getUser(inputs.apiKey, inputs.secret, inputs.userId, function(user) {
         if (!user) {
-          callback('Unknown User: ' + inputs.userId + ', key: ' + inputs.apiKey + ', secret: ' + inputs.secret);
-        }
-        else {
+          callback('Unknown User: ' + inputs.userId + ', key: ' + inputs.apiKey + ', secret: ' + inputs.secret)
+        } else {
           // save user's language to state
-          state.language = user.language;
+          state.language = user.language
 
-          callback && callback(null,
-
-            // jade locals
-            {
-              survey: translateSurvey(survey.translations, user.language, survey),
-              responseCount: _.keys(responses || {}).length,
-              percentageComplete: Math.floor((_.keys(responses || {}).length / survey.questions.length) * 100),
-              instances: instances,
-              labels: translateLabels(survey.translations, user.language,
-                {
-                  'questionCount': '{{COUNT}} question survey',
-                  'response': 'response',
-                  'responses': 'responses',
-                  'completed': 'Completed',
-                  'continue': 'Continue',
-                  'start': 'Start'
-                },
-                {
-                  count: survey.questions.length
-                }
-              )
-            },
-
-            // js client side locals
-            {
-              surveyId: survey.id,
-              questions: translateQuestions(survey.translations, user.language, survey.questions),
-              questionImages: survey.questionImages,
-              responses: responses || {},
-              user: user,
-              limit: survey.limit,
-              instances: instances,
-              previousQuestionId: state.previousQuestionId,
-              photoCount: survey.photos.length,
-              allowBack: survey.allowBack,
-              labels: translateLabels(survey.translations, user.language, {
-                'start': 'Start',
-                'next': 'Next',
-                'back': 'Back',
-                'done': 'Done',
-                'required': 'required',
-                'response': 'response',
-                'responses': 'responses',
-                'completed': 'Completed',
-                'continue': 'Continue'
-              })
-            }
-          );
+          callback &&
+            callback(
+              null,
+              // jade locals
+              {
+                survey: translateSurvey(survey.translations, user.language, survey),
+                responseCount: _.keys(responses || {}).length,
+                percentageComplete: Math.floor(_.keys(responses || {}).length / survey.questions.length * 100),
+                instances: instances,
+                labels: translateLabels(
+                  survey.translations,
+                  user.language,
+                  {
+                    questionCount: '{{COUNT}} question survey',
+                    response: 'response',
+                    responses: 'responses',
+                    completed: 'Completed',
+                    continue: 'Continue',
+                    start: 'Start'
+                  },
+                  {
+                    count: survey.questions.length
+                  }
+                )
+              },
+              // js client side locals
+              {
+                surveyId: survey.id,
+                questions: translateQuestions(survey.translations, user.language, survey.questions),
+                questionImages: survey.questionImages,
+                responses: responses || {},
+                user: user,
+                limit: survey.limit,
+                instances: instances,
+                previousQuestionId: state.previousQuestionId,
+                photoCount: survey.photos.length,
+                allowBack: survey.allowBack,
+                labels: translateLabels(survey.translations, user.language, {
+                  start: 'Start',
+                  next: 'Next',
+                  back: 'Back',
+                  done: 'Done',
+                  required: 'required',
+                  response: 'response',
+                  responses: 'responses',
+                  completed: 'Completed',
+                  continue: 'Continue'
+                })
+              }
+            )
         }
-      });
+      })
     }
 
     function formatDate(value, timezoneOffset, format) {
-      format = format || 'D MMM YYYY H:mm';
+      format = format || 'D MMM YYYY H:mm'
 
       if (value) {
-        var dt = Moment(value).utc();
+        var dt = Moment(value).utc()
 
         // default offset to GMT +2
         if (_.isUndefined(timezoneOffset) || _.isNull(timezoneOffset) || !_.isNumber(timezoneOffset)) {
-          timezoneOffset = 120;
+          timezoneOffset = 120
         }
 
-        return dt.utcOffset(timezoneOffset).format(format);
-      }
-      else {
-        return '';
+        return dt.utcOffset(timezoneOffset).format(format)
+      } else {
+        return ''
       }
     }
 
     function translateSurvey(translations, languageCode, survey) {
       if (languageCode && languageCode === 'en') {
-        return survey;
-      }
-      else {
-        survey.name = lookupTranslation(translations, languageCode, null, 'name', survey.name);
-        survey.description = lookupTranslation(translations, languageCode, null, 'description', survey.description);
+        return survey
+      } else {
+        survey.name = lookupTranslation(translations, languageCode, null, 'name', survey.name)
+        survey.description = lookupTranslation(translations, languageCode, null, 'description', survey.description)
 
-        return survey;
+        return survey
       }
     }
 
     function translateLabels(translations, languageCode, defaults, values) {
-      var labels = {};
+      var labels = {}
 
-      _.each(_.keys(defaults), function (defaultKey) {
-        labels[defaultKey] = lookupTranslation(translations, languageCode, 'labels', defaultKey, defaults[defaultKey]);
+      _.each(_.keys(defaults), function(defaultKey) {
+        labels[defaultKey] = lookupTranslation(translations, languageCode, 'labels', defaultKey, defaults[defaultKey])
 
         // replace any tokens with provided values
         if (values) {
-          _.each(_.keys(values), function (valueKey) {
-            labels[defaultKey] = labels[defaultKey].replace('{{' + valueKey.toUpperCase() + '}}', values[valueKey]);
-          });
+          _.each(_.keys(values), function(valueKey) {
+            labels[defaultKey] = labels[defaultKey].replace('{{' + valueKey.toUpperCase() + '}}', values[valueKey])
+          })
         }
-      });
+      })
 
-      return labels;
+      return labels
     }
 
     function translateQuestions(translations, languageCode, questions) {
       if (languageCode && languageCode === 'en') {
-        return questions;
-      }
-      else {
+        return questions
+      } else {
         if (translations && questions && _.isArray(questions)) {
-          _.forEach(questions, function (question) {
-            question.message = lookupQuestionTranslation(translations, languageCode, question);
+          _.forEach(questions, function(question) {
+            question.message = lookupQuestionTranslation(translations, languageCode, question)
 
             // translate multiple choice options
             if (question.replyType === 'multipleChoice') {
               if (question.reply && _.isArray(question.reply)) {
-                _.forEach(question.reply, function (reply) {
-                  reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply.choice);
-                });
+                _.forEach(question.reply, function(reply) {
+                  reply._choice = reply.choice
+                  reply.choice = lookupQuestionChoiceTranslation(translations, languageCode, question.id, reply.choice)
+                })
               }
             }
 
             // translate conditions to facilitate option matches
             if (question.conditions && _.isArray(question.conditions)) {
-              _.forEach(question.conditions, function (condition) {
+              _.forEach(question.conditions, function(condition) {
                 if (condition.questionId) {
-                  _.forEach(questions, function (previousQuestion) {
+                  _.forEach(questions, function(previousQuestion) {
                     if (previousQuestion.id === condition.questionId) {
                       if (translations[languageCode]) {
                         if (translations[languageCode].questions) {
                           if (translations[languageCode].questions[previousQuestion.id]) {
                             if (translations[languageCode].questions[previousQuestion.id].choices) {
                               if (translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)]) {
-                                condition.response = translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)];
+                                condition.response = translations[languageCode].questions[previousQuestion.id].choices[encodeKey(condition.response)]
                               }
                             }
                           }
                         }
                       }
                     }
-                  });
+                  })
                 }
-              });
+              })
             }
-          });
+          })
         }
 
-        return questions;
+        return questions
       }
     }
 
     function lookupTranslation(translations, languageCode, section, key, defaultValue) {
       if (languageCode && languageCode === 'en') {
-        return defaultValue;
-      }
-      else {
+        return defaultValue
+      } else {
         if (translations) {
           if (translations[languageCode]) {
             if (section) {
               if (translations[languageCode][section]) {
                 if (translations[languageCode][section][key]) {
-                  return translations[languageCode][section][key];
+                  return translations[languageCode][section][key]
                 }
               }
-            }
-            else {
+            } else {
               if (translations[languageCode][key]) {
-                return translations[languageCode][key];
+                return translations[languageCode][key]
               }
             }
           }
         }
 
-        return defaultValue;
+        return defaultValue
       }
     }
 
     function lookupQuestionTranslation(translations, languageCode, question) {
       if (languageCode && languageCode === 'en') {
-        return question.message;
-      }
-      else {
+        return question.message
+      } else {
         if (translations) {
           if (translations[languageCode]) {
             if (translations[languageCode].questions) {
               if (translations[languageCode].questions[question.id]) {
-                return translations[languageCode].questions[question.id].question;
+                return translations[languageCode].questions[question.id].question
               }
             }
           }
         }
 
-        return question.message;
+        return question.message
       }
     }
 
     function lookupQuestionChoiceTranslation(translations, languageCode, questionId, choice) {
       if (languageCode && languageCode === 'en') {
-        return choice;
-      }
-      else {
+        return choice
+      } else {
         if (translations) {
           if (translations[languageCode]) {
             if (translations[languageCode].questions) {
               if (translations[languageCode].questions[questionId]) {
                 if (translations[languageCode].questions[questionId].choices) {
                   if (translations[languageCode].questions[questionId].choices[encodeKey(choice)]) {
-                    return translations[languageCode].questions[questionId].choices[encodeKey(choice)];
+                    return translations[languageCode].questions[questionId].choices[encodeKey(choice)]
                   }
                 }
               }
@@ -340,20 +330,17 @@ module.exports = {
           }
         }
 
-        return choice;
+        return choice
       }
     }
 
     // encode mongodb key
     function encodeKey(key) {
       if (key && _.isString(key)) {
+        return key.replace(/\$/g, '\uFF04').replace(/\./g, '\uFF0E')
+      } else {
         return key
-          .replace(/\$/g, '\uFF04')
-          .replace(/\./g, '\uFF0E');
-      }
-      else {
-        return key;
       }
     }
   }
-};
+}
