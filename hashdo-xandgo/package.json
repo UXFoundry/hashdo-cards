@@ -1,37 +1,28 @@
 {
   "name": "hashdo-xandgo",
-  "version": "0.3.81",
+  "version": "0.3.92",
   "description": "X&Go related HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
-  "keywords": [
-    "hashdo",
-    "card",
-    "xandgo"
-  ],
+  "keywords": ["hashdo", "card", "xandgo"],
   "dependencies": {
-    "cloudinary": "1.4.1",
+    "cloudinary": "1.9.0",
     "cuid": "1.3.8",
-    "lodash": "4.14.0",
-    "moment": "2.14.1",
+    "lodash": "4.17.4",
+    "moment": "2.19.1",
     "perfy": "1.1.2",
-    "request": "2.74.0"
+    "request": "2.83.0"
   },
   "devDependencies": {
     "gulp": "gulpjs/gulp#4.0",
-    "gulp-autoprefixer": "3.1.0",
-    "gulp-concat": "2.6.0",
-    "gulp-less": "3.1.0",
-    "gulp-load-plugins": "1.2.4",
+    "gulp-autoprefixer": "4.0.0",
+    "gulp-concat": "2.6.1",
+    "gulp-less": "3.3.2",
+    "gulp-load-plugins": "1.5.0",
     "gulp-rename": "1.2.2",
-    "gulp-uglify": "1.5.4"
+    "gulp-uglify": "3.0.0"
   },
   "pack": {
     "friendlyName": "X&Go",
-    "cards": [
-      "rate",
-      "place",
-      "product",
-      "survey"
-    ]
+    "cards": ["bool", "rate", "place", "product", "survey"]
   }
 }

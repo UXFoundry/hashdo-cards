@@ -1,0 +1,18 @@
+{
+  "name": "hashdo-mecc",
+  "version": "0.1.2",
+  "description": "MECC HashDo cards.",
+  "author": "HashDo <info@hashdo.com>",
+  "keywords": ["hashdo", "card", "mecc"],
+  "dependencies": {
+    "humanname": "0.2.2",
+    "lodash": "4.17.4",
+    "moment": "2.18.1",
+    "mysql": "2.14.1",
+    "request": "2.81.0"
+  },
+  "pack": {
+    "friendlyName": "MECC",
+    "cards": ["statement"]
+  }
+}

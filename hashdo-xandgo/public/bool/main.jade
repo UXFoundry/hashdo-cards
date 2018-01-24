@@ -1,0 +1,16 @@
+extends /card
+
+block header
+  .hdc-hdr
+    .hdc-title!= locals.question
+
+block content
+  .table(data-source!= locals.source)
+    .row
+      if locals.response === 101
+        .cell.yes.done!= locals.yesOption
+      else if locals.response === 100
+        .cell.no.done!= locals.noOption
+      else
+        .cell.yes!= locals.yesOption
+        .cell.no!= locals.noOption

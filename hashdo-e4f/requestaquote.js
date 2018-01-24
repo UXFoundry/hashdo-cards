@@ -84,7 +84,7 @@ module.exports = {
             E4FUserId: inputs.E4FUserId
           };
 
-          Request.post(url, {json: true, body: args}, function (err, res, body) {
+          Request.post(url, {json: true, body: args, timeout: 10000}, function (err, res, body) {
             if (!err && res.statusCode === 200) {
               var sourceCountries = res.body.returnData;
               cb(null, sourceCountries);
@@ -101,7 +101,7 @@ module.exports = {
             E4FUserId: inputs.E4FUserId
           };
 
-          Request.post(url, {json: true, body: args}, function (err, res, body) {
+          Request.post(url, {json: true, body: args, timeout: 10000}, function (err, res, body) {
             if (!err && res.statusCode === 200) {
               var destinationCountries = res.body.returnData;
               cb(null, destinationCountries);

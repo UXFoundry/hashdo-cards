@@ -1,0 +1,97 @@
+.hdc {
+  &.mecc.statement {
+    .hdc-hdr {
+      img {
+        float: left;
+        margin-right: 5px;
+      }
+    }
+
+    .hdc-subhdr {
+      padding: 10px;
+      background-color: rgba(239, 239, 239, 0.2);
+      border-bottom: 1px solid #e1e1e1;
+
+      .row {
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #f0f4f7;
+
+        label {
+          .label {
+            color: #999;
+            font-weight: 200;
+            display: inline-block;
+            width: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .value {
+            color: #000;
+            display: inline-block;
+            width: 140px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        &:last-child {
+          padding-bottom: 0;
+          margin-bottom: 0;
+          border-bottom: none;
+        }
+      }
+    }
+
+    .hdc-inner {
+      padding: 10px;
+      font-size: 12px;
+
+      .row {
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #f0f4f7;
+
+        label {
+          .label {
+            color: #999;
+            font-weight: 200;
+            display: inline-block;
+            width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .value {
+            color: #000;
+            display: inline-block;
+            width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: right;
+          }
+
+          .description {
+            color: #999;
+            font-weight: 300;
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        &:last-child {
+          padding-bottom: 0;
+          margin-bottom: 0;
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}

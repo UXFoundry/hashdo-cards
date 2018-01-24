@@ -1,0 +1,40 @@
+extends /card
+
+block header
+  .hdc-hdr
+    img(src='https://cdn.hashdo.com/icons/mecc.png', width='24px', height='24px')
+    .hdc-title
+      | Account Statement
+
+  .hdc-subhdr
+    .row
+      label
+        .label Account
+        .value= locals.statement.accountNumber
+    .row
+      label
+        .label Date
+        .value= locals.date
+    .row
+      label
+        .label Name
+        .value= locals.statement.name
+    .row
+      label
+        .label Balance
+        .value= locals.statement.balance
+    .row
+      label
+        .label Available
+        .value= locals.statement.availableBalance
+
+block content
+  if locals.statement.transactions.length > 0
+    each item in locals.statement.transactions
+      .row
+        label
+          .label= item.date
+          .value= item.debit || item.credit
+          .description= item.description
+  else
+    p No Transactions

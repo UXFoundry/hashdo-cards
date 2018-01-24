@@ -6,7 +6,7 @@ var Cloudinary = require('cloudinary'),
 
 var dataVersions = [],
   dataVersionCacheDurationInMinutes = 2,
-  baseAPIUrl = 'http://xandgo.com/api/';
+  baseAPIUrl = 'https://xandgo.com/api/';
 
 exports.getUser = function (apiKey, apiSecret, userId, callback) {
   Request.post(

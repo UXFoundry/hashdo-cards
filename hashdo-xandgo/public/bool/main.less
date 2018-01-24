@@ -1,0 +1,47 @@
+.hdc {  
+  &.xandgo.bool {
+    .hdc-hdr {
+      padding: 10px 10px 12px 10px;
+    }
+
+    .hdc-inner {
+      padding: 0;
+
+      .table {
+        width: 100%;
+        text-align: center;
+        display: table;
+
+        .row {
+          display: table-row;
+
+          .cell {
+            padding: 10px 10px 8px 10px;
+            display: table-cell;
+            cursor: pointer;
+
+            &:last-child {
+              border-left: 1px solid #e1e1e1;
+            }
+
+            &:only-child {
+              border: none;
+            }
+
+            &.done {
+              cursor: default;
+
+              &.yes {
+                color: green;
+              }
+
+              &.no {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

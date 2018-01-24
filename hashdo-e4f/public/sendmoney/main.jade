@@ -1,11 +1,12 @@
 extends /card
 
 block content
-  link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/sendmoney.css')
-  h1.title.sendMoneyMainTitle Send Money
-  h1.title.sendMoneyConfirmed.hidden Payment Details
+  //link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/sendmoney.css')
+  .logo
+  h1.sendMoneyMainTitle Send Money
+  h2.sendMoneyConfirmed.hidden Payment Details
   .payInCountryBlock.hidden
-    h1 Sending Country
+    h2 Sending Country
     div
       select(id='payIn',name='payInCountries').payInCountrySelect
         option(value='Default') Select Pay In Country
@@ -19,7 +20,7 @@ block content
     .paymethodIn
       select(id='paymethodIn',name='paymethodIn').paymethodInSelect
   .payOutCountryBlock.hidden
-    h1 Destination Country
+    label Destination Country
     select(id='payOut',name='payOutCountries').payOutCountrySelect
       option(value='Default') Select Pay Out Country
       if payOutCountries
@@ -32,7 +33,7 @@ block content
     .paymethodOut
       select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
   .payOptionBlock.hidden
-    h1 Amount Options
+    label Amount Options
     select(id='payOption',name='payOption').payOption
       option(value='default') Select Rate Option
       option(value='0') Sending Amount
@@ -40,7 +41,7 @@ block content
     br
   .getQuoteBlock.hidden
     input(type="text", name="payValue", placeholder="Amount").payValue
-    a.btn.button.getQuote Get Quote
+    a.btn.getQuote Get Quote
   .quoteResults.hidden
     table
       tr
@@ -68,9 +69,9 @@ block content
       tr
         td.quoteAcceptanceTerms On acceptance of the quote, I confirm that I commit to the exchange rate which is fixed and can’t be changed and that I have read and agree to the Terms and Conditions of Exchange4free.
   .acceptQuote.hidden
-    a.btn.button.acceptQuoteButton Accept Quote
+    a.btn.acceptQuoteButton Accept Quote
   .beneficiaryPayOutOptions.hidden
-    h1 Beneficiary Information
+    h2 Beneficiary Information
     input(type="text", name="firstName", placeholder="First Name").firstNametxt
     input(type="text", name="lastName", placeholder="Last Name").lastNametxt
     input(type="text", name="idnumber", placeholder="ID Number").idNumbertxt
@@ -126,7 +127,7 @@ block content
         td
           input(type="text", name="beneficiaryBankCountry", readonly="readonly").beneficiaryBankCountry
   .beneficiaryAccept.hidden
-    a.btn.button.acceptBeneficiary Accept Beneficary
+    a.btn.acceptBeneficiary Accept Beneficary
   .finalTransferReason.hidden
     select(id='finalTransferReason',name='finalTransferReason').finalTransferReasonSelect
   .finalSourceofFunds.hidden
@@ -180,15 +181,15 @@ block content
       tr
         td
           input(type="text", name="beneficiaryBankCountry", readonly="readonly").pdTotalPaidOut
-    a.btn.button.confirmFinal Confirm Transfer
+    a.btn.confirmFinal Confirm Transfer
   .cardExpired.hidden
     table
       tr
         td Your transaction session has expired. Please note that due to security restrictions, the time from commencing the transaction to completion must be within a 10 minute window. Please re-create your transaction.
   .cardCompletedEFT.hidden
     table
-      tr
-        td Your transaction booking is completed. Please ensure you use the correct Deposit Reference. Please note that we do not accept cash deposits.
+      //- tr
+      //-   td Your transaction booking is completed. Please ensure you use the correct Deposit Reference. Please note that we do not accept cash deposits.
       tr
         td Deposit Reference to Use
       tr

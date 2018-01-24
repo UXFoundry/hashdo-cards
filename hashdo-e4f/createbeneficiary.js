@@ -41,8 +41,8 @@ module.exports = {
             ], function (err) {
                 console.log("ERROR #################################");
                 console.log(err);
-            });           
-           
+            });
+
         }
 
         else {
@@ -57,7 +57,7 @@ module.exports = {
 
         function handovertoHashDo(dataIn) {
             var viewModel = {
-                title: 'Create a Beneficiary'               
+                title: 'Create a Beneficiary'
             };
             var clientLocals = {
                 userID: inputs.LoggedInUserID,
@@ -66,7 +66,7 @@ module.exports = {
             callback(null, viewModel, clientLocals);
 
         }
-       
+
 
     }
 };

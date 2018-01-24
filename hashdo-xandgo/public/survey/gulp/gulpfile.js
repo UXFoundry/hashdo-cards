@@ -27,7 +27,7 @@ gulp.task('less', function (done) {
 gulp.task('js', function () {
   return gulp.src([
       '../js/cuid.1.3.8.js',
-      '../js/lodash.custom.4.14.0.js',
+      '../js/lodash.custom.4.17.4.js',
       '../js/noconflict.js'
     ])
     .pipe(plugins.concat('survey.min.js'))
