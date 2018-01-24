@@ -1,0 +1,209 @@
+.hdc.e4f.requestaquote div.hidden {
+  display: none;
+}
+.hdc.e4f.requestaquote .hidden {
+  display: none;
+}
+.hdc.e4f.requestaquote .hot-container {
+  margin-top: 100px;
+  min-height: 100px;
+  text-align: center;
+  width: 100%;
+}
+.hdc.e4f.requestaquote .hot-container p {
+  margin-top: 10px;
+}
+.hdc.e4f.requestaquote a {
+  text-decoration: none;
+}
+.hdc.e4f.requestaquote #overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.hdc.e4f.requestaquote #loading {
+  width: 50px;
+  height: 57px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -25px;
+}
+.hdc.e4f.requestaquote .hdc-error-text {
+  border-color: transparent !important;
+  border: none !important;
+  color: #ff0000;
+}
+.hdc.e4f.requestaquote .hdc-errormodal-done {
+  text-align: right;
+}
+
+.hdc.e4f.requestaquote h1 {
+    background: #1c1c1c;
+    background: -moz-linear-gradient(left, #1c1c1c 81%, #f8bc44 81%);
+    background: -webkit-linear-gradient(left, #1c1c1c 81%,#f8bc44 81%);
+    background: linear-gradient(to right, #1c1c1c 81%,#f8bc44 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c1c1c', endColorstr='#f8bc44',GradientType=1 );
+    color: white !important;
+    margin-right: -15px;
+    margin-left: -15px;
+    height: 30px;
+    line-height: 30px;
+    text-indent: 10px;
+    font-size: 1em !important;
+}
+
+.hdc.e4f.requestaquote h1.title, .title {
+    background-color: #2b2b2b;
+    height: 55px;
+    color: white;
+    line-height: 65px;
+    text-indent: 10px;
+    margin-top: -15px;
+    padding-bottom: unset;
+    background: #000000;
+    background: -moz-linear-gradient(left, #000000 81%, #4c4c4c 81%);
+    background: -webkit-linear-gradient(left, #000000 81%,#4c4c4c 81%);
+    background: linear-gradient(to right, #000000 81%,#4c4c4c 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#4c4c4c',GradientType=1 );
+    margin-left: -15px;
+    margin-right: -15px;
+    font-size: 1.3em !important;
+}
+
+.hdc.e4f.requestaquote select {
+  background-color: #fff;
+  color: #000;
+  height: 30px;
+  left: 0px;
+  margin-bottom: 9px;
+  margin-left: 0px;
+  margin-right: 9px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.hdc.e4f.requestaquote input {
+  background: #ffffff;
+  font-family: arial;
+  font-size: 14px;
+  font-weight: normal;
+  height: 30px;
+  margin-bottom: 3px;
+  text-indent: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #999;
+  border-radius: 6px;
+}
+.hdc.e4f.requestaquote input[type="text"],
+.hdc.e4f.requestaquote input[type="password"]{
+  -webkit-appearance: none;
+}
+.hdc.e4f.requestaquote input[type="checkbox"] {
+  width: auto;
+  margin: 5px 6px 0 0;
+}
+
+.hdc.e4f.requestaquote .btn {
+    background: #72b13b;
+    border: 1px solid #277227;
+    bottom: 10px;
+    cursor: pointer;
+    display: block;
+    font-family: arial;
+    /*font-size: 16px;*/
+    font-size: 1em;
+    font-weight: normal;
+    height: 30px;
+    line-height: 30px;
+    margin: 15px 9px 20px;
+    text-align: center;
+    width: 90%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    text-decoration: none !important;
+    color: #fff !important;
+}
+
+.acceptQuoteButton{
+    background-color: #000;
+    border: 1px #000000 solid;
+    color: #f8bc44 !important;
+}
+
+
+.hdc.e4f.requestaquote td {
+  color: #f8bc44;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+}
+.hdc.e4f.requestaquote h2 {
+  color: #2b2b2b;
+  font-family: arial, helvetica;
+  font-size: 16px;
+}
+
+.rewardsnoticedata {
+color: red !important;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+
+}
+
+
+
+.requestaquote:before {
+    position: relative;
+    /*z-index: 100000;*/
+    left: 0px;
+    top: 0px;
+
+    display: inline-block;
+    width: 100%;
+    height: 220px;
+    margin-right: 5px;
+    content: "";
+    background: url("https://www.exchange4free.com/xandgo/images/raqS.png") no-repeat 0 0;
+    background-size: 100%;
+}
+
+
+input[readonly="readonly"] {
+    border: none !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-bottom: 1px solid #bdbdbd !important;
+    border-radius: unset !important;
+}
+
+
+input.AmountValue{
+    border: none !important;
+    background: none !important;
+    color: green !important;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
+} 
+ input.transferFeeValue{
+    border: none !important;
+    color: red !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+    border-radius: unset !important;
+}
+input.exchangeRateValue{
+    border: none !important;
+    color: #2b2b2b !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+    border-radius: unset !important;
+}
