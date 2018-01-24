@@ -1,0 +1,51 @@
+extends /card
+
+block content
+	.payInCountryBlock
+		h1 Pay In
+		select(id='payIn',name='payInCountries').payInCountrySelect
+				option(value='Default') Select Pay In Country
+				each payInCountry in payInCountries
+					option(value=payInCountry.sourceCountryCode) #{payInCountry.sourceCountryName}
+	.payInCurrencyBlock.hidden
+		.currencyIn
+			select(id='payInCurrencies',name='payInCurrencies').payInCurrencySelect
+	.payInMethodBlock.hidden
+		.paymethodIn
+			select(id='paymethodIn',name='paymethodIn').paymethodInSelect
+	.payOutCountryBlock.hidden
+		h1 Pay Out 
+		select(id='payOut',name='payOutCountries').payOutCountrySelect
+			option(value='Default') Select Pay Out Country
+			each payOutCountry in payOutCountries
+				option(value=payOutCountry.destinationCountryCode) #{payOutCountry.destinationCountryName}
+	.payOutCurrencyBlock.hidden
+		.currencyOut
+			select(id='payOutCurrencies',name='payOutCurrencies').payOutCurrencySelect
+	.payOutMethodBlock.hidden
+		.paymethodOut
+			select(id='paymethodOut',name='paymethodOut').paymethodOutSelect
+	.payOptionBlock.hidden
+		h1 Amount Options
+		select(id='payOption',name='payOption').payOption
+			option(value='default') Select Rate Option
+			option(value='0') Sending Amount
+			option(value='1') Receiving Amount
+		br
+	.getQuoteBlock.hidden
+		input(type="text", name="payValue").payValue
+		button.getQuoteBtn Get Quote
+	.quoteResults.hidden
+		table
+			tr
+				td TransferFee
+				td 
+					input(type="text", name="transferFeeValue", readonly="readonly").transferFeeValue
+			tr
+				td Rate
+				td 
+					input(type="text", name="Rate", readonly="readonly").exchangeRateValue
+			tr
+				td Amount
+				td 
+					input(type="text", name="Amount", readonly="readonly").AmountValue

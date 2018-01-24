@@ -1,7 +1,7 @@
 extends /card
 
 block content
-  //link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/sendmoney.css')
+  link(rel='stylesheet', href='https://www.exchange4free.com/xandgo/css/sendmoney.2.0.0.css')
   .logo
   h1.sendMoneyMainTitle Send Money
   h2.sendMoneyConfirmed.hidden Payment Details
@@ -60,6 +60,12 @@ block content
         td.cashrewardsvaluedata
           span
             .cashrewardsvalue
+      tr.signonfeeheaderrow.hidden
+        td Sign on Fee
+      tr.signonfeevaluerow.hidden
+        td.signonfeevaluedata
+          span
+            .signonfeevalue
     table
       tr
         td Amount

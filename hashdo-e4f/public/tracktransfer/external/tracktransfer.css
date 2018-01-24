@@ -1,0 +1,358 @@
+.hdc.e4f.tracktransfer div.hidden {
+  display: none;
+}
+.hdc.e4f.tracktransfer .hidden {
+  display: none;
+}
+.hdc.e4f.tracktransfer .hot-container {
+  margin-top: 100px;
+  min-height: 100px;
+  text-align: center;
+  width: 100%;
+}
+.hdc.e4f.tracktransfer .hot-container p {
+  margin-top: 10px;
+}
+.hdc.e4f.tracktransfer a {
+  text-decoration: none;
+}
+.hdc.e4f.tracktransfer #overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.hdc.e4f.tracktransfer #loading {
+  width: 50px;
+  height: 57px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -25px;
+}
+.hdc.e4f.tracktransfer .hdc-error-text {
+  border-color: transparent !important;
+  border: none !important;
+  color: #ff0000;
+}
+.hdc.e4f.tracktransfer .hdc-errormodal-done {
+  text-align: right;
+}
+/* .hdc.e4f.tracktransfer h1 {
+  color: #2b2b2b;
+  font-family: arial, helvetica;
+  font-size: 18px;
+  font-weight: normal;
+}
+ */
+.hdc.e4f.tracktransfer h1 {
+    background: #1c1c1c;
+    background: -moz-linear-gradient(left, #1c1c1c 81%, #f8bc44 81%);
+    background: -webkit-linear-gradient(left, #1c1c1c 81%,#f8bc44 81%);
+    background: linear-gradient(to right, #1c1c1c 81%,#f8bc44 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c1c1c', endColorstr='#f8bc44',GradientType=1 );
+    color: white !important;
+    margin-right: -15px;
+    margin-left: -15px;
+    height: 30px;
+    line-height: 30px;
+    text-indent: 10px;
+    font-size: 1em !important;
+}
+/*.hdc.e4f.tracktransfer h1.title {
+  font-weight: bold;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E6E6E6;
+}*/
+
+.hdc.e4f.tracktransfer h1.title, .title {
+    background-color: #2b2b2b;
+    height: 55px;
+    color: white;
+    line-height: 65px;
+    text-indent: 10px;
+    margin-top: -15px;
+    padding-bottom: unset;
+    background: #000000;
+    background: -moz-linear-gradient(left, #000000 81%, #4c4c4c 81%);
+    background: -webkit-linear-gradient(left, #000000 81%,#4c4c4c 81%);
+    background: linear-gradient(to right, #000000 81%,#4c4c4c 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#4c4c4c',GradientType=1 );
+    margin-left: -15px;
+    margin-right: -15px;
+    font-size: 1.3em !important;
+}
+.title {
+    background-color: #2b2b2b !important;
+    height: 55px !important;
+    color: white !important;
+    line-height: 65px !important;
+    text-indent: 10px !important;
+    margin-top: -15px !important;
+    padding-bottom: unset !important;
+    background: #000000;
+    background: -moz-linear-gradient(left, #000000 81%, #4c4c4c 81%);
+    background: -webkit-linear-gradient(left, #000000 81%,#4c4c4c 81%);
+    background: linear-gradient(to right, #000000 81%,#4c4c4c 81%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#4c4c4c',GradientType=1 );
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    font-size: 1.3em !important;
+}
+
+.hdc.e4f.tracktransfer select {
+  background-color: #fff;
+  color: #000;
+  height: 30px;
+  left: 0px;
+  margin-bottom: 9px;
+  margin-left: 0px;
+  margin-right: 9px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.hdc.e4f.tracktransfer td {
+  color: #f8bc44;
+}
+
+.hdc.e4f.tracktransfer input {
+  background: #ffffff;
+  font-family: arial;
+  font-size: 14px;
+  font-weight: normal;
+  height: 30px;
+  margin-bottom: 3px;
+  text-indent: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #999;
+  border-radius: 6px;
+  color: #2b2b2b;
+}
+.hdc.e4f.tracktransfer input[type="text"],
+.hdc.e4f.tracktransfer input[type="password"]{
+  -webkit-appearance: none;
+}
+.hdc.e4f.tracktransfer input[type="checkbox"] {
+  width: auto;
+  margin: 5px 6px 0 0;
+}
+/* .hdc.e4f.tracktransfer .btn {
+  background: #f8bc44;
+  border: none;
+  bottom: 10px;
+  cursor: pointer;
+  display: block;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2', GradientType=0);
+  font-family: arial;
+  font-size: 16px;
+  font-weight: normal;
+  height: 30px;
+  line-height: 30px;
+  margin: 5px 0 20px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  text-decoration: none;
+  color: #000 !important;
+} */
+
+.hdc.e4f.tracktransfer .btn {
+    background: #72b13b;
+    border: 1px solid #277227;
+    bottom: 10px;
+    cursor: pointer;
+    display: block;
+    font-family: arial;
+    /*font-size: 16px;*/
+    font-size: 1em;
+    font-weight: normal;
+    height: 30px;
+    line-height: 30px;
+    margin: 15px 9px 20px;
+    text-align: center;
+    width: 90%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    text-decoration: none !important;
+    color: #fff !important;
+}
+
+.acceptQuoteButton{
+    background-color: #000;
+    border: 1px #000000 solid;
+    color: #f8bc44 !important;
+}
+
+
+.hdc.e4f.tracktransfer td {
+  color: #f8bc44;
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: bold;
+}
+.hdc.e4f.tracktransfer h2 {
+  color: #2b2b2b;
+  font-family: arial, helvetica;
+  font-size: 16px;
+}
+.hdc table {
+  margin-top: 5px;
+  width: 100%;
+}
+.hdc table tr td {
+  padding: 0 0 4px;
+}
+.hdc .termsandConditions table {
+  margin-top: -10px;
+}
+
+#messages-page .page-content .messages .message .message-text.card-container .hdc {
+    margin: 0;
+    box-shadow: none;
+    border: 1px solid #b3b3b3;
+    border-radius: 8px;
+    background: rgb(255, 255, 255); /*sets the card background*/
+}
+
+/* input[name="term1Accept"]{
+    margin-left: -18px !important;
+    display: block;
+}
+input[name="term1Accept"] + label {
+    margin-left: 18px !important;;
+    width: 90% !important;;
+    display: block !important;;
+    margin-bottom: 10px !important;;
+} */
+
+
+.cardExpired, .cardExpired td{
+    background-color: #2b2b2b !important;
+    color: #bdbdbd !important;
+    margin-left: -16px;
+    padding: 16px;  
+    margin-right: -14px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial;
+}
+
+
+.tracktransfer:before {
+
+    position: relative;
+    /*z-index: 100000;*/
+    left: 0px;
+    top: 0px;
+
+    display: inline-block;
+    width: 100%;
+    height: 220px;
+    margin-right: 5px;
+    content: "";
+    background: url("https://www.exchange4free.com/xandgo/images/tracktransfer.png") no-repeat 0 0;
+    background-size: 100%;
+}
+
+input[readonly="readonly"] {
+    border: none !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-bottom: 1px solid #bdbdbd !important;
+    border-radius: unset !important;
+}
+
+.termsLabel {
+    display: block !important;
+    color: white !important;
+    background-color: #2b2b2b !important;
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+    font-size: 14px !important;
+}
+.term1 {
+    display: block !important;
+    left: 25px !important;
+    position: relative !important;
+    width: 15px !important;
+    height: 15px !important;
+    font-size: 15px !important;
+    padding: 10px !important;
+    -ms-transform: scale(1.5) !important;
+    -moz-transform: scale(1.5) !important;
+    -webkit-transform: scale(1.5) !important;
+    -o-transform: scale(1.5) !important;
+    margin-bottom: 5px !important;
+}
+label {
+  font-weight: bold !important;
+}
+
+.pending {
+  color:red;
+  font-weight: bold !important;
+}
+
+.received {
+  color:green;
+  font-weight: bold !important;
+}
+
+.complete {
+  color:black;
+  font-weight: bold !important;
+}
+
+.cancelled {
+  color:red;
+  font-weight: bold !important;
+}
+
+/* OVERRIDES UNTILL FIXED IN THE CODE */
+
+
+#beneficiaryFundsOwnerInformationCountry {
+    margin-bottom: 20px;
+}
+
+input.AmountValue{
+    border: none !important;
+    background: none !important;
+    color: green !important;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
+} 
+
+ input.transferFeeValue{
+    border: none !important;
+    color: red !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+    border-radius: unset !important;
+}
+input.exchangeRateValue{
+    border: none !important;
+    color: #2b2b2b !important;
+    background: none !important;
+    border-bottom: 1px #a5a5a5 solid !important;
+    border-radius: unset !important;
+}
+
+#DRreference {
+  color: red !important;
+  font-size: larger;
+  font-weight: bold;
+}
