@@ -527,7 +527,13 @@ function importcreateBeneficiary() {
         getCountryPayOutOptions();
         $card.find('.beneficiarypayoutmethod').removeClass('hidden');
         hideLoading();
-        getBankNameOptions();
+        var selectedCountry = $card.find('.beneficiarycountrySelect').val();
+        if (selectedCountry == 'NGA') {
+            $card.find('.beneficiaryBankNameSelect').addClass('hidden');
+        } else {
+            getBankNameOptions();
+
+        }
 
 
     });
@@ -616,12 +622,19 @@ function importcreateBeneficiary() {
         var selectedIndex = $card.find('.beneficiarypayoutmethodSelect')[0].options.selectedIndex - 1;
         console.log(selectedIndex);
         console.log($card.find('.beneficiarypayoutmethodSelect').val());
-
+        console.log(locals.payoutoptions[selectedIndex]);
+        if (locals.payoutoptions[selectedIndex]) {
+            if (locals.payoutoptions[selectedIndex].providerType) {
+                locals.providerType=locals.payoutoptions[selectedIndex].providerType;
+            }
+        }
         var cont = true;
         if ($card.find('.beneficiarypayoutmethodSelect').val() == '3') {
+            
             if (locals.payoutoptions[selectedIndex]) {
                 if (locals.payoutoptions[selectedIndex].payoutOption)
                     if (locals.payoutoptions[selectedIndex].payoutOption != '0') {
+                        
                         resetUItoHidden(function () {
                             $card.find('.beneficiaryPayoutMethodNotRequired').removeClass('hidden');
                             $card.find('.beneficiarycountry').removeClass('hidden');
@@ -704,8 +717,8 @@ function importcreateBeneficiary() {
         'MUS',
         'MAR',
         'MOZ',
-        'NGA',
         'NER',
+        'NGA',
         'RWA',
         'MAR',
         'SEN',
@@ -972,28 +985,14 @@ function importcreateBeneficiary() {
 
         if ((entityType == 1) && (payoutmethod != 3) && (payoutmethod != 7)) {
             $card.find('.beneficiaryBankName').removeClass('hidden');
-
-
-
-
-
             $card.find('.beneficiaryBankCity').removeClass('hidden');
-
 
         }
 
         else if ((payoutmethod != 3) && (payoutmethod != 7)) {
             $card.find('.beneficiaryBankName').removeClass('hidden');
-
-
             $card.find('.beneficiaryBankCity').removeClass('hidden');
-
-
-
-
-
         }
-
 
 
         $card.find('.benefeciaryControls').removeClass('hidden');
@@ -1507,16 +1506,44 @@ function importcreateBeneficiary() {
 
     }
 
+    function populatebankCodeSelection() {
+        card.proxy.post('http://127.0.0.1:3100/e4f/getBankEntityCode/', { providerType:'NGN::Bank' }, function (err, response) {
+            
+                    if (response) {
+                        if (response.returnData) {
+                            var bankCodeSelection = $card.find('.beneficiaryBankCodeSelect');
+                            bankCodeSelection[0].options.length = 0;
+                            bankCodeSelection.append($("<option />").val('DEFAULT').text('Bank Code'));
+                            console.log(response.returnData);
+                            
+                            response.returnData.forEach(function (entry) {
+            
+                                bankCodeSelection = $card.find('.beneficiaryBankCodeSelect');
+                                bankCodeSelection.append($("<option />").val(entry.entityCode).text(entry.bankName + '('+entry.entityCode+')'));
+                            });
+                            
+            
+                            /*
+                                               
+                            */
+                        }
+            
+                    }
+                });
+    }
+
 
     function populateForm_NGA(entityType, payoutmethod, callback) {
 
         if ((entityType == 1) && (payoutmethod != 3) && (payoutmethod != 7)) {
             $card.find('.beneficiaryBankName').removeClass('hidden');
             $card.find('.beneficiaryBankCity').removeClass('hidden');
-
-
-
-            $card.find('.beneficiaryBankBranchCode').removeClass('hidden');
+            $card.find('.beneficiaryBankBranchCode').addClass('hidden');
+            //$card.find('.beneficiaryBankBranchCode').removeClass('hidden');
+            $card.find('.beneficiaryBankCode').removeClass('hidden');
+            $card.find('.beneficiaryBankCodetxt').addClass('hidden');
+            $card.find('.beneficiaryBankCodeSelect').removeClass('hidden');
+            populatebankCodeSelection();
 
 
         }
@@ -1527,10 +1554,7 @@ function importcreateBeneficiary() {
 
         else if ((payoutmethod != 3) && (payoutmethod != 7)) {
             $card.find('.beneficiaryBankName').removeClass('hidden');
-            $card.find('.beneficiaryBankCity').removeClass('hidden');
-
-
-
+            $card.find('.beneficiaryBankCity').removeClass('hidden');           
             $card.find('.beneficiaryBankBranchCode').removeClass('hidden');
         }
 
@@ -2338,8 +2362,7 @@ function importcreateBeneficiary() {
             beneficiarySurname: $card.find('.lastNametxt').val(),
             idNumber: $card.find('.idtxt').val(),
             beneficiaryEmail: $card.find('.emailtxt').val(),
-
-
+            providerType: locals.providerType,
             beneficiaryCurrencyCode: $card.find('.beneficiarycurrencySelect').val(),
             beneficiaryCountryCode: $card.find('.beneficiarycountrySelect').val(),
             type: $card.find('.beneficiarypayoutmethodSelect').val(), //getPayoutMethodList
@@ -2387,9 +2410,14 @@ function importcreateBeneficiary() {
         }
 
         createBeneficiaryRequest.beneficiaryAddress = $card.find('.streetnumbertxt').val() + ' ' + $card.find('.streetnametxt').val();
-        console.log($card.find('.beneficiarypostCodeZARSelect').val());
+        console.log($card.find('.beneficiarycountrySelect').val());
         if ($card.find('.beneficiarycountrySelect').val() == 'ZAF')
             createBeneficiaryRequest.transferReasonId = '184';
+
+        if ($card.find('.beneficiarycountrySelect').val() == 'GBR') {
+            createBeneficiaryRequest.bankingInformation.sortCode = $card.find('.beneficiaryBankBranchCodetxt').val();
+        }
+
 
         if ($card.find('.beneficiarypostCodeZARSelect').val()) {
             createBeneficiaryRequest.beneficiaryPostCode = $card.find('.beneficiarypostCodeZARSelect').val();
@@ -2707,21 +2735,18 @@ function checkibancore(iban) {
     illegal = /\W|_/; // contains chars other than (a-zA-Z0-9) 
 
     // TEST ILLEGAL CHARACTERS
-    if (illegal.test(iban))
-    { return "0"; }
+    if (illegal.test(iban)) { return "0"; }
 
     else {
 
         illegal = /^\D\D\d\d.+/; // first chars are letter letter digit digit
 
         // CHECK FIRST 2 CHARACTERS
-        if (illegal.test(iban) == false)
-        { return "0"; }
+        if (illegal.test(iban) == false) { return "0"; }
 
         else {
             illegal = /^\D\D00.+|^\D\D01.+|^\D\D99.+/; // check digit are 00 or 01 or 99
-            if (illegal.test(iban))
-            { return "0"; }
+            if (illegal.test(iban)) { return "0"; }
 
             else { // no, continue
                 lofi = ilbc.slice(0, ctcnt).in_array(iban.substr(0, 2).toUpperCase()); // test if country respected
@@ -2737,8 +2762,7 @@ function checkibancore(iban) {
                 }  // but continue
 
                 // COUNTRY CODE IS FOUND, WRONG STRING LENGTH
-                if ((iban.length - lofi) != 0)
-                { return "0"; } // yes, continue
+                if ((iban.length - lofi) != 0) { return "0"; } // yes, continue
 
                 if (ctck >= 0) { illegal = buildtest("B04" + ilbc[ctck + ctcnt * 2], standard); } // fetch sub structure of respected country
                 else { illegal = /.+/; } // or take care of not respected country

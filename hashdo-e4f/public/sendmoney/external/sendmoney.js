@@ -1257,14 +1257,22 @@ function importSendMoney() {
 
 		if (locals.payOutOptionsEnabled) {
 			if (locals.payOutOptionsEnabled[$card.find('.paymethodOutSelect').val()]) {
-				console.log('Beneficiary on the Fly Payout Options Enabled - Updating Payment Details');
 
-				var firstName = $card.find('.firstNametxt').val();
-				var lastName = $card.find('.lastNametxt').val();
-				var mobile = $card.find('.telephonetxt').val();
+				if ($card.find('.payOutCountrySelect').val() == 'NGA') {
+					callAPI = true;
+				}
 
-				$card.find('.pdBeneficiaryName').val(firstName + ' ' + lastName);
-				$card.find('.pdPhoneNumber').val(selectedCountryInformation.dialingCode + mobile);
+				else {
+					console.log('Beneficiary on the Fly Payout Options Enabled - Updating Payment Details');
+
+					var firstName = $card.find('.firstNametxt').val();
+					var lastName = $card.find('.lastNametxt').val();
+					var mobile = $card.find('.telephonetxt').val();
+
+					$card.find('.pdBeneficiaryName').val(firstName + ' ' + lastName);
+					$card.find('.pdPhoneNumber').val(selectedCountryInformation.dialingCode + mobile);
+				}
+
 
 			}
 			else {
@@ -1731,29 +1739,37 @@ function importSendMoney() {
 
 		if (locals.payOutOptionsEnabled) {
 			if (locals.payOutOptionsEnabled[$card.find('.paymethodOutSelect').val()]) {
-				console.log('Payout Options Enabled');
-				updateSelectedCountryInformation();
-				getIDTypeList();
-				$card.find('.beneficiaryPayOutOptions').removeClass('hidden');
-				initiatedCashCollectionDetails(function () {
+				if ($card.find('.payOutCountrySelect').val() == 'NGA') {
+					$card.find('.beneficiary').removeClass('hidden');
+					getBeneficiaryForUserAndCountryRemote();
+				}
 
-				});
+				else {
+					console.log('Payout Options Enabled');
+					updateSelectedCountryInformation();
+					getIDTypeList();
+					$card.find('.beneficiaryPayOutOptions').removeClass('hidden');
+					initiatedCashCollectionDetails(function () {
 
-				getBeneficiaryTypeList();
+					});
 
-				if ($card.find('.paymethodOutSelect').val() == '1') { //Bank to Bank
-					$card.find('.beneficiaryPayOutOptionsBank').removeClass('hidden');
-					//Check on Country Required Information - NON BENEFICIARY TRANSACTIONS
-					console.log($card.find('.payOutCountrySelect').val());
-					if ($card.find('.payOutCountrySelect').val() == 'ARG') {
-						$card.find('.beneficiaryPayOutOptionsBankName').removeClass('hidden');
-						$card.find('.beneficiaryPayOutOptionsBranch').removeClass('hidden');
-						$card.find('.beneficiaryPayOutOptionsBankCity').removeClass('hidden');
-						$card.find('.beneficiaryPayOutOptionsBankCBU').removeClass('hidden');
-						$card.find('.beneficiaryPayOutOptionsBankName').removeClass('hidden');
-						$card.find('.beneficiaryPayOutOptionsBankCUIT').removeClass('hidden');
+					getBeneficiaryTypeList();
+
+					if ($card.find('.paymethodOutSelect').val() == '1') { //Bank to Bank
+						$card.find('.beneficiaryPayOutOptionsBank').removeClass('hidden');
+						//Check on Country Required Information - NON BENEFICIARY TRANSACTIONS
+						console.log($card.find('.payOutCountrySelect').val());
+						if ($card.find('.payOutCountrySelect').val() == 'ARG') {
+							$card.find('.beneficiaryPayOutOptionsBankName').removeClass('hidden');
+							$card.find('.beneficiaryPayOutOptionsBranch').removeClass('hidden');
+							$card.find('.beneficiaryPayOutOptionsBankCity').removeClass('hidden');
+							$card.find('.beneficiaryPayOutOptionsBankCBU').removeClass('hidden');
+							$card.find('.beneficiaryPayOutOptionsBankName').removeClass('hidden');
+							$card.find('.beneficiaryPayOutOptionsBankCUIT').removeClass('hidden');
+						}
 					}
 				}
+
 
 			}
 			else {

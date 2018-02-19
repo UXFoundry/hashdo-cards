@@ -88,15 +88,25 @@ block content
     input(type="text", name="city", placeholder="City").citytxt
   .beneficiaryPayOutOptionsBank.hidden
     h1 Bank Information
+    .beneficiaryPayOutOptionsAccountHolderName.hidden
+      input(type="text", name="po_accountholdername", placeholder="Account Holder Name").po_accountholdernametxt
+    .beneficiaryPayOutOptionsAccountNumber.hidden
+      input(type="text", name="po_accountnumber", placeholder="Account Number").po_accountnumbertxt
+    .beneficiaryPayOutOptionsAccountType.hidden
+       select(id='po_accounttype',name='po_accounttype').po_accounttypeselect
+    .beneficiaryPayOutbankcode.hidden
+       select(id='po_bankCode',name='po_bankcodeselect').po_bankcodeselect
+    .beneficiaryPayOutOptionsbankCity.hidden
+      input(type="text", name="po_bankCity", placeholder="Bank City").po_bankcitytxt
     .beneficiaryPayOutOptionsBankName.hidden
        select(id='bankNameSelect',name='bankNameSelect').bankNameSelect
-     .beneficiaryPayOutOptionsBranch.hidden
+    .beneficiaryPayOutOptionsBranch.hidden
        input(type="text", name="bankbranch", placeholder="Branch").branchtxt
-     .beneficiaryPayOutOptionsBankCity.hidden
+    .beneficiaryPayOutOptionsBankCity.hidden
        input(type="text", name="bankcity", placeholder="Bank City").bankcitytxt
-     .beneficiaryPayOutOptionsBankCBU.hidden
+    .beneficiaryPayOutOptionsBankCBU.hidden
        input(type="text", name="bankCBU", placeholder="CBU Number").bankcbutxt
-     .beneficiaryPayOutOptionsBankCUIT.hidden
+    .beneficiaryPayOutOptionsBankCUIT.hidden
        input(type="text", name="bankcuit", placeholder="CUIT/CUIL").bankcuittxt
   .beneficiary.hidden
     h1 Beneficiary

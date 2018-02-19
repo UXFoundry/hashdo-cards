@@ -4,7 +4,7 @@ card.onReady = function () {
 		now = new Date(),
 		renderUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()).valueOf();
 	if (typeof __e4fraq == 'undefined') {		
-		card.require('http://www.exchange4free.com/xandgo/lib/requestaquote.js?v=' + Math.round(new Date().getTime() / 1000), function () {			
+		card.require('https://www.exchange4free.com/xandgo/lib/requestaquote.js?v=' + Math.round(new Date().getTime() / 1000), function () {			
 			init();
 		});
 	}
