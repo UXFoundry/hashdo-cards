@@ -31,6 +31,11 @@ module.exports = {
       description: 'Authenticated User Token.',
       secure: true,
       required: true
+    },
+    requestId: {
+      example: '552fa62425186c6012edcf18',
+      description: 'The current request\'s ID.',
+      required: true
     }
   },
 
@@ -39,19 +44,19 @@ module.exports = {
       if ((state.localData.acceptedQuote) || (state.localData.completed)) {
         var viewModel = {
           title: 'Information',
-          payOutCountries: [ {
+          payOutCountries: [{
             destinationCountryID: 0,
             destinationCountryCode: state.localData.destinationCountryCodeText,
             destinationCountryName: state.localData.destinationCountryCodeText,
             continent: 'DEFAULT'
-          } ],
-          payInCountries: [ {
+          }],
+          payInCountries: [{
             sourceCountryId: 0,
             sourceCountryCode: state.localData.sourceCountryCode,
             sourceCountryName: state.localData.sourceCountryCodeText,
             continent: 'DEFAULT'
 
-          } ]
+          }]
         };
         var clientLocals = {
           userID: inputs.LoggedInUserID,
@@ -83,7 +88,7 @@ module.exports = {
       });
     }
 
-    function handovertoHashDo (dataIn) {
+    function handovertoHashDo(dataIn) {
       var viewModel = {
         title: 'Information',
         payInCountries: dataIn.e4f_getPayInCountries,
@@ -96,51 +101,51 @@ module.exports = {
 
     }
 
-    function sortPayInCountriesbyName (x, y) {
+    function sortPayInCountriesbyName(x, y) {
       return ((x.sourceCountryName == y.sourceCountryName) ? 0 : ((x.sourceCountryName > y.sourceCountryName) ? 1 : -1));
     }
 
-    function sortPayOutCountriesbyName (x, y) {
+    function sortPayOutCountriesbyName(x, y) {
       return ((x.destinationCountryName == y.destinationCountryName) ? 0 : ((x.destinationCountryName > y.destinationCountryName) ? 1 : -1));
     }
 
-    function prePopulate_e4fData (callback) {
+    function prePopulate_e4fData(callback) {
       async.parallel({
-          e4f_getPayInCountries: function (cb) {
-            var url = 'http://guinness.exchange4free.com:3000/e4f/getPayInCountryList';
-            var args = {
-              E4FUserId: inputs.E4FUserId
-            };
+        e4f_getPayInCountries: function (cb) {
+          var url = 'http://guinness.exchange4free.com:3000/e4f/getPayInCountryList';
+          var args = {
+            E4FUserId: inputs.E4FUserId
+          };
 
-            var request = require('request');
-            request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
-              if (!err && res.statusCode === 200) {
-                var sourceCountries = res.body.returnData || [];
-                sourceCountries.sort(sortPayInCountriesbyName);
-                cb(null, sourceCountries);
-              } else {
-                cb()
-              }
-            });
-          },
-          e4f_getPayOutCountries: function (cb) {
-            var url = 'http://guinness.exchange4free.com:3000/e4f/getPayOutCountryList';
-            var args = {
-              E4FUserId: inputs.E4FUserId
-            };
-
-            var request = require('request');
-            request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
-              if (!err && res.statusCode === 200) {
-                var destinationCountries = res.body.returnData || [];
-                destinationCountries.sort(sortPayOutCountriesbyName);
-                cb(null, destinationCountries);
-              } else {
-                cb()
-              }
-            });
-          }
+          var request = require('request');
+          request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
+            if (!err && res.statusCode === 200) {
+              var sourceCountries = res.body.returnData || [];
+              sourceCountries.sort(sortPayInCountriesbyName);
+              cb(null, sourceCountries);
+            } else {
+              cb()
+            }
+          });
         },
+        e4f_getPayOutCountries: function (cb) {
+          var url = 'http://guinness.exchange4free.com:3000/e4f/getPayOutCountryList';
+          var args = {
+            E4FUserId: inputs.E4FUserId
+          };
+
+          var request = require('request');
+          request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
+            if (!err && res.statusCode === 200) {
+              var destinationCountries = res.body.returnData || [];
+              destinationCountries.sort(sortPayOutCountriesbyName);
+              cb(null, destinationCountries);
+            } else {
+              cb()
+            }
+          });
+        }
+      },
         function (err, results) {
           callback(null, results);
         });

@@ -32,6 +32,11 @@ module.exports = {
       description: 'Authenticated User Token.',
       secure: true,
       required: true
+    },
+    requestId: {
+      example: '552fa62425186c6012edcf18',
+      description: 'The current request\'s ID.',
+      required: true
     }
   },
 
@@ -84,7 +89,7 @@ module.exports = {
             E4FUserId: inputs.E4FUserId
           };
 
-          Request.post(url, {json: true, body: args, timeout: 10000}, function (err, res, body) {
+          Request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
             if (!err && res.statusCode === 200) {
               var sourceCountries = res.body.returnData;
               cb(null, sourceCountries);
@@ -101,7 +106,7 @@ module.exports = {
             E4FUserId: inputs.E4FUserId
           };
 
-          Request.post(url, {json: true, body: args, timeout: 10000}, function (err, res, body) {
+          Request.post(url, { json: true, body: args, timeout: 10000 }, function (err, res, body) {
             if (!err && res.statusCode === 200) {
               var destinationCountries = res.body.returnData;
               cb(null, destinationCountries);
@@ -113,9 +118,9 @@ module.exports = {
         }
       },
 
-      function (err, results) {
-        callback(null, results);
-      });
+        function (err, results) {
+          callback(null, results);
+        });
     }
   }
 };

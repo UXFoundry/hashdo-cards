@@ -31,6 +31,11 @@ module.exports = {
             description: 'Authenticated User Token.',
             secure: true,
             required: true
+        },
+        requestId: {
+            example: '552fa62425186c6012edcf18',
+            description: 'The current request\'s ID.',
+            required: true
         }
     },
 

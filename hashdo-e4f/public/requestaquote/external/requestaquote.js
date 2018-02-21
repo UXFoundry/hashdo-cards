@@ -17,6 +17,14 @@ var locals;
 
 function importrequestaquote() {
     console.log('RAQ CodeBase Imported');
+    console.log(locals);
+    card.proxy.post('https://xandgo.com/api/request/message/delete', { appId:'564b271e11be470f00e1aa6e',requestId: '1', messageId: 'a8ffc5a6b66a124f' }, function (err, response) {
+        console.log(err);
+        console.log(response);
+
+    })
+
+
     if (locals) {
         if (locals.stateData) {
             if (locals.stateData.quoted) {
@@ -98,17 +106,17 @@ function importrequestaquote() {
             $card.find('.quoteDetails').addClass('hidden');
             $card.find('.quoteResults').removeClass('hidden');
             hideLoading();
-           console.log(locals.quoteData.cashReward);      
+            console.log(locals.quoteData.cashReward);
 
             if ((locals.quoteData.cashReward) && (locals.quoteData.cashReward != '0.0')) {
-                console.log(locals.quoteData.cashReward);             
+                console.log(locals.quoteData.cashReward);
                 $card.find('.rewardsnotice').removeClass('hidden');
 
             }
 
             else {
                 $card.find('.rewardsnotice').addClass('hidden');
-              
+
 
 
 

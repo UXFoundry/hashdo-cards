@@ -1507,7 +1507,7 @@ function importcreateBeneficiary() {
     }
 
     function populatebankCodeSelection() {
-        card.proxy.post('http://127.0.0.1:3100/e4f/getBankEntityCode/', { providerType:'NGN::Bank' }, function (err, response) {
+        card.proxy.post('http://guinness.exchange4free.com:3000/e4f/getBankEntityCode/', { providerType:'NGN::Bank' }, function (err, response) {
             
                     if (response) {
                         if (response.returnData) {

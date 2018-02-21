@@ -31,25 +31,30 @@ module.exports = {
             description: 'Authenticated User Token.',
             secure: true,
             required: true
+        },
+        requestId: {
+            example: '552fa62425186c6012edcf18',
+            description: 'The current request\'s ID.',
+            required: true
         }
     },
 
     getCardData: function (inputs, state, callback) {
         if (state.localData) {
 
-            async.waterfall([               
+            async.waterfall([
                 handovertoHashDo
 
             ], function (err) {
                 console.log("ERROR #################################");
                 console.log(err);
-            });           
-           
+            });
+
         }
 
         else {
             console.log('No state data');
-            async.waterfall([               
+            async.waterfall([
                 handovertoHashDo
 
             ], function (err) {
@@ -61,7 +66,7 @@ module.exports = {
 
         function handovertoHashDo(dataIn) {
             var viewModel = {
-                title: 'E4F Query Transaction'                     
+                title: 'E4F Query Transaction'
             };
             var clientLocals = {
                 userID: inputs.LoggedInUserID,
@@ -70,7 +75,7 @@ module.exports = {
             callback(null, viewModel, clientLocals);
 
         }
-       
+
 
     }
 };
