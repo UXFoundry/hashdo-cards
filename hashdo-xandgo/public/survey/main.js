@@ -26,7 +26,7 @@ card.onReady = function() {
   // first survey loaded into document?
   if (typeof _lodash_survey === 'undefined') {
     // load css dependencies
-    card.requireCSS('https://cdn.hashdo.com/css/survey.v18.css')
+    card.requireCSS('https://cdn.hashdo.com/css/survey.v22.css')
 
     // load js dependencies
     card.require('https://cdn.hashdo.com/js/survey.v10.js', function() {
@@ -502,8 +502,41 @@ card.onReady = function() {
 
             break
 
+          case 'multipleChoiceQty':
+            inputHTML = '<div class="hdc-survey-input-options">'
+
+            if (_lodash_survey.isArray(currentQuestion.reply)) {
+              for (var i = 0; i < currentQuestion.reply.length; i++) {
+                var controlType = 'tel'
+                var choice = currentQuestion.reply[i]._choice || currentQuestion.reply[i].choice
+
+                inputHTML +=
+                  '<div class="' +
+                  controlType +
+                  '">' +
+                  '<input type="' +
+                  controlType +
+                  '" data-choice="' +
+                  choice +
+                  '" name="option-' +
+                  currentQuestionIndex +
+                  '" id="option-' +
+                  currentQuestionIndex +
+                  '-' +
+                  i +
+                  '"><label>' +
+                  currentQuestion.reply[i].choice +
+                  '</label>' +
+                  '</div>'
+              }
+            }
+
+            inputHTML += '</div>'
+
+            break
+
           case 'number':
-            inputHTML = '<input type="number">'
+            inputHTML = '<input type="tel">'
             break
 
           case 'rating':
@@ -604,6 +637,17 @@ card.onReady = function() {
           return $input.find('input[type="radio"]:checked').attr('data-choice')
         }
 
+      case 'multipleChoiceQty':
+        var selections = []
+
+        $input.find('input[type="tel"]').each(function() {
+          if ($(this).val() > 0) {
+            selections.push($(this).val() + ' x ' + $(this).attr('data-choice'))
+          }
+        })
+
+        return selections.join(String.fromCharCode(30))
+
       case 'image':
         var $img = $input.find('.placeholder.set')
 
@@ -662,6 +706,16 @@ card.onReady = function() {
         }
         break
 
+      case 'multipleChoiceQty':
+        var selections = response.split(String.fromCharCode(30))
+
+        for (j = 0; j < selections.length; j++) {
+          var selection = selections[j].split(' x ')
+          $input.find('.hdc-survey-input-options input[data-choice="' + selection[1] + '"]').val(selection[0])
+        }
+
+        break
+
       case 'image':
         if (response) {
           $input
@@ -688,15 +742,58 @@ card.onReady = function() {
         $response = $input.find('.hdc-survey-input-options')
         clearEvent = 'change'
 
-        if (_lodash_survey.isArray(currentQuestion.reply)) {
-          var validOption = false
+        if (!response && currentQuestion.required) {
+          valid = false
+        } else {
+          if (_lodash_survey.isArray(currentQuestion.reply)) {
+            var validOption = false
 
-          for (var i = 0; i < currentQuestion.reply.length; i++) {
-            if (currentQuestion.multipleSelections) {
+            for (var i = 0; i < currentQuestion.reply.length; i++) {
+              if (currentQuestion.multipleSelections) {
+                var selections = response.split(String.fromCharCode(30))
+
+                for (j = 0; j < selections.length; j++) {
+                  if (currentQuestion.reply[i].choice === selections[j] || currentQuestion.reply[i]._choice === selections[j]) {
+                    validOption = true
+                    break
+                  }
+                }
+
+                if (validOption) {
+                  break
+                }
+              } else {
+                if (currentQuestion.reply[i].choice === response || currentQuestion.reply[i]._choice === response) {
+                  validOption = true
+                  break
+                }
+              }
+            }
+
+            if (currentQuestion.required && !validOption) {
+              valid = false
+            }
+          }
+        }
+        break
+
+      case 'multipleChoiceQty':
+        $response = $input.find('.hdc-survey-input-options')
+        clearEvent = 'change'
+
+        if (!response && currentQuestion.required) {
+          valid = false
+        } else {
+          if (_lodash_survey.isArray(currentQuestion.reply)) {
+            var validOption = false
+
+            for (var i = 0; i < currentQuestion.reply.length; i++) {
               var selections = response.split(String.fromCharCode(30))
 
               for (j = 0; j < selections.length; j++) {
-                if (currentQuestion.reply[i].choice === selections[j] || currentQuestion.reply[i]._choice === selections[j]) {
+                var selection = selections[j].split(' x ')
+
+                if (currentQuestion.reply[i].choice === selection[1] || currentQuestion.reply[i]._choice === selection[1]) {
                   validOption = true
                   break
                 }
@@ -705,16 +802,11 @@ card.onReady = function() {
               if (validOption) {
                 break
               }
-            } else {
-              if (currentQuestion.reply[i].choice === response || currentQuestion.reply[i]._choice === response) {
-                validOption = true
-                break
-              }
             }
-          }
 
-          if (currentQuestion.required && !validOption) {
-            valid = false
+            if (currentQuestion.required && !validOption) {
+              valid = false
+            }
           }
         }
         break
@@ -870,6 +962,21 @@ card.onReady = function() {
             }
           }
         }
+      } else if (currentQuestion.replyType === 'multipleChoiceQty') {
+        for (var i = 0; i < currentQuestion.reply.length; i++) {
+          var selection = response.split(' x ')
+
+          if (currentQuestion.reply[i].choice === selection[1] || currentQuestion.reply[i]._choice === selection[1]) {
+            if (currentQuestion.reply[i].jumpTo) {
+              if (currentQuestion.reply[i].jumpTo === 'end') {
+                nextQuestionIndex = Math.max()
+              } else {
+                nextQuestionIndex = getQuestionIndexById(currentQuestion.reply[i].jumpTo)
+                break
+              }
+            }
+          }
+        }
       }
     }
 
@@ -971,6 +1078,16 @@ card.onReady = function() {
 
             if (question.replyType === 'multipleChoice' && question.multipleSelections) {
               responseArray = response.response.split(String.fromCharCode(30))
+            }
+
+            if (question.replyType === 'multipleChoiceQty') {
+              responseArray = []
+
+              var qtyResponseArray = response.response.split(String.fromCharCode(30))
+
+              for (var i = 0; i < qtyResponseArray.length; i++) {
+                responseArray.push(qtyResponseArray[i].split(' x ')[1])
+              }
             }
 
             for (var i = 0; i < responseArray.length; i++) {
