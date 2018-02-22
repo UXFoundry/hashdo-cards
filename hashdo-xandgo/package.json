@@ -1,22 +1,22 @@
 {
   "name": "hashdo-xandgo",
-  "version": "0.3.92",
+  "version": "0.4.6",
   "description": "X&Go related HashDo cards.",
   "author": "HashDo <info@hashdo.com>",
   "keywords": ["hashdo", "card", "xandgo"],
   "dependencies": {
-    "cloudinary": "1.9.0",
-    "cuid": "1.3.8",
-    "lodash": "4.17.4",
-    "moment": "2.19.1",
+    "cloudinary": "1.10.0",
+    "cuid": "2.1.0",
+    "lodash": "4.17.5",
+    "moment": "2.20.1",
     "perfy": "1.1.2",
     "request": "2.83.0"
   },
   "devDependencies": {
-    "gulp": "gulpjs/gulp#4.0",
-    "gulp-autoprefixer": "4.0.0",
+    "gulp": "4.0.0",
+    "gulp-autoprefixer": "4.1.0",
     "gulp-concat": "2.6.1",
-    "gulp-less": "3.3.2",
+    "gulp-less": "3.5.0",
     "gulp-load-plugins": "1.5.0",
     "gulp-rename": "1.2.2",
     "gulp-uglify": "3.0.0"
